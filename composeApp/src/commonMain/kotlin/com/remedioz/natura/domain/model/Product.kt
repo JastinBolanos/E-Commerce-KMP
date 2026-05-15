@@ -9,7 +9,7 @@ data class Product(
     val price: String = "",
     val description: String = "",
     val imageUrl: String = "",
-    val extraImages: List<String> = emptyList(), // <-- Añade esto para la cuadrícula
+    val extraImages: List<String> = emptyList(),
     val category: String = "",
     val isFavorite: Boolean = false
 )

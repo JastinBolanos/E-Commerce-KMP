@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.0.0"
+    id("com.google.gms.google-services") version "4.4.1"
 }
 
 kotlin {
@@ -26,6 +27,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
+            implementation("io.ktor:ktor-client-okhttp:2.3.12")
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -37,6 +39,16 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.materialIconsExtended)
+
+            // Coil para cargar imágenes desde URL o Bytes en KMP
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor2)
+
+            // 👇 NUEVO: Núcleo de Ktor para que Coil pueda descargar las URLs
+            implementation("io.ktor:ktor-client-core:2.3.12")
+
+            // Seleccionador de archivos multiplataforma
+            implementation("io.github.vinceglb:filekit-compose:0.8.2")
 
             // 🔥 FIREBASE KMP (GitLive) - ¡Versión actualizada para soportar Wasm!
             implementation("dev.gitlive:firebase-auth:1.13.0")
