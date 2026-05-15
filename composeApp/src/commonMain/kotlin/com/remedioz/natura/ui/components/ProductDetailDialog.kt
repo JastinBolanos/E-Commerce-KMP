@@ -40,11 +40,11 @@ fun ProductDetailDialog(
 ) {
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(usePlatformDefaultWidth = false) // Permite que sea grande
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Surface(
             modifier = Modifier
-                .fillMaxWidth(0.95f) // Cubre casi toda la pantalla
+                .fillMaxWidth(0.95f)
                 .fillMaxHeight(0.85f)
                 .clip(RoundedCornerShape(32.dp)),
             color = Color.White
@@ -92,7 +92,7 @@ fun ProductDetailDialog(
 
                     // --- DESCRIPCIÓN ---
                     Text(
-                        text = product.description.ifEmpty { "Ritmo cardíaco y ECG: Miden las pulsaciones y algunos modelos incluyen electrocardiogramas..." },
+                        text = product.description.ifEmpty { "Descripción no disponible para este producto." },
                         fontSize = 18.sp,
                         color = Color.Black,
                         lineHeight = 24.sp,

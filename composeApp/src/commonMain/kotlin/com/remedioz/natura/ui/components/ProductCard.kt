@@ -9,7 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddShoppingCart // <-- NUEVO IMPORT PARA EL CARRITO
+import androidx.compose.material.icons.filled.AddShoppingCart
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Remove
@@ -21,19 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.remedioz.natura.domain.model.Product
 
 @Composable
 fun ProductCard(
-    name: String,
-    price: String,
-    initialIsInCart: Boolean = false, // <-- CAMBIO 1: Renombrado a InCart
+    product: Product,
+    initialIsInCart: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    var isInCart by remember { mutableStateOf(initialIsInCart) } // <-- CAMBIO 2: Estado del carrito
+    val name = product.name
+    val price = product.price
+    var isInCart by remember { mutableStateOf(initialIsInCart) }
     var expanded by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf(1) }
     var showDetails by remember { mutableStateOf(false) }
@@ -45,15 +48,25 @@ fun ProductCard(
             .border(1.dp, Color(0xFFE5E5E5), RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White)
-            .animateContentSize() // La magia de la expansión suave
+            .animateContentSize()
     ) {
         // --- 1. IMAGEN (Más grande y proporcionada) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(0.9f) // 0.9f la hace ligeramente más alta que ancha
+                .aspectRatio(0.9f)
                 .background(Color(0xFFEBEBEB))
         ) {
+            // AÑADIMOS COIL PARA MOSTRAR LA FOTO
+            if (product.imageUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = product.imageUrl,
+                    contentDescription = name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
             // --- BOTÓN DE CARRITO (Reemplaza al corazón) ---
             Box(
                 modifier = Modifier
@@ -62,14 +75,14 @@ fun ProductCard(
                     .size(36.dp)
                     .clip(CircleShape)
                     .clickable {
-                        isInCart = !isInCart // <-- CAMBIO 3: Cambia el estado al tocar
+                        isInCart = !isInCart
                         if (isInCart) {
                             println("Guardado en carretilla: $name")
                         } else {
                             println("Retirado de carretilla: $name")
                         }
                     }
-                    .background(if (isInCart) Color(0xFFFF5252) else Color.White, CircleShape) // <-- CAMBIO 4: Rojo si está en carrito
+                    .background(if (isInCart) Color(0xFFFF5252) else Color.White, CircleShape)
                     .border(
                         width = if (isInCart) 0.dp else 1.dp,
                         color = Color.LightGray.copy(alpha = 0.5f),
@@ -78,16 +91,15 @@ fun ProductCard(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.AddShoppingCart, // <-- CAMBIO 5: Icono de carrito
+                    imageVector = Icons.Default.AddShoppingCart,
                     contentDescription = "Añadir al carrito",
-                    tint = if (isInCart) Color.White else Color.Gray, // <-- CAMBIO 6: Blanco si está activo, gris si no
+                    tint = if (isInCart) Color.White else Color.Gray,
                     modifier = Modifier.size(20.dp)
                 )
             }
         }
 
         // --- 2. CONTENIDO (Textos y controles) ---
-        // (De aquí para abajo, tu código está EXACTAMENTE igual, sin romper nada)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -103,7 +115,7 @@ fun ProductCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                    Text(text = price, fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "S/ $price", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -129,17 +141,16 @@ fun ProductCard(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
                             .background(Brush.horizontalGradient(listOf(Color(0xFF67B2C5), Color(0xFF5B78A5))))
-                            .clickable { showDetails = true } // <-- ACTIVA LA PANTALLA
+                            .clickable { showDetails = true }
                             .padding(horizontal = 20.dp, vertical = 6.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text("Ver", color = Color.White, fontSize = 14.sp)
                     }
 
-                    // 3. Al final de tu ProductCard (fuera de la Column), añade el Dialog
                     if (showDetails) {
                         ProductDetailDialog(
-                            product = Product(name = name, price = price), // Pasa el producto actual
+                            product = product,
                             onDismiss = { showDetails = false }
                         )
                     }
@@ -147,7 +158,7 @@ fun ProductCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "Precio: PEN 180.00", fontSize = 15.sp, color = Color.Black)
+                Text(text = "Precio: S/ $price", fontSize = 15.sp, color = Color.Black)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
