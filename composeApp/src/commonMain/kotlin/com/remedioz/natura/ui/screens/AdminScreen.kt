@@ -3,7 +3,6 @@ package com.remedioz.natura.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -20,25 +19,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.remedioz.natura.domain.model.Product
-import com.remedioz.natura.ui.components.* // Importamos tus componentes ya creados
+import com.remedioz.natura.ui.components.*
+import com.remedioz.natura.ui.viewmodel.AdminViewModel
+import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.core.PickerType
+import io.github.vinceglb.filekit.core.PickerMode
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImage
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AdminScreen(onBackClick: () -> Unit) {
+fun AdminScreen(
+    onBackClick: () -> Unit,
+    viewModel: AdminViewModel
+) {
     // --- ESTADOS DE CONTROL ---
     var selectedProduct by remember { mutableStateOf<Product?>(null) }
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-    // Datos de prueba (Luego vendrán de Firebase)
-    val verticalProducts = listOf(
-        Product(name = "Crema Facial", price = "$25", category = "Tratamientos"),
-        Product(name = "Aceite de Coco", price = "$15", category = "Piel")
-    )
-    val kitsProducts = listOf(
-        Product(name = "Kit Relajante Total", price = "$45", category = "Kits"),
-        Product(name = "Rutina Cuidado Facial", price = "$60", category = "Kits")
-    )
+    // --- LOS DATOS REALES DE FIREBASE (Empiezan vacíos automáticamente) ---
+    val allProducts by viewModel.products.collectAsState()
+
+    // Filtramos las listas según lo que llegue de la nube
+    val kitsProducts = allProducts.filter { it.category.equals("Kits", ignoreCase = true) }
+    val verticalProducts = allProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
     Scaffold(
         topBar = {
@@ -51,6 +66,19 @@ fun AdminScreen(onBackClick: () -> Unit) {
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
             )
+        },
+        // --- NUEVO: BOTÓN PARA AGREGAR PRODUCTOS ---
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    selectedProduct = null
+                    showSheet = true
+                },
+                containerColor = Color.Black,
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Agregar Producto")
+            }
         }
     ) { paddingValues ->
         // Contenedor principal con Scroll para que quepa todo como en la tienda
@@ -72,9 +100,8 @@ fun AdminScreen(onBackClick: () -> Unit) {
             ) {
                 items(verticalProducts) { product ->
                     ProductCard(
-                        name = product.name,
-                        price = product.price,
-                        initialIsInCart = false, // <--- ¡AQUÍ ESTÁ EL CAMBIO!
+                        product = product,
+                        initialIsInCart = false,
                         modifier = Modifier
                             .width(230.dp)
                             .clickable {
@@ -124,14 +151,8 @@ fun AdminScreen(onBackClick: () -> Unit) {
                 // El contenido de la bandeja de edición
                 EditProductSheetContent(
                     product = selectedProduct,
-                    onSave = { updatedProduct ->
-                        println("Guardando cambios de: ${updatedProduct.name}")
-                        showSheet = false
-                    },
-                    onDelete = {
-                        println("Borrando producto")
-                        showSheet = false
-                    }
+                    viewModel = viewModel,
+                    onCloseSheet = { showSheet = false }
                 )
             }
         }
@@ -141,14 +162,33 @@ fun AdminScreen(onBackClick: () -> Unit) {
 @Composable
 fun EditProductSheetContent(
     product: Product?,
-    onSave: (Product) -> Unit,
-    onDelete: () -> Unit
+    viewModel: AdminViewModel,
+    onCloseSheet: () -> Unit
 ) {
-    // Variables temporales para editar
+    // --- VARIABLES DE ESTADO ---
     var name by remember { mutableStateOf(product?.name ?: "") }
     var price by remember { mutableStateOf(product?.price ?: "") }
     var category by remember { mutableStateOf(product?.category ?: "") }
-    var description by remember { mutableStateOf(product?.description ?: "Descripción del producto natural...") }
+    var description by remember { mutableStateOf(product?.description ?: "") }
+
+    // Estado para la imagen
+    var selectedImageBytes by remember { mutableStateOf<ByteArray?>(null) }
+
+    // Corrutina segura para la UI (Reemplaza al GlobalScope)
+    val coroutineScope = rememberCoroutineScope()
+
+    // Selector de imágenes (FileKit)
+    val launcher = rememberFilePickerLauncher(
+        type = PickerType.Image,
+        mode = PickerMode.Single,
+        title = "Selecciona una foto para el producto"
+    ) { platformFile ->
+        if (platformFile != null) {
+            coroutineScope.launch {
+                selectedImageBytes = platformFile.readBytes()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -157,69 +197,85 @@ fun EditProductSheetContent(
             .padding(bottom = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Editar Contenido", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(if (product?.id.isNullOrEmpty()) "Nuevo Producto" else "Editar Contenido", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Botón para cambiar foto (Simulado profesional)
+        // Botón para cambiar foto (AHORA MUESTRA LA IMAGEN)
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .background(Color(0xFFF0F0F0), RoundedCornerShape(16.dp))
-                .clickable { /* Abrir galería */ },
+                .clip(RoundedCornerShape(16.dp)) // Para que la foto no se salga de las esquinas
+                .clickable { launcher.launch() },
             contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(Icons.Default.PhotoCamera, contentDescription = null, tint = Color.Gray)
-                Text("Cambiar Foto", fontSize = 10.sp, color = Color.Gray)
+            // Si el usuario acaba de elegir una foto nueva (Bytes)
+            if (selectedImageBytes != null) {
+                AsyncImage(
+                    model = selectedImageBytes, // Coil entiende los bytes directamente
+                    contentDescription = "Foto nueva",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            // Si no hay foto nueva, pero el producto ya tiene una URL en Firebase
+            else if (!product?.imageUrl.isNullOrEmpty()) {
+                AsyncImage(
+                    model = product!!.imageUrl,
+                    contentDescription = "Foto actual",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            // Si no hay nada (Producto nuevo y sin seleccionar foto)
+            else {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(Icons.Default.PhotoCamera, contentDescription = null, tint = Color.Gray)
+                    Text("Cambiar Foto", fontSize = 10.sp, color = Color.Gray)
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Campos de Texto profesionales
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Nombre") },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
-        )
+        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(
                 value = price,
                 onValueChange = { price = it },
                 label = { Text("Precio") },
+
+                prefix = { Text("S/ ") },
+
+                // Abre el teclado de números automáticamente ---
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp)
             )
-            OutlinedTextField(
-                value = category,
-                onValueChange = { category = it },
-                label = { Text("Categoría") },
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(12.dp)
-            )
+            OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text("Categoría") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp))
         }
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
-            value = description,
-            onValueChange = { description = it },
-            label = { Text("Descripción") },
-            modifier = Modifier.fillMaxWidth().height(100.dp),
-            shape = RoundedCornerShape(12.dp)
-        )
-
+        OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Descripción") }, modifier = Modifier.fillMaxWidth().height(100.dp), shape = RoundedCornerShape(12.dp))
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botones de Acción
+        // Botón Guardar
         Button(
-            onClick = { onSave(product!!.copy(name = name, price = price)) },
+            onClick = {
+                val productToSave = Product(
+                    id = product?.id ?: "",
+                    name = name,
+                    price = price,
+                    category = category,
+                    description = description,
+                    imageUrl = product?.imageUrl ?: ""
+                )
+                viewModel.saveProduct(productToSave, selectedImageBytes)
+                onCloseSheet()
+            },
             modifier = Modifier.fillMaxWidth().height(56.dp),
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
@@ -227,8 +283,16 @@ fun EditProductSheetContent(
             Text("Guardar Cambios", color = Color.White, fontWeight = FontWeight.Bold)
         }
 
-        TextButton(onClick = onDelete, modifier = Modifier.padding(top = 8.dp)) {
-            Text("Eliminar Producto", color = Color.Red)
+        if (!product?.id.isNullOrEmpty()) {
+            TextButton(
+                onClick = {
+                    viewModel.deleteProduct(product!!.id)
+                    onCloseSheet()
+                },
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Eliminar Producto", color = Color.Red)
+            }
         }
     }
 }

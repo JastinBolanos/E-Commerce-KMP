@@ -32,12 +32,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.remedioz.natura.ui.screens.AuthScreen
 import com.remedioz.natura.ui.screens.CartScreen
+import androidx.compose.runtime.collectAsState
+import com.remedioz.natura.ui.viewmodel.HomeViewModel
+import androidx.compose.foundation.lazy.items
+
 
 @Composable
-fun HomeScreen(onAdminClick: () -> Unit) {
-
+fun HomeScreen(
+    onAdminClick: () -> Unit,
+    viewModel: HomeViewModel // <-- NUEVO: Recibimos el ViewModel aquí
+) {
     // Estado para controlar qué vemos dentro de la sección "Home"
     var currentScreen by remember { mutableStateOf("STORE") }
+
+    // --- NUEVO: ESCUCHAMOS LOS DATOS REALES DE FIREBASE ---
+    val allProducts by viewModel.products.collectAsState()
+
+    // Filtramos las listas en tiempo real según la categoría
+    val kitsProducts = allProducts.filter { it.category.equals("Kits", ignoreCase = true) }
+    val verticalProducts = allProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
     // --- LÓGICA DE NAVEGACIÓN ---
     if (currentScreen == "STORE") {
@@ -75,13 +88,16 @@ fun HomeScreen(onAdminClick: () -> Unit) {
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    item { ProductCard(name = "Crema Facial", price = "S/25", initialIsInCart = true, modifier = Modifier.width(180.dp)) }
-                    item { ProductCard(name = "Aceite de Coco", price = "S/15", initialIsInCart = false, modifier = Modifier.width(180.dp)) }
-                    item { ProductCard(name = "Extracto Herbal", price = "S/18", initialIsInCart = false, modifier = Modifier.width(180.dp)) }
-                    item { ProductCard(name = "Jabón de Avena", price = "S/12", initialIsInCart = false, modifier = Modifier.width(180.dp)) }
+                    // CAMBIO: Usamos 'items' en lugar de escribir uno por uno
+                    items(verticalProducts) { product ->
+                        ProductCard(
+                            product = product,
+                            initialIsInCart = false,
+                            modifier = Modifier.width(180.dp)
+                        )
+                    }
                 }
             }
-
             // 3. TERCERA SECCIÓN (Tarjetas Apaisadas)
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -100,9 +116,14 @@ fun HomeScreen(onAdminClick: () -> Unit) {
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        item { LandscapeProductCard(name = "Kit Relajante Total", price = "S/45") }
-                        item { LandscapeProductCard(name = "Rutina Cuidado Facial", price = "S/60") }
-                        item { LandscapeProductCard(name = "Pack Cuidado Capilar", price = "S/35") }
+                        // CAMBIO: Ahora es dinámico desde Firebase
+                        items(kitsProducts) { product ->
+                            LandscapeProductCard(
+                                name = product.name,
+                                price = product.price,
+                                modifier = Modifier // Puedes pasarle eventos aquí luego
+                            )
+                        }
                     }
                 }
             }

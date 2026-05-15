@@ -43,8 +43,6 @@ fun TopNavBar(
             color = Color.Black
         )
         // --- FIN DEL LOGO ---
-
-        // Reduje el spacedBy a 4.dp porque los IconButton ya traen su propio espacio invisible para el dedo
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
 
             // --- BOTÓN DEL CARRITO CONECTADO ---
