@@ -1,4 +1,4 @@
-rootProject.name = "RemediozNatura"
+rootProject.name = "RemediozNatura-KMP"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
