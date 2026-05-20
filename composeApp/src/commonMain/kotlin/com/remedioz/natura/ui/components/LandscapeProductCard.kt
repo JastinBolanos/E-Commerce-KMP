@@ -1,40 +1,50 @@
 package com.remedioz.natura.ui.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.border
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddShoppingCart
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Remove
-import androidx.compose.ui.graphics.Brush
+import coil3.compose.AsyncImage
+import com.remedioz.natura.domain.model.CartManager
+import com.remedioz.natura.domain.model.Product
 
+/**
+ * Tarjeta Horizontal para Kits y Promociones.
+ * Mantiene el diseño original, pero ahora está viva y conectada al cerebro (CartManager).
+ */
 @Composable
 fun LandscapeProductCard(
-    name: String,
-    price: String,
-    initialIsInCart: Boolean = false,
+    product: Product,
+    showCartIcon: Boolean = true,
     modifier: Modifier = Modifier
 ) {
+    val name = product.name
+    val price = product.price
+
     // --- ESTADOS ---
-    var isInCart by remember { mutableStateOf(initialIsInCart) }
+    val cartItems by CartManager.cartItems.collectAsState()
+    val isInCart = cartItems.any { it.product.id == product.id }
     var isFavorite by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf(1) }
@@ -42,42 +52,49 @@ fun LandscapeProductCard(
 
     Column(
         modifier = modifier
-            .width(280.dp) // Un poquito más ancho para que quepa bien el selector
+            .width(280.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, Color(0xFFE5E5E5), RoundedCornerShape(24.dp))
             .background(Color.White)
-            .animateContentSize() // <--- MAGIA AQUÍ
+            .animateContentSize()
     ) {
         // Caja principal de la imagen
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                // 2. MAGIA AQUÍ: 1.6f hace que sea un rectángulo "echado" (casi 16:9)
                 .aspectRatio(1.6f)
                 .clip(RoundedCornerShape(16.dp))
-                .background(Color(0xFFD6D6D6)) // Un gris un pelín distinto para variar
+                .background(Color(0xFFD6D6D6))
         ) {
-            // --- BOTÓN DE CARRITO (Antes era Corazón) ---
+            // Inyectamos Coil para que pinte la foto de Firebase
+            if (product.imageUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = product.imageUrl,
+                    contentDescription = name,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+            // --- BOTÓN DE CARRITO ---
             Box(
                 modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.TopEnd)
                     .size(32.dp)
                     .clip(CircleShape)
-                    .clickable { isInCart = !isInCart } // <-- Ahora controla el carrito
-                    .background(
-                        color = if (isInCart) Color(0xFFFF5252) else Color.White,
-                        shape = CircleShape
-                    )
-                    .border(
-                        width = if (isInCart) 0.dp else 1.dp,
-                        color = Color.LightGray.copy(alpha = 0.5f),
-                        shape = CircleShape
-                    ),
+                    .clickable {
+                        if (isInCart) {
+                            CartManager.removeProduct(product.id)
+                        } else {
+                            CartManager.addProduct(product, quantity)
+                        }
+                    }
+                    .background(color = if (isInCart) Color(0xFFFF5252) else Color.White, shape = CircleShape)
+                    .border(width = if (isInCart) 0.dp else 1.dp, color = Color.LightGray.copy(alpha = 0.5f), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    // CAMBIO AQUÍ: Usamos el icono de carretilla
                     imageVector = Icons.Default.AddShoppingCart,
                     contentDescription = "Añadir al carrito",
                     tint = if (isInCart) Color.White else Color.Gray,
@@ -102,7 +119,7 @@ fun LandscapeProductCard(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text(text = price, fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "S/ $price", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -140,11 +157,11 @@ fun LandscapeProductCard(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Text(text = "Precio: PEN 180.00", fontSize = 14.sp, color = Color.Black)
+                Text(text = "Precio: S/ $price", fontSize = 14.sp, color = Color.Black)
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Selector de Cantidad
+                // Selector de Cantidad (Intacto)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -158,72 +175,42 @@ fun LandscapeProductCard(
                             .clickable { if (quantity > 1) quantity-- },
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            Icons.Default.Remove,
-                            contentDescription = "-",
-                            tint = Color.Black,
-                            modifier = Modifier.size(16.dp)
-                        )
+                        Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black, modifier = Modifier.size(16.dp))
                     }
-                    Box(
-                        modifier = Modifier.width(1.dp).fillMaxHeight()
-                            .background(Color(0xFFCCCCCC))
-                    )
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                        contentAlignment = Alignment.Center
-                    ) {
+                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+                    Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                         Text(text = quantity.toString(), fontSize = 16.sp, color = Color.Black)
                     }
-                    Box(
-                        modifier = Modifier.width(1.dp).fillMaxHeight()
-                            .background(Color(0xFFCCCCCC))
-                    )
+                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
                     Box(
                         modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            Icons.Default.Add,
-                            contentDescription = "+",
-                            tint = Color.Black,
-                            modifier = Modifier.size(16.dp)
-                        )
+                        Icon(Icons.Default.Add, contentDescription = "+", tint = Color.Black, modifier = Modifier.size(16.dp))
                     }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Botón Comprar
+                // Botón Comprar (Intacto)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(40.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    Color(0xFF4CB8FF),
-                                    Color(0xFFFF7A8A)
-                                )
-                            )
-                        )
-                        .clickable { println("Comprar $quantity $name") },
+                        .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
+                        .clickable { println("Comprar directo: $quantity $name") },
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        "Comprar",
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    Text("Comprar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 }
             }
         }
     }
+
     if (showDetails) {
         ProductDetailDialog(
-            product = com.remedioz.natura.domain.model.Product(name = name, price = price),
+            product = product,
             onDismiss = { showDetails = false }
         )
     }

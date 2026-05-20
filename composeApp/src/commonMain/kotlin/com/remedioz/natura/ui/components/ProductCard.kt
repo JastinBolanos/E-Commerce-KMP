@@ -27,16 +27,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.remedioz.natura.domain.model.Product
+import com.remedioz.natura.domain.model.CartManager
 
 @Composable
 fun ProductCard(
     product: Product,
-    initialIsInCart: Boolean = false,
+    showCartIcon: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val name = product.name
     val price = product.price
-    var isInCart by remember { mutableStateOf(initialIsInCart) }
+
+    // --- PERSISTENCIA ---
+    val cartItems by CartManager.cartItems.collectAsState()
+    val isInCart = cartItems.any { it.product.id == product.id }
+
     var expanded by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf(1) }
     var showDetails by remember { mutableStateOf(false) }
@@ -50,7 +55,7 @@ fun ProductCard(
             .background(Color.White)
             .animateContentSize()
     ) {
-        // --- 1. IMAGEN (Más grande y proporcionada) ---
+        // --- 1. IMAGEN ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -67,35 +72,36 @@ fun ProductCard(
                 )
             }
 
-            // --- BOTÓN DE CARRITO (Reemplaza al corazón) ---
-            Box(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.TopEnd)
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        isInCart = !isInCart
-                        if (isInCart) {
-                            println("Guardado en carretilla: $name")
-                        } else {
-                            println("Retirado de carretilla: $name")
+            // --- BOTÓN DE CARRITO ---
+            if (showCartIcon) {
+                Box(
+                    modifier = Modifier
+                        .padding(12.dp)
+                        .align(Alignment.TopEnd)
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            if (isInCart) {
+                                CartManager.removeProduct(productId = product.id)
+                            } else {
+                                CartManager.addProduct(product = product, quantity = quantity)
+                            }
                         }
-                    }
-                    .background(if (isInCart) Color(0xFFFF5252) else Color.White, CircleShape)
-                    .border(
-                        width = if (isInCart) 0.dp else 1.dp,
-                        color = Color.LightGray.copy(alpha = 0.5f),
-                        shape = CircleShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AddShoppingCart,
-                    contentDescription = "Añadir al carrito",
-                    tint = if (isInCart) Color.White else Color.Gray,
-                    modifier = Modifier.size(20.dp)
-                )
+                        .background(if (isInCart) Color(0xFFFF5252) else Color.White, CircleShape)
+                        .border(
+                            width = if (isInCart) 0.dp else 1.dp,
+                            color = Color.LightGray.copy(alpha = 0.5f),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AddShoppingCart,
+                        contentDescription = "Añadir al carrito",
+                        tint = if (isInCart) Color.White else Color.Gray,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
 
@@ -136,7 +142,7 @@ fun ProductCard(
                 ) {
                     Text(text = "Detalles", fontSize = 16.sp, color = Color(0xFF333333), modifier = Modifier.weight(1f))
 
-                    // 2. Busca tu botón "Ver" y actualiza el clickable
+                    // 2. botón "Ver"
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
@@ -162,7 +168,7 @@ fun ProductCard(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Selector de Cantidad Perfecto [ - | 1 | + ]
+                // Selector de Cantidad [ - | 1 | + ]
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -197,14 +203,17 @@ fun ProductCard(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Botón Comprar Degradado
+                // Botón Comprar
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
-                        .clickable { println("Comprar $quantity $name") },
+                        .clickable {
+                            CartManager.addProduct(product = product, quantity = quantity)
+                            println("Comprar $quantity $name")
+                        },
                     contentAlignment = Alignment.Center
                 ) {
                     Text("Comprar", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
