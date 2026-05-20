@@ -23,19 +23,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import remedioznatura.composeapp.generated.resources.Res
-import remedioznatura.composeapp.generated.resources.ic_google_logo
-import remedioznatura.composeapp.generated.resources.imperial_script
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.remedioz.natura.ui.viewmodel.AuthViewModel
+import remedioznatura_kmp.composeapp.generated.resources.Res
+import remedioznatura_kmp.composeapp.generated.resources.ic_google_logo
+import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 
 @Composable
 fun AuthScreen(
+    viewModel: AuthViewModel,
     onClose: () -> Unit,
-    onGoogleSignInClick: () -> Unit // <-- La lógica se pasa desde afuera para no romper la web
+    onGoogleSignInClick: () -> Unit
 ) {
+    // Escuchamos los estados del ViewModel
+    val isLoading by viewModel.isLoading.collectAsState()
+    val loginSuccess by viewModel.loginSuccess.collectAsState()
+
+    // Si el login fue exitoso, cerramos la pantalla automáticamente
+    if (loginSuccess) {
+        onClose()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // TEMA BLANCO
+            .background(Color.White)
             .statusBarsPadding()
             .padding(horizontal = 24.dp)
     ) {
@@ -87,16 +100,21 @@ fun AuthScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        // --- 3. ACCIONES DE ACCESO (Solo Google, súper limpio) ---
+        // --- 3. ACCIONES DE ACCESO ---
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Opción: Google
-            FloatingAuthButton(
-                text = "Continuar con Google",
-                onClick = onGoogleSignInClick
-            )
+            // Si está cargando, mostramos el círculo. Si no, mostramos el botón.
+            if (isLoading) {
+                CircularProgressIndicator(color = Color(0xFF6B4BFF))
+            } else {
+                FloatingAuthButton(
+                    text = "Continuar con Google",
+                    onClick = onGoogleSignInClick // Aquí dispararemos el popup de Google nativo
+                )
+            }
 
             Text(
                 text = "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad.",
@@ -111,7 +129,7 @@ fun AuthScreen(
     }
 }
 
-// --- COMPONENTE: BOTÓN GOOGLE ADAPTADO A TEMA CLARO ---
+// --- COMPONENTE: BOTÓN GOOGLE ---
 @Composable
 fun FloatingAuthButton(
     text: String,
@@ -125,7 +143,7 @@ fun FloatingAuthButton(
             .height(56.dp)
             .clip(RoundedCornerShape(14.dp))
             .background(Color.White)
-            .border(BorderStroke(1.dp, Color(0xFFE0E0E0)), RoundedCornerShape(14.dp)) // Borde gris suave
+            .border(BorderStroke(1.dp, Color(0xFFE0E0E0)), RoundedCornerShape(14.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.CenterStart
     ) {
@@ -141,7 +159,7 @@ fun FloatingAuthButton(
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = text,
-                color = Color.Black, // Texto oscuro
+                color = Color.Black,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium
             )

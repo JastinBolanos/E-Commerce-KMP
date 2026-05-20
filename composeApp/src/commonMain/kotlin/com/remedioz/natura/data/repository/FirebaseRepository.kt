@@ -2,14 +2,39 @@ package com.remedioz.natura.data.repository
 
 import com.remedioz.natura.domain.model.Product
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.GoogleAuthProvider
+import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 
 class FirebaseRepository {
-    // Apuntamos a la base de datos de Firestore
+    // --- 1. INSTANCIAS DE FIREBASE ---
     private val db = Firebase.firestore
-
-    // Referencia directa a la "carpeta" (colección) de productos en la nube
+    private val auth = Firebase.auth
     private val productsCollection = db.collection("products")
+
+    // --- 2. MÉTODOS DE AUTENTICACIÓN ---
+
+    /**
+     * Inicia sesión en Firebase usando las credenciales obtenidas de Google.
+     * Recibe el idToken que Android/Web nos proporcionará tras el popup de Google.
+     */
+    suspend fun signInWithGoogle(idToken: String, accessToken: String? = null): Boolean {
+        return try {
+            val credential = GoogleAuthProvider.credential(idToken, accessToken)
+            auth.signInWithCredential(credential)
+            true // Login exitoso
+        } catch (e: Exception) {
+            println("Error en Firebase Auth: ${e.message}")
+            false // Falló el login
+        }
+    }
+
+    /**
+     * Verifica si ya hay un usuario logueado al abrir la app.
+     */
+    fun isUserLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
 
     /**
      * Función para OBTENER todos los productos de la tienda.
