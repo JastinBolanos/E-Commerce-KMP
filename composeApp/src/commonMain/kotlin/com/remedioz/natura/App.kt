@@ -7,19 +7,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.remedioz.natura.data.repository.ProductRepositoryImpl
-import com.remedioz.natura.ui.screens.AdminScreen
-import com.remedioz.natura.ui.screens.home.HomeScreen
-import com.remedioz.natura.ui.viewmodel.AdminViewModel
-import com.remedioz.natura.ui.viewmodel.HomeViewModel
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
 import coil3.network.ktor2.KtorNetworkFetcherFactory
+import com.remedioz.natura.data.repository.FirebaseRepository
+import com.remedioz.natura.data.repository.ProductRepositoryImpl
+import com.remedioz.natura.ui.screens.AdminScreen
+import com.remedioz.natura.ui.screens.AuthScreen
+import com.remedioz.natura.ui.screens.home.HomeScreen
+import com.remedioz.natura.ui.viewmodel.AdminViewModel
+import com.remedioz.natura.ui.viewmodel.AuthViewModel
+import com.remedioz.natura.ui.viewmodel.HomeViewModel
 
 @Composable
 fun App() {
 
-    // --- NUEVO: LE ENSEÑAMOS A COIL A DESCARGAR DE INTERNET ---
+    // --- LE ENSEÑAMOS A COIL A DESCARGAR DE INTERNET ---
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .components {
@@ -29,11 +32,12 @@ fun App() {
     }
 
     MaterialTheme {
-        // Variable de estado que controla qué pantalla vemos
+        // Variable de estado global que controla qué pantalla vemos
         var currentScreen by remember { mutableStateOf("STORE") }
 
-        // 1. Creamos el repositorio UNA vez aquí arriba para que ambas pantallas lo puedan usar
+        // --- REPOSITORIOS (Se instancian una sola vez para ahorrar memoria) ---
         val productRepository = remember { ProductRepositoryImpl() }
+        val firebaseRepository = remember { FirebaseRepository() } // <-- NUEVO: Para la Autenticación
 
         // Envolvemos todo en un Box con safeDrawingPadding() para respetar la barra de estado
         Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
@@ -42,9 +46,8 @@ fun App() {
                 val homeViewModel = viewModel { HomeViewModel(productRepository) }
 
                 HomeScreen(
-                    onAdminClick = {
-                        currentScreen = "ADMIN"
-                    },
+                    onAdminClick = { currentScreen = "ADMIN" },
+                    onAuthClick = { currentScreen = "AUTH" },
                     viewModel = homeViewModel
                 )
 
@@ -54,6 +57,19 @@ fun App() {
                 AdminScreen(
                     onBackClick = { currentScreen = "STORE" },
                     viewModel = adminViewModel
+                )
+
+            } else if (currentScreen == "AUTH") {
+                // --- PANTALLA DE LOGIN ---
+                val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
+
+                AuthScreen(
+                    viewModel = authViewModel,
+                    onClose = { currentScreen = "STORE" },
+                    onGoogleSignInClick = {
+                        println("Disparando Popup de Google...")
+                        // TODO: Aquí implementaremos el puente nativo de Google pronto
+                    }
                 )
             }
         }

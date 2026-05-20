@@ -48,7 +48,7 @@ fun AdminScreen(
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
 
-    // --- LOS DATOS REALES DE FIREBASE (Empiezan vacíos automáticamente) ---
+    // --- LOS DATOS REALES DE FIREBASE ---
     val allProducts by viewModel.products.collectAsState()
 
     // Filtramos las listas según lo que llegue de la nube
@@ -89,7 +89,7 @@ fun AdminScreen(
                 .verticalScroll(rememberScrollState())
                 .background(Color.White)
         ) {
-            // 1. Buscador e Iconos (Estética idéntica)
+            // 1. Buscador e Iconos
             SearchInput(modifier = Modifier.padding(top = 8.dp))
             CategoryFilter(modifier = Modifier.padding(vertical = 16.dp))
 
@@ -101,7 +101,7 @@ fun AdminScreen(
                 items(verticalProducts) { product ->
                     ProductCard(
                         product = product,
-                        initialIsInCart = false,
+                        showCartIcon = false,
                         modifier = Modifier
                             .width(230.dp)
                             .clickable {
@@ -127,8 +127,8 @@ fun AdminScreen(
             ) {
                 items(kitsProducts) { product ->
                     LandscapeProductCard(
-                        name = product.name,
-                        price = product.price,
+                        product = product,
+                        showCartIcon = false,
                         modifier = Modifier.clickable {
                             selectedProduct = product
                             showSheet = true
@@ -137,10 +137,10 @@ fun AdminScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(100.dp)) // Espacio para no chocar con el final
+            Spacer(modifier = Modifier.height(100.dp))
         }
 
-        // --- BANDEJA FLOTANTE (MODAL BOTTOM SHEET) ---
+        // --- BANDEJA FLOTANTE ---
         if (showSheet) {
             ModalBottomSheet(
                 onDismissRequest = { showSheet = false },
@@ -174,7 +174,7 @@ fun EditProductSheetContent(
     // Estado para la imagen
     var selectedImageBytes by remember { mutableStateOf<ByteArray?>(null) }
 
-    // Corrutina segura para la UI (Reemplaza al GlobalScope)
+    // Corrutina segura para la UI
     val coroutineScope = rememberCoroutineScope()
 
     // Selector de imágenes (FileKit)

@@ -30,46 +30,50 @@ import com.remedioz.natura.ui.components.TestimonialBanner
 import com.remedioz.natura.ui.components.TopNavBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.remedioz.natura.ui.screens.AuthScreen
 import com.remedioz.natura.ui.screens.CartScreen
 import androidx.compose.runtime.collectAsState
 import com.remedioz.natura.ui.viewmodel.HomeViewModel
 import androidx.compose.foundation.lazy.items
 
-
+/**
+ * PANTALLA PRINCIPAL DE LA TIENDA (HomeScreen)
+ * @param onAdminClick Callback para navegar a la vista de Administrador.
+ * @param onAuthClick Callback para delegar la navegación de Autenticación hacia App.kt.
+ * @param viewModel El ViewModel que provee el catálogo en tiempo real desde Firebase.
+ */
 @Composable
 fun HomeScreen(
     onAdminClick: () -> Unit,
-    viewModel: HomeViewModel // <-- NUEVO: Recibimos el ViewModel aquí
+    onAuthClick: () -> Unit,
+    viewModel: HomeViewModel
 ) {
-    // Estado para controlar qué vemos dentro de la sección "Home"
+    // Estado para controlar qué vemos dentro de la sección "Home" (Solo Tienda o Carrito)
     var currentScreen by remember { mutableStateOf("STORE") }
 
-    // --- NUEVO: ESCUCHAMOS LOS DATOS REALES DE FIREBASE ---
+    // --- ESCUCHAMOS LOS DATOS REALES DE FIREBASE ---
+    // El 'collectAsState' hace que la pantalla se redibuje automáticamente si hay cambios en la nube
     val allProducts by viewModel.products.collectAsState()
 
     // Filtramos las listas en tiempo real según la categoría
     val kitsProducts = allProducts.filter { it.category.equals("Kits", ignoreCase = true) }
     val verticalProducts = allProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
-    // --- LÓGICA DE NAVEGACIÓN ---
+    // --- LÓGICA DE NAVEGACIÓN INTERNA ---
     if (currentScreen == "STORE") {
 
-        // Si estamos en la tienda, dibujamos todo tu código original
+        // Si estamos en la tienda, dibujamos todo el catálogo principal
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White),
             contentPadding = PaddingValues(bottom = 0.dp)
         ) {
-            // 1. CABECERA: Buscador, Categorías, etc.
+            // 1. CABECERA: Buscador, Categorías y Navegación
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    // ¡NUEVO!: Le pasamos el cable al TopNavBar para que avise cuando toquen el carrito
-                    // ¡NUEVO!: Le pasamos el cable al TopNavBar para el perfil
                     TopNavBar(
                         onCartClick = { currentScreen = "CART" },
-                        onProfileClick = { currentScreen = "AUTH" }
+                        onProfileClick = { onAuthClick() }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -88,17 +92,17 @@ fun HomeScreen(
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // CAMBIO: Usamos 'items' en lugar de escribir uno por uno
+                    // Generamos dinámicamente las tarjetas consumiendo los datos de Firebase
                     items(verticalProducts) { product ->
                         ProductCard(
                             product = product,
-                            initialIsInCart = false,
                             modifier = Modifier.width(180.dp)
                         )
                     }
                 }
             }
-            // 3. TERCERA SECCIÓN (Tarjetas Apaisadas)
+
+            // 3. TERCERA SECCIÓN (Tarjetas Apaisadas - Kits y Promociones)
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(32.dp))
@@ -116,12 +120,10 @@ fun HomeScreen(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // CAMBIO: Ahora es dinámico desde Firebase
                         items(kitsProducts) { product ->
                             LandscapeProductCard(
-                                name = product.name,
-                                price = product.price,
-                                modifier = Modifier // Puedes pasarle eventos aquí luego
+                                product = product,
+                                modifier = Modifier
                             )
                         }
                     }
@@ -140,21 +142,9 @@ fun HomeScreen(
         }
 
     } else if (currentScreen == "CART") {
-
+        // Mostramos el carrito de compras y permitimos volver al Store
         CartScreen(
             onBackClick = { currentScreen = "STORE" }
         )
-
-    } else if (currentScreen == "AUTH") {
-
-        // ¡DIBUJA LA PANTALLA DE LOGIN!
-        AuthScreen(
-            onClose = { currentScreen = "STORE" },
-            onGoogleSignInClick = {
-                println("Clic en Iniciar sesión con Google")
-                // Aquí conectaremos Firebase más adelante
-            }
-        )
-
     }
 }
