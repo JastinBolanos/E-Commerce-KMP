@@ -30,17 +30,22 @@ import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.ic_google_logo
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 
+/**
+ * Pantalla de autenticación bajo el patrón UDF (Unidirectional Data Flow).
+ * Delega la lógica de negocio al [AuthViewModel] y los eventos de navegación al router padre,
+ * garantizando que la vista permanezca desacoplada del grafo de navegación del sistema.
+ */
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel,
     onClose: () -> Unit,
     onGoogleSignInClick: () -> Unit
 ) {
-    // Escuchamos los estados del ViewModel
     val isLoading by viewModel.isLoading.collectAsState()
     val loginSuccess by viewModel.loginSuccess.collectAsState()
 
-    // Si el login fue exitoso, cerramos la pantalla automáticamente
+    // Reacción reactiva a cambios de estado.
+    // Se ejecuta el callback de cierre para limpiar la pila de navegación tras un éxito.
     if (loginSuccess) {
         onClose()
     }
@@ -52,7 +57,6 @@ fun AuthScreen(
             .statusBarsPadding()
             .padding(horizontal = 24.dp)
     ) {
-        // --- 1. BARRA SUPERIOR ---
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -65,7 +69,6 @@ fun AuthScreen(
 
         Spacer(modifier = Modifier.height(60.dp))
 
-        // --- 2. IDENTIDAD VISUAL (Reemplazo del Logo por Texto Elegante) ---
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -100,19 +103,17 @@ fun AuthScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        // --- 3. ACCIONES DE ACCESO ---
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Si está cargando, mostramos el círculo. Si no, mostramos el botón.
             if (isLoading) {
                 CircularProgressIndicator(color = Color(0xFF6B4BFF))
             } else {
                 FloatingAuthButton(
                     text = "Continuar con Google",
-                    onClick = onGoogleSignInClick // Aquí dispararemos el popup de Google nativo
+                    onClick = onGoogleSignInClick
                 )
             }
 
@@ -129,7 +130,11 @@ fun AuthScreen(
     }
 }
 
-// --- COMPONENTE: BOTÓN GOOGLE ---
+/**
+ * Componente visual Stateless (Tonto).
+ * Diseñado mediante State Hoisting para ser reutilizable. Depende únicamente de sus parámetros
+ * de entrada y expone la interacción mediante el callback [onClick].
+ */
 @Composable
 fun FloatingAuthButton(
     text: String,
