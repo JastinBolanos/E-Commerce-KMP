@@ -7,34 +7,57 @@ import com.remedioz.natura.domain.model.Product
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * Orquestador de estado y lógica de negocio para la consola de administración.
+ * Aplica UDF (Unidirectional Data Flow) aislando las mutaciones de la base de datos
+ * y exponiendo estados inmutables para garantizar consistencia y seguridad en la UI.
+ */
 class AdminViewModel(
     private val repository: ProductRepository
 ) : ViewModel() {
 
-    // --- ESTADOS DE LA PANTALLA ---
-
-    // 1. Estado para la lista de productos (los que vienen de Firebase)
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
 
-    // 2. Estado para mostrar un indicador de carga mientras sube la foto
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private val _selectedCategory = MutableStateFlow("Todos")
+    val selectedCategory: StateFlow<String> = _selectedCategory.asStateFlow()
+
+    // Cálculo reactivo asíncrono.
+    // Centraliza el filtrado aquí para evitar la sobrecarga del Main Thread (Recomposición de UI)
+    // frente a catálogos masivos, manteniendo el ViewModel como Única Fuente de Verdad.
+    val filteredProducts: StateFlow<List<Product>> = combine(
+        _products, _searchQuery, _selectedCategory
+    ) { products, query, category ->
+        products.filter { product ->
+            val matchesQuery = product.name.contains(query, ignoreCase = true) ||
+                    product.description.contains(query, ignoreCase = true)
+
+            val matchesCategory = if (category == "Todos") true else product.category.equals(category, ignoreCase = true)
+
+            matchesQuery && matchesCategory
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     init {
         loadProducts()
     }
 
-    // --- FUNCIONES DE ACCIÓN ---
-
     fun loadProducts() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val result = repository.getProducts()
-                _products.value = result
+                _products.value = repository.getProducts()
             } catch (e: Exception) {
                 println("Error cargando productos: ${e.message}")
             } finally {
@@ -43,15 +66,22 @@ class AdminViewModel(
         }
     }
 
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun updateCategory(category: String) {
+        _selectedCategory.value = category
+    }
+
     fun saveProduct(product: Product, imageBytes: ByteArray?) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Llamamos al repositorio para subir todo a Firebase
                 val success = repository.addProduct(product, imageBytes)
-
                 if (success) {
-                    // Si se guardó con éxito, recargamos la lista para que aparezca en pantalla
+                    // Forzamos la resincronización explícita tras una mutación exitosa
+                    // para garantizar que la memoria local refleje el estado real de la nube.
                     loadProducts()
                 } else {
                     println("Error: El repositorio devolvió false al guardar.")
@@ -68,7 +98,7 @@ class AdminViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // TODO: Añadiremos la función deleteProduct en el Repository luego
+                // TODO: Implementar llamada al endpoint de eliminación cuando el repositorio lo soporte
                 println("Simulando eliminación del producto con ID: $productId")
                 //repository.deleteProduct(productId)
                 //loadProducts()
