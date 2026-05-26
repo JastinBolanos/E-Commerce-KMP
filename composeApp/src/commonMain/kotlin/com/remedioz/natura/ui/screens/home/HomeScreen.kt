@@ -36,10 +36,14 @@ import com.remedioz.natura.ui.viewmodel.HomeViewModel
 import androidx.compose.foundation.lazy.items
 
 /**
- * PANTALLA PRINCIPAL DE LA TIENDA (HomeScreen)
- * @param onAdminClick Callback para navegar a la vista de Administrador.
- * @param onAuthClick Callback para delegar la navegación de Autenticación hacia App.kt.
- * @param viewModel El ViewModel que provee el catálogo en tiempo real desde Firebase.
+ * Contenedor principal de la Tienda (UI Host).
+ * Actúa como el consumidor final del [HomeViewModel], observando el estado reactivo
+ * (Single Source of Truth) y distribuyéndolo a sus componentes hijos (State Hoisting).
+ * Implementa un enrutador interno ligero de memoria local para alternar entre el catálogo y el carrito.
+ *
+ * @param onAdminClick Delegación de navegación hacia el módulo de administración protegido.
+ * @param onAuthClick Delegación de navegación hacia el flujo de autenticación (SSO).
+ * @param viewModel Orquestador de la lógica de negocio y proveedor del catálogo filtrado.
  */
 @Composable
 fun HomeScreen(
@@ -47,52 +51,45 @@ fun HomeScreen(
     onAuthClick: () -> Unit,
     viewModel: HomeViewModel
 ) {
-    // Estado para controlar qué vemos dentro de la sección "Home" (Solo Tienda o Carrito)
     var currentScreen by remember { mutableStateOf("STORE") }
 
-    // --- ESCUCHAMOS LOS DATOS REALES DE FIREBASE ---
-    // El 'collectAsState' hace que la pantalla se redibuje automáticamente si hay cambios en la nube
-    val allProducts by viewModel.products.collectAsState()
+    val filteredProducts by viewModel.filteredProducts.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
 
-    // Filtramos las listas en tiempo real según la categoría
-    val kitsProducts = allProducts.filter { it.category.equals("Kits", ignoreCase = true) }
-    val verticalProducts = allProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
+    val kitsProducts = filteredProducts.filter { it.category.equals("Kits", ignoreCase = true) }
+    val verticalProducts = filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
-    // --- LÓGICA DE NAVEGACIÓN INTERNA ---
     if (currentScreen == "STORE") {
-
-        // Si estamos en la tienda, dibujamos todo el catálogo principal
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
+            modifier = Modifier.fillMaxSize().background(Color.White),
             contentPadding = PaddingValues(bottom = 0.dp)
         ) {
-            // 1. CABECERA: Buscador, Categorías y Navegación
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    TopNavBar(
-                        onCartClick = { currentScreen = "CART" },
-                        onProfileClick = { onAuthClick() }
-                    )
+                    TopNavBar(onCartClick = { currentScreen = "CART" }, onProfileClick = { onAuthClick() })
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    SearchInput()
+                    SearchInput(
+                        query = searchQuery,
+                        onQueryChange = { viewModel.updateSearchQuery(it) }
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    CategoryFilter()
+                    CategoryFilter(
+                        selectedCategory = selectedCategory,
+                        onCategorySelected = { viewModel.updateCategory(it) }
+                    )
                     Spacer(modifier = Modifier.height(24.dp))
                 }
             }
 
-            // 2. PRODUCTOS: El carrusel horizontal (Tarjetas Verticales)
             item {
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Generamos dinámicamente las tarjetas consumiendo los datos de Firebase
                     items(verticalProducts) { product ->
                         ProductCard(
                             product = product,
@@ -102,35 +99,30 @@ fun HomeScreen(
                 }
             }
 
-            // 3. TERCERA SECCIÓN (Tarjetas Apaisadas - Kits y Promociones)
             item {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Text(
-                        text = "Kits y Promociones",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(kitsProducts) { product ->
-                            LandscapeProductCard(
-                                product = product,
-                                modifier = Modifier
-                            )
+                if (kitsProducts.isNotEmpty()) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Text(
+                            text = "Kits y Promociones",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(kitsProducts) { product ->
+                                LandscapeProductCard(product = product, modifier = Modifier)
+                            }
                         }
                     }
                 }
             }
 
-            // 4. FINAL DE LA PÁGINA: Testimonios y Footer
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(40.dp))
@@ -142,7 +134,6 @@ fun HomeScreen(
         }
 
     } else if (currentScreen == "CART") {
-        // Mostramos el carrito de compras y permitimos volver al Store
         CartScreen(
             onBackClick = { currentScreen = "STORE" }
         )

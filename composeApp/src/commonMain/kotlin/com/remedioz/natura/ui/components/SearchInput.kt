@@ -11,28 +11,24 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue // <-- Importante para el estado
-import androidx.compose.runtime.mutableStateOf // <-- Importante para el estado
-import androidx.compose.runtime.remember // <-- Importante para el estado
-import androidx.compose.runtime.setValue // <-- Importante para el estado
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Componente de búsqueda visual (Stateless) diseñado mediante State Hoisting.
+ * Al delegar el estado hacia afuera ([query] y [onQueryChange]), asegura que el
+ * ViewModel centralice la captura de texto y coordine el filtrado reactivo en tiempo real.
+ */
 @Composable
-fun SearchInput(modifier: Modifier = Modifier) {
-    // Aquí creamos la memoria del buscador. Empieza vacío ("")
-    var searchText by remember { mutableStateOf("") }
-
+fun SearchInput(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedTextField(
-        // Conectamos el valor del texto a nuestra variable
-        value = searchText,
-
-        // Cada vez que tecleas algo, actualizamos la variable
-        onValueChange = { nuevoTexto ->
-            searchText = nuevoTexto
-        },
-
+        value = query,
+        onValueChange = onQueryChange,
         placeholder = { Text("Buscar Productos", color = Color.Gray) },
         trailingIcon = { Icon(Icons.Default.Search, contentDescription = "Buscar", tint = Color.Gray) },
         shape = RoundedCornerShape(50),
@@ -45,7 +41,7 @@ fun SearchInput(modifier: Modifier = Modifier) {
             focusedBorderColor = Color.Black,
             unfocusedContainerColor = Color.White,
             focusedContainerColor = Color.White,
-            cursorColor = Color.Black // Agregamos el cursor negro para que se vea bien
+            cursorColor = Color.Black
         )
     )
 }
