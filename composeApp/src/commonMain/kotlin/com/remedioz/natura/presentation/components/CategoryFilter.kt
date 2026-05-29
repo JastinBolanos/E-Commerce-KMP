@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

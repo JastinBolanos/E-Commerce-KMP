@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,24 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) {
     // --- MEMORIA DEL COMPONENTE ---
-    // 1. ¿El panel de admin está abierto o cerrado? (Empieza cerrado)
     var isAdminExpanded by remember { mutableStateOf(false) }
-
-    // 2. Variables para guardar lo que el admin escriba
     var emailAdmin by remember { mutableStateOf("") }
     var passwordAdmin by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color(0xFF0A0A0A)) // Negro profundo como en tu diseño
+            .background(Color(0xFF0A0A0A))
             .padding(32.dp)
     ) {
         // Título de la marca
@@ -93,15 +89,14 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Input de Contraseña (más corto como en tu diseño)
+            // Input de Contraseña
             OutlinedTextField(
                 value = passwordAdmin,
                 onValueChange = { passwordAdmin = it },
                 placeholder = { Text("Contraseña", color = Color.Gray) },
                 shape = RoundedCornerShape(50),
-                // VisualTransformation oculta el texto con puntitos o asteriscos
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth(0.7f), // Ocupa el 70% del ancho
+                modifier = Modifier.fillMaxWidth(0.7f),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
@@ -117,7 +112,7 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
             // Botón Ingresar
             Button(
-                onClick = { onAdminLoginClick() }, // <-- AQUÍ CONECTAMOS EL CABLE
+                onClick = { onAdminLoginClick() },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
@@ -126,20 +121,17 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
         }
 
         // --- LA FLECHITA TÁCTIL ---
-        // La alineamos a la derecha abajo
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ) {
             Icon(
-                // Si está expandido muestra flecha arriba, si no, flecha abajo
                 imageVector = if (isAdminExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = "Expandir Admin",
                 tint = Color.White,
                 modifier = Modifier
                     .size(36.dp)
                     .clickable {
-                        // Al tocar, invierte el valor (de abierto a cerrado y viceversa)
                         isAdminExpanded = !isAdminExpanded
                     }
             )

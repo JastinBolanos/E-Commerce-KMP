@@ -14,8 +14,6 @@ import dev.gitlive.firebase.initialize
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Despertamos a la librería KMP de Firebase pasándole el contexto
         Firebase.initialize(this)
 
         enableEdgeToEdge()

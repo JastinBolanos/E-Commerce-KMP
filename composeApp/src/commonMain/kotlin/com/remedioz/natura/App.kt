@@ -12,17 +12,17 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import com.remedioz.natura.data.repository.FirebaseRepository
 import com.remedioz.natura.data.repository.ProductRepositoryImpl
-import com.remedioz.natura.ui.screens.AdminScreen
-import com.remedioz.natura.ui.screens.AuthScreen
-import com.remedioz.natura.ui.screens.home.HomeScreen
-import com.remedioz.natura.ui.viewmodel.AdminViewModel
-import com.remedioz.natura.ui.viewmodel.AuthViewModel
-import com.remedioz.natura.ui.viewmodel.HomeViewModel
+import com.remedioz.natura.presentation.features.admin.AdminScreen
+import com.remedioz.natura.presentation.features.auth.AuthScreen
+import com.remedioz.natura.presentation.features.home.HomeScreen
+import com.remedioz.natura.presentation.features.admin.AdminViewModel
+import com.remedioz.natura.presentation.features.auth.AuthViewModel
+import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
+import com.remedioz.natura.presentation.features.home.HomeViewModel
 
 @Composable
 fun App() {
-
-    // --- LE ENSEÑAMOS A COIL A DESCARGAR DE INTERNET ---
+    
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .components {
@@ -32,23 +32,21 @@ fun App() {
     }
 
     MaterialTheme {
-        // Variable de estado global que controla qué pantalla vemos
         var currentScreen by remember { mutableStateOf("STORE") }
-
-        // --- REPOSITORIOS (Se instancian una sola vez para ahorrar memoria) ---
         val productRepository = remember { ProductRepositoryImpl() }
-        val firebaseRepository = remember { FirebaseRepository() } // <-- NUEVO: Para la Autenticación
+        val firebaseRepository = remember { FirebaseRepository() }
 
-        // Envolvemos todo en un Box con safeDrawingPadding() para respetar la barra de estado
         Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 
             if (currentScreen == "STORE") {
                 val homeViewModel = viewModel { HomeViewModel(productRepository) }
+                val checkoutViewModel = viewModel { CheckoutViewModel(firebaseRepository) }
 
                 HomeScreen(
                     onAdminClick = { currentScreen = "ADMIN" },
                     onAuthClick = { currentScreen = "AUTH" },
-                    viewModel = homeViewModel
+                    viewModel = homeViewModel,
+                    checkoutViewModel = checkoutViewModel
                 )
 
             } else if (currentScreen == "ADMIN") {

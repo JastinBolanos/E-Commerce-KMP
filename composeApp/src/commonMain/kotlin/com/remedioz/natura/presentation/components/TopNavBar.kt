@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -42,7 +42,6 @@ fun TopNavBar(
             letterSpacing = 0.sp,
             color = Color.Black
         )
-        // --- FIN DEL LOGO ---
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
 
             // --- BOTÓN DEL CARRITO ---

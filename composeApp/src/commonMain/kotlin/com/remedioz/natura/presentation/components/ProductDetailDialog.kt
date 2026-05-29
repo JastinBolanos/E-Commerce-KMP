@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +50,7 @@ fun ProductDetailDialog(
             color = Color.White
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                // Botón Cerrar (X) arriba a la derecha
+                // --- Botón Cerrar (X) arriba a la derecha ---
                 IconButton(
                     onClick = onDismiss,
                     modifier = Modifier.align(Alignment.TopEnd).padding(8.dp).zIndex(1f)
@@ -69,7 +69,7 @@ fun ProductDetailDialog(
                         modifier = Modifier.fillMaxWidth().height(280.dp),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        // Imagen grande izquierda
+                        // --- Imagen grande izquierda ---
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -78,7 +78,7 @@ fun ProductDetailDialog(
                                 .background(Color(0xFFC4C4C4))
                         )
 
-                        // Dos imágenes pequeñas Derecha
+                        // --- Dos imágenes pequeñas Derecha ---
                         Column(
                             modifier = Modifier.weight(1f).fillMaxHeight(),
                             verticalArrangement = Arrangement.spacedBy(8.dp)

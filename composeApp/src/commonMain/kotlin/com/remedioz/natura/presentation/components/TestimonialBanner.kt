@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -19,12 +19,12 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .background(Color(0xFF8D7C70)) // Color temporal marrón claro
+            .background(Color(0xFF8D7C70))
     ) {
         Column(
             modifier = Modifier
                 .padding(32.dp)
-                .fillMaxWidth(0.65f) // Ocupa el 65% del ancho para dejar espacio a la foto
+                .fillMaxWidth(0.65f)
         ) {
             Text("2026", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
             Spacer(modifier = Modifier.height(8.dp))
