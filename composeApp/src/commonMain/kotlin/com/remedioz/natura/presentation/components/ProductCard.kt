@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -27,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.remedioz.natura.domain.model.Product
-import com.remedioz.natura.domain.model.CartManager
+import com.remedioz.natura.presentation.state.CartManager
 
 @Composable
 fun ProductCard(
     product: Product,
     showCartIcon: Boolean = true,
+    isAdminView: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val name = product.name
@@ -46,7 +47,7 @@ fun ProductCard(
     var quantity by remember { mutableStateOf(1) }
     var showDetails by remember { mutableStateOf(false) }
 
-    // CONTENEDOR PRINCIPAL
+    // --- CONTENEDOR PRINCIPAL ---
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -111,7 +112,7 @@ fun ProductCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Fila de Título y Flecha
+            // --- Fila de Título y Flecha ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -135,14 +136,14 @@ fun ProductCard(
             if (expanded) {
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Fila: Detalles + Botón Ver
+                // --- Detalles + Botón Ver ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Detalles", fontSize = 16.sp, color = Color(0xFF333333), modifier = Modifier.weight(1f))
 
-                    // 2. botón "Ver"
+                    // --- botón "Ver" ---
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
@@ -162,61 +163,63 @@ fun ProductCard(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                if (!isAdminView) {
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                Text(text = "Precio: S/ $price", fontSize = 15.sp, color = Color.Black)
+                    Text(text = "Precio: S/ $price", fontSize = 15.sp, color = Color.Black)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                // Selector de Cantidad [ - | 1 | + ]
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(44.dp)
-                        .border(1.dp, Color(0xFFCCCCCC), RoundedCornerShape(8.dp))
-                        .clip(RoundedCornerShape(8.dp)),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Botón Menos
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight().clickable { if (quantity > 1) quantity-- },
-                        contentAlignment = Alignment.Center
-                    ) { Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black) }
+                    // --- Selector de Cantidad [ - | 1 | + ] ---
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(44.dp)
+                            .border(1.dp, Color(0xFFCCCCCC), RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(8.dp)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        // --- Botón Menos ---
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable { if (quantity > 1) quantity-- },
+                            contentAlignment = Alignment.Center
+                        ) { Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black) }
 
-                    // Línea
-                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+                        // --- Línea ---
+                        Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
 
-                    // Número
-                    Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
-                        Text(text = quantity.toString(), fontSize = 18.sp, color = Color.Black)
+                        // --- Número ---
+                        Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
+                            Text(text = quantity.toString(), fontSize = 18.sp, color = Color.Black)
+                        }
+
+                        // --- Línea ---
+                        Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+
+                        // --- Botón Más ---
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
+                            contentAlignment = Alignment.Center
+                        ) { Icon(Icons.Default.Add, contentDescription = "+", tint = Color.Black) }
                     }
 
-                    // Línea
-                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                    // Botón Más
+                    // --- Botón Comprar ---
                     Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
+                            .clickable {
+                                CartManager.addProduct(product = product, quantity = quantity)
+                                println("Comprar $quantity $name")
+                            },
                         contentAlignment = Alignment.Center
-                    ) { Icon(Icons.Default.Add, contentDescription = "+", tint = Color.Black) }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Botón Comprar
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
-                        .clickable {
-                            CartManager.addProduct(product = product, quantity = quantity)
-                            println("Comprar $quantity $name")
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Comprar", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    ) {
+                        Text("Comprar", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                    }
                 }
             }
         }

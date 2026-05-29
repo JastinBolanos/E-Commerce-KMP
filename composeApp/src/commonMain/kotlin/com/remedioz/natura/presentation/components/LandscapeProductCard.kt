@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.components
+package com.remedioz.natura.presentation.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.remedioz.natura.domain.model.CartManager
+import com.remedioz.natura.presentation.state.CartManager
 import com.remedioz.natura.domain.model.Product
 
 /**
@@ -37,6 +37,7 @@ import com.remedioz.natura.domain.model.Product
 fun LandscapeProductCard(
     product: Product,
     showCartIcon: Boolean = true,
+    isAdminView: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val name = product.name
@@ -58,7 +59,7 @@ fun LandscapeProductCard(
             .background(Color.White)
             .animateContentSize()
     ) {
-        // Caja principal de la imagen
+        // --- Caja principal de la imagen ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,7 +67,6 @@ fun LandscapeProductCard(
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color(0xFFD6D6D6))
         ) {
-            // Inyectamos Coil para que pinte la foto de Firebase
             if (product.imageUrl.isNotEmpty()) {
                 AsyncImage(
                     model = product.imageUrl,
@@ -77,34 +77,43 @@ fun LandscapeProductCard(
             }
 
             // --- BOTÓN DE CARRITO ---
-            Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .align(Alignment.TopEnd)
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        if (isInCart) {
-                            CartManager.removeProduct(product.id)
-                        } else {
-                            CartManager.addProduct(product, quantity)
+            if (!isAdminView && showCartIcon) {
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.TopEnd)
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            if (isInCart) {
+                                CartManager.removeProduct(product.id)
+                            } else {
+                                CartManager.addProduct(product, quantity)
+                            }
                         }
-                    }
-                    .background(color = if (isInCart) Color(0xFFFF5252) else Color.White, shape = CircleShape)
-                    .border(width = if (isInCart) 0.dp else 1.dp, color = Color.LightGray.copy(alpha = 0.5f), shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AddShoppingCart,
-                    contentDescription = "Añadir al carrito",
-                    tint = if (isInCart) Color.White else Color.Gray,
-                    modifier = Modifier.size(18.dp)
-                )
+                        .background(
+                            color = if (isInCart) Color(0xFFFF5252) else Color.White,
+                            shape = CircleShape
+                        )
+                        .border(
+                            width = if (isInCart) 0.dp else 1.dp,
+                            color = Color.LightGray.copy(alpha = 0.5f),
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.AddShoppingCart,
+                        contentDescription = "Añadir al carrito",
+                        tint = if (isInCart) Color.White else Color.Gray,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
             }
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
-            // Fila de Título y Flecha
+            // --- Fila de Título y Flecha ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,7 +141,7 @@ fun LandscapeProductCard(
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Fila Detalles + Botón Ver
+                // --- Fila Detalles + Botón Ver ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
@@ -155,54 +164,56 @@ fun LandscapeProductCard(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                if (!isAdminView) {
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                Text(text = "Precio: S/ $price", fontSize = 14.sp, color = Color.Black)
+                    Text(text = "Precio: S/ $price", fontSize = 14.sp, color = Color.Black)
 
-                Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                // Selector de Cantidad (Intacto)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .border(1.dp, Color(0xFFCCCCCC), RoundedCornerShape(8.dp))
-                        .clip(RoundedCornerShape(8.dp)),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                    // --- Selector de Cantidad ---
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .border(1.dp, Color(0xFFCCCCCC), RoundedCornerShape(8.dp))
+                            .clip(RoundedCornerShape(8.dp)),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight()
+                                .clickable { if (quantity > 1) quantity-- },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black, modifier = Modifier.size(16.dp))
+                        }
+                        Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+                        Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
+                            Text(text = quantity.toString(), fontSize = 16.sp, color = Color.Black)
+                        }
+                        Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
+                        Box(
+                            modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Add, contentDescription = "+", tint = Color.Black, modifier = Modifier.size(16.dp))
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // --- Botón Comprar ---
                     Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight()
-                            .clickable { if (quantity > 1) quantity-- },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
+                            .clickable { println("Comprar directo: $quantity $name") },
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black, modifier = Modifier.size(16.dp))
+                        Text("Comprar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
-                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
-                    Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
-                        Text(text = quantity.toString(), fontSize = 16.sp, color = Color.Black)
-                    }
-                    Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
-                    Box(
-                        modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = "+", tint = Color.Black, modifier = Modifier.size(16.dp))
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Botón Comprar (Intacto)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
-                        .clickable { println("Comprar directo: $quantity $name") },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Comprar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 }
             }
         }
