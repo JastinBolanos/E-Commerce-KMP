@@ -1,13 +1,13 @@
-package com.remedioz.natura.ui.viewmodel
+package com.remedioz.natura.presentation.features.admin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.remedioz.natura.data.repository.ProductRepository
 import com.remedioz.natura.domain.model.Product
+import com.remedioz.natura.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -43,11 +43,14 @@ class AdminViewModel(
             val matchesQuery = product.name.contains(query, ignoreCase = true) ||
                     product.description.contains(query, ignoreCase = true)
 
-            val matchesCategory = if (category == "Todos") true else product.category.equals(category, ignoreCase = true)
+            val matchesCategory = if (category == "Todos") true else product.category.equals(
+                category,
+                ignoreCase = true
+            )
 
             matchesQuery && matchesCategory
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())
 
     init {
         loadProducts()
@@ -80,8 +83,6 @@ class AdminViewModel(
             try {
                 val success = repository.addProduct(product, imageBytes)
                 if (success) {
-                    // Forzamos la resincronización explícita tras una mutación exitosa
-                    // para garantizar que la memoria local refleje el estado real de la nube.
                     loadProducts()
                 } else {
                     println("Error: El repositorio devolvió false al guardar.")
@@ -98,10 +99,7 @@ class AdminViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // TODO: Implementar llamada al endpoint de eliminación cuando el repositorio lo soporte
                 println("Simulando eliminación del producto con ID: $productId")
-                //repository.deleteProduct(productId)
-                //loadProducts()
             } catch (e: Exception) {
                 println("Error eliminando producto: ${e.message}")
             } finally {

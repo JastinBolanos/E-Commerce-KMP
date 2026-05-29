@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.screens
+package com.remedioz.natura.presentation.features.admin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,8 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.remedioz.natura.domain.model.Product
-import com.remedioz.natura.ui.components.*
-import com.remedioz.natura.ui.viewmodel.AdminViewModel
 import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerType
 import io.github.vinceglb.filekit.core.PickerMode
@@ -37,6 +35,10 @@ import coil3.compose.AsyncImage
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material3.ExperimentalMaterial3Api
+import com.remedioz.natura.presentation.components.CategoryFilter
+import com.remedioz.natura.presentation.components.LandscapeProductCard
+import com.remedioz.natura.presentation.components.ProductCard
+import com.remedioz.natura.presentation.components.SearchInput
 
 /**
  * Consola de Administración (UI Host protegido).
@@ -116,6 +118,7 @@ fun AdminScreen(
                     ProductCard(
                         product = product,
                         showCartIcon = false,
+                        isAdminView = true,
                         modifier = Modifier
                             .width(230.dp)
                             .clickable {
@@ -143,6 +146,7 @@ fun AdminScreen(
                     LandscapeProductCard(
                         product = product,
                         showCartIcon = false,
+                        isAdminView = true,
                         modifier = Modifier.clickable {
                             selectedProduct = product
                             showSheet = true
@@ -171,6 +175,7 @@ fun AdminScreen(
         }
     }
 }
+
 /**
  * Formulario de creación/edición de productos (Stateful Component).
  * Gestiona su propio estado temporal (Draft State) antes de confirmar la mutación
