@@ -1,67 +1,50 @@
+# 🌿 Remedioz Natura | Multiplatform E-Commerce
+
+> *"Tu salud, nuestra prioridad. Soluciones naturales y bienestar diario al alcance de tu mano."*
+
+**Remedioz Natura** es el puente digital entre la medicina natural de confianza y la tecnología de vanguardia. Diseñada en exclusiva para **Lima, Perú**, esta plataforma ofrece una experiencia de compra rápida, intuitiva y accesible desde cualquier dispositivo móvil o navegador web, adaptándose perfectamente a la realidad comercial de la capital.
 
 ---
 
-# 🌿 Remedioz Natura | E-Commerce Multiplataforma
+## ✨ Experiencia de Usuario y Funcionalidades
 
-> *"Tu salud, nuestra prioridad. Más que una tienda, somos un equipo dedicado a guiarte en tu camino hacia una vida más saludable con soluciones naturales diseñadas para tu bienestar diario."*
-
-**Remedioz Natura** es una plataforma de e-commerce innovadora y de alto rendimiento, diseñada exclusivamente para la ciudad de **Lima, Perú**. Especializada en la venta de medicamentos y productos naturales, la aplicación conecta la sabiduría de la medicina natural con la tecnología más moderna, ofreciendo una experiencia de usuario fluida, reactiva y accesible tanto desde dispositivos móviles como desde la web.
-
----
-
-## ✨ Características Principales y Lógica de Negocio
-
-* 🔄 **Catálogo Reactivo en Tiempo Real:** Exploración de productos, kits y promociones que reaccionan al instante a los cambios en la base de datos gracias a flujos asíncronos (`StateFlow`).
-* 🧠 **Motor de Carrito Inteligente (SSOT):** Gestión centralizada del carrito bajo el principio de *Single Source of Truth*. Los productos seleccionados persisten su estado visual a través de todas las pantallas sin perder sincronía.
-* 🛡️ **Autenticación Segura y Limpia:** Sistema de inicio de sesión preparado para integraciones nativas (Google SignIn) separando estrictamente la vista de la lógica de negocio.
-* 💼 **Backoffice Móvil (Consola Admin):** Una vista de administración protegida y dedicada para gestionar el inventario. Permite crear, editar, eliminar productos y subir fotografías a la nube directamente desde el dispositivo de forma intuitiva.
-* 💸 **Flujo de Pagos por Validación (Contexto Local):** Sistema de pago sin fricciones tecnológicas bancarias. El usuario realiza su pedido y valida su compra enviando una captura del *voucher* (comprobante Yape/Plin/Transferencia), adaptándose de manera perfecta y segura a la realidad financiera del comercio limeño.
+* 🔄 **Catálogo Dinámico:** Exploración instantánea de productos, kits y tratamientos con actualizaciones visuales en tiempo real.
+* 🛒 **Carrito Inteligente:** Sincronización ininterrumpida de selecciones a lo largo de toda la navegación del usuario.
+* 🛡️ **Acceso Protegido:** Autenticación fluida y segura para garantizar la privacidad y una experiencia sin barreras.
+* 💳 **Pagos Locales Sin Fricción:** Sistema de validación de compras adaptado al entorno financiero limeño (Yape, Plin y Transferencias). Elimina comisiones de pasarelas internacionales y fortalece la confianza entre la tienda y el paciente mediante la verificación de comprobantes.
+* 💼 **Centro de Control Administrativo:** Backoffice móvil dedicado que permite la gestión instantánea del inventario y la actualización del catálogo directamente desde la palma de la mano.
 
 ---
 
-## 🚀 Arquitectura y Stack Tecnológico (The Tech Stack)
+## 🚀 Motor Tecnológico (Tech Stack)
 
-Este ecosistema ha sido construido utilizando el estado del arte en desarrollo de software moderno. Se rige por los patrones **MVVM (Model-View-ViewModel)** y **UDF (Unidirectional Data Flow)**, garantizando un código escalable, testeable y de grado Senior.
+Construido bajo los estándares más exigentes de la industria móvil y web, garantizando velocidad, escalabilidad y un rendimiento de grado empresarial.
 
-### 📱 Frontend (Android & Web)
-
-* **Kotlin Multiplatform (KMP):** El corazón del proyecto. Lógica de negocio, modelos de dominio y repositorios escritos una sola vez, ejecutados de forma nativa en múltiples plataformas.
-* **Compose Multiplatform:** Interfaz de usuario 100% declarativa. Tarjetas adaptativas, animaciones y modales que brillan en Android y se renderizan a la perfección en la Web.
-
-### ☁️ Infraestructura Cloud & Red
-
-* **Firebase (GitLive SDK):** Backend serverless multiplataforma.
-* **Cloud Firestore:** Base de datos NoSQL para el catálogo y los pedidos en tiempo real.
-* **Firebase Storage:** Alojamiento seguro para imágenes de productos y vouchers de clientes.
-* **Firebase Auth:** Gestión de identidades y sesiones de usuario.
-
-
-* **Ktor Client:** Motor asíncrono y ultrarrápido para el manejo de peticiones de red bajo el capó.
-* **Coil 3:** Carga, renderizado y caché avanzado de imágenes (`AsyncImage`) mediante `KtorNetworkFetcherFactory`.
-
-### 🛠️ Herramientas y Librerías Adicionales
-
-* **FileKit Compose:** Selector de archivos nativo multiplataforma para la captura de fotos desde la galería.
-* **Corrutinas (Coroutines) y Flows:** Manejo avanzado de asincronía y reactividad en hilos paralelos.
+* **Core Multiplataforma:** Kotlin Multiplatform (KMP) para una base de código unificada y eficiente.
+* **Interfaz Declarativa:** Compose Multiplatform, logrando animaciones fluidas y diseños adaptables de primera categoría.
+* **Infraestructura Cloud:** Respaldado por el ecosistema serverless de Firebase (Base de datos NoSQL, Storage multimedia y Auth).
+* **Conectividad y Renderizado:** Ktor Client para un manejo de red ultrarrápido y Coil 3 para la carga y caché asíncrona de imágenes.
 
 ---
 
-## 📍 Alcance y Visión Local
+## 📍 Visión Estratégica: Lima Metropolitana
 
-Diseñado por y para la comunidad. Al restringir el servicio a **Lima Metropolitana**, *Remedioz Natura* asegura una logística de entrega óptima, elimina las comisiones pasarelas internacionales (Stripe/PayPal), reduce el fraude informático y establece un vínculo de confianza directo y personalizado con cada paciente.
+Al enfocar el ecosistema operativo exclusivamente en la ciudad de Lima, la plataforma asegura una logística de entrega impecable, mitiga riesgos de fraude digital y establece un vínculo directo y personalizado. Esto permite un modelo de negocio ágil, libre de comisiones de terceros y enfocado al 100% en el bienestar de la comunidad local.
 
 ---
 
-## 🚧 Roadmap y Estado del Proyecto
+## 🚧 Estado del Proyecto
 
 **[ EN DESARROLLO ACTIVO ⚙️ ]**
 
-La arquitectura base y el motor del e-commerce están completados. Nos encontramos en la Fase de Consolidación (Checkout y Búsqueda):
+La base estructural y el motor del e-commerce están cimentados. Actualmente en la Fase de Consolidación de Flujos:
 
-* [x] **Fase 1:** UI Declarativa, Navegación y Diseño Adaptativo.
-* [x] **Fase 2:** Integración Cloud, Inventario Admin, Auth y Motor de Carrito (SSOT).
-* [ ] **Fase 3:** Sistema de Filtros Reactivos (Búsqueda en tiempo real).
-* [ ] **Fase 4:** Flujo de validación de Vouchers (Generación de Tickets y Consola de Pedidos).
-* [ ] **Fase 5:** Pruebas finales y despliegue en producción.
+* [x] **Fase 1:** Diseño Adaptativo y Experiencia de Usuario (UI/UX).
+* [x] **Fase 2:** Integración Cloud, Autenticación y Motor de E-Commerce.
+* [x] **Fase 3:** Sistema de Búsqueda Dinámica y Filtrado.
+* [ ] **Fase 4:** Consola de Pedidos y Validación de Pagos.
+* [ ] **Fase 5:** Pruebas de Estrés y Despliegue en Producción.
+
+---
 
 *Creado con ❤️, disciplina y Kotlin.*
