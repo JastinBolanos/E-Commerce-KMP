@@ -1,15 +1,20 @@
 package com.remedioz.natura.data.repository
 
+import com.remedioz.natura.data.platform.toFirebaseData
+import com.remedioz.natura.domain.model.Order
 import com.remedioz.natura.domain.model.Product
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.GoogleAuthProvider
 import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
+import dev.gitlive.firebase.storage.storage
+import kotlin.time.Clock
 
 class FirebaseRepository {
     // --- 1. INSTANCIAS DE FIREBASE ---
     private val db = Firebase.firestore
     private val auth = Firebase.auth
+    private val storage = Firebase.storage
     private val productsCollection = db.collection("products")
 
     // --- 2. MÉTODOS DE AUTENTICACIÓN ---
@@ -22,10 +27,10 @@ class FirebaseRepository {
         return try {
             val credential = GoogleAuthProvider.credential(idToken, accessToken)
             auth.signInWithCredential(credential)
-            true // Login exitoso
+            true
         } catch (e: Exception) {
             println("Error en Firebase Auth: ${e.message}")
-            false // Falló el login
+            false
         }
     }
 
@@ -43,14 +48,13 @@ class FirebaseRepository {
      */
     suspend fun getProducts(): List<Product> {
         return try {
-            // Descargamos los documentos y los convertimos automáticamente a nuestro modelo Product
             val snapshot = productsCollection.get()
             snapshot.documents.map { document ->
                 document.data<Product>()
             }
         } catch (e: Exception) {
             println("Error al descargar productos: ${e.message}")
-            emptyList() // Si falla, devolvemos una lista vacía para que no se caiga la app
+            emptyList()
         }
     }
 
@@ -59,19 +63,61 @@ class FirebaseRepository {
      */
     suspend fun addProduct(product: Product): Boolean {
         return try {
-            // EL CAMBIO ESTÁ AQUÍ: Le quitamos los () a document
             val newDocRef = productsCollection.document
-
-            // 2. Le inyectamos ese ID al producto
             val productWithId = product.copy(id = newDocRef.id)
-
-            // 3. Lo guardamos en la nube
             newDocRef.set(productWithId)
-
-            true // Éxito
+            true
         } catch (e: Exception) {
             println("Error al guardar el producto: ${e.message}")
-            false // Fallo
+            false
+        }
+    }
+
+    /**
+     * Sube la imagen del voucher a Firebase Storage y devuelve la URL pública.
+     */
+    private suspend fun uploadVoucherImage(imageBytes: ByteArray, orderId: String): String {
+        return try {
+            val storageRef = storage.reference.child("vouchers/$orderId.jpg")
+
+            storageRef.putData(imageBytes.toFirebaseData())
+
+            storageRef.getDownloadUrl()
+        } catch (e: Exception) {
+            println("Error subiendo voucher: ${e.message}")
+            ""
+        }
+    }
+
+    /**
+     * Guarda la orden completa en la base de datos tras procesar el pago.
+     * Esta es la función principal que llamará el ViewModel del Checkout.
+     */
+    suspend fun createOrder(order: Order, voucherBytes: ByteArray): Boolean {
+        return try {
+            val generatedOrderId = "ORD-${Clock.System.now().toEpochMilliseconds()}"
+
+            val voucherUrl = uploadVoucherImage(voucherBytes, generatedOrderId)
+
+            if (voucherUrl.isEmpty()) {
+                println("Fallo al subir el voucher, cancelando creación de orden.")
+                return false
+            }
+
+            val finalOrder = order.copy(
+                id = generatedOrderId,
+                voucherUrl = voucherUrl,
+                timestamp = Clock.System.now().toEpochMilliseconds()
+            )
+
+            db.collection("orders")
+                .document(generatedOrderId)
+                .set(finalOrder)
+
+            true
+        } catch (e: Exception) {
+            println("Error al crear la orden: ${e.message}")
+            false
         }
     }
 }

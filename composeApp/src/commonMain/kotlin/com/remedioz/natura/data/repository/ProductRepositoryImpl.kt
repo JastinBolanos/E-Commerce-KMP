@@ -1,10 +1,11 @@
 package com.remedioz.natura.data.repository
 
+import com.remedioz.natura.data.platform.toFirebaseData
 import com.remedioz.natura.domain.model.Product
+import com.remedioz.natura.domain.repository.ProductRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import dev.gitlive.firebase.storage.storage
-import dev.gitlive.firebase.storage.Data
 
 class ProductRepositoryImpl : ProductRepository {
     private val db = Firebase.firestore
@@ -25,23 +26,19 @@ class ProductRepositoryImpl : ProductRepository {
             val newDocRef = productsCollection.document
             var finalImageUrl = ""
 
-            // 1. Si hay imagen, la subimos a Storage primero
             if (imageBytes != null) {
                 val imageRef = storage.reference.child("products/${newDocRef.id}.jpg")
 
-                val firebaseData = createFirebaseData(imageBytes)
-                imageRef.putData(firebaseData)
+                imageRef.putData(imageBytes.toFirebaseData())
 
                 finalImageUrl = imageRef.getDownloadUrl()
             }
 
-            // 2. Le inyectamos el ID y la URL de la imagen al producto
             val productToSave = product.copy(
                 id = newDocRef.id,
                 imageUrl = finalImageUrl
             )
 
-            // 3. Guardamos el texto en Firestore
             newDocRef.set(productToSave)
             true
         } catch (e: Exception) {
