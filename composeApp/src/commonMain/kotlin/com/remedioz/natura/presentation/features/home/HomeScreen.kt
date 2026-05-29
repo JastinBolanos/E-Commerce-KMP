@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.screens.home
+package com.remedioz.natura.presentation.features.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,19 +21,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.remedioz.natura.ui.components.CategoryFilter
-import com.remedioz.natura.ui.components.FooterSection
-import com.remedioz.natura.ui.components.LandscapeProductCard
-import com.remedioz.natura.ui.components.ProductCard
-import com.remedioz.natura.ui.components.SearchInput
-import com.remedioz.natura.ui.components.TestimonialBanner
-import com.remedioz.natura.ui.components.TopNavBar
+import com.remedioz.natura.presentation.components.CategoryFilter
+import com.remedioz.natura.presentation.components.FooterSection
+import com.remedioz.natura.presentation.components.LandscapeProductCard
+import com.remedioz.natura.presentation.components.ProductCard
+import com.remedioz.natura.presentation.components.SearchInput
+import com.remedioz.natura.presentation.components.TestimonialBanner
+import com.remedioz.natura.presentation.components.TopNavBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.remedioz.natura.ui.screens.CartScreen
+import com.remedioz.natura.presentation.features.cart.CartScreen
 import androidx.compose.runtime.collectAsState
-import com.remedioz.natura.ui.viewmodel.HomeViewModel
 import androidx.compose.foundation.lazy.items
+import com.remedioz.natura.presentation.state.CartManager
+import com.remedioz.natura.presentation.features.checkout.CheckoutScreen
+import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 
 /**
  * Contenedor principal de la Tienda (UI Host).
@@ -49,7 +51,8 @@ import androidx.compose.foundation.lazy.items
 fun HomeScreen(
     onAdminClick: () -> Unit,
     onAuthClick: () -> Unit,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    checkoutViewModel: CheckoutViewModel
 ) {
     var currentScreen by remember { mutableStateOf("STORE") }
 
@@ -135,7 +138,30 @@ fun HomeScreen(
 
     } else if (currentScreen == "CART") {
         CartScreen(
-            onBackClick = { currentScreen = "STORE" }
+            onBackClick = { currentScreen = "STORE" },
+            onProceedToCheckoutClick = { currentScreen = "CHECKOUT" }
+        )
+    } else if (currentScreen == "CHECKOUT") {
+
+        val total = CartManager.cartItems.value.sumOf { item ->
+            (item.product.price.toDoubleOrNull() ?: 0.0) * item.quantity
+        }
+
+        CheckoutScreen(
+            totalAmount = total,
+            onBackClick = { currentScreen = "CART" },
+            onConfirmOrder = { voucherBytes ->
+                checkoutViewModel.processOrder(
+                    userId = "USER-ANONYMOUS", // TODO: Conectar con Auth real en el futuro
+                    customerName = "Cliente de App",
+                    cartItems = CartManager.cartItems.value,
+                    total = total,
+                    voucherBytes = voucherBytes
+                )
+                // Opcional por ahora: limpiar el carrito y volver al inicio
+                CartManager.clearCart()
+                currentScreen = "STORE"
+            }
         )
     }
 }

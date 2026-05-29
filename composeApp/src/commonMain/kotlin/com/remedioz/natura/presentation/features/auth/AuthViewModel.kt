@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.viewmodel
+package com.remedioz.natura.presentation.features.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,11 +12,9 @@ class AuthViewModel(
     private val repository: FirebaseRepository
 ) : ViewModel() {
 
-    // Estado para controlar si mostramos un indicador de carga en la UI
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    // Estado para avisarle a la UI que el login fue exitoso
     private val _loginSuccess = MutableStateFlow(false)
     val loginSuccess: StateFlow<Boolean> = _loginSuccess.asStateFlow()
 

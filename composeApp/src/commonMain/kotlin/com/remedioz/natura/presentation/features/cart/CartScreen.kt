@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.screens
+package com.remedioz.natura.presentation.features.cart
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,19 +27,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.remedioz.natura.domain.model.CartItem
-import com.remedioz.natura.domain.model.CartManager
-import com.remedioz.natura.ui.components.ProductDetailDialog
+import com.remedioz.natura.presentation.state.CartManager
+import com.remedioz.natura.presentation.components.ProductDetailDialog
 import org.jetbrains.compose.resources.Font
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(onBackClick: () -> Unit) {
-    // 1. ESCUCHAMOS EL CEREBRO EN TIEMPO REAL
+fun CartScreen(
+    onBackClick: () -> Unit,
+    onProceedToCheckoutClick: () -> Unit
+) {
     val cartItems by CartManager.cartItems.collectAsState()
 
-    // 2. MATEMÁTICAS: Calculamos el Total general sumando los subtotales
     val totalAmount = cartItems.sumOf { item ->
         val priceNum = item.product.price.toDoubleOrNull() ?: 0.0
         priceNum * item.quantity
@@ -71,7 +72,6 @@ fun CartScreen(onBackClick: () -> Unit) {
         },
         bottomBar = {
             // --- FOOTER: TOTAL Y BOTÓN COMPRAR TODO ---
-            // Solo lo mostramos si hay productos en el carrito
             if (cartItems.isNotEmpty()) {
                 Column(
                     modifier = Modifier
@@ -79,19 +79,17 @@ fun CartScreen(onBackClick: () -> Unit) {
                         .background(Color.White)
                         .padding(24.dp)
                 ) {
-                    // Mostramos el total real calculado
                     Text("Total: S/ $totalAmount", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Botón con degradado Morado a Verde Neón
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
                             .clip(RoundedCornerShape(32.dp))
                             .background(Brush.horizontalGradient(listOf(Color(0xFF6B4BFF), Color(0xFF00E676))))
-                            .clickable { println("Proceder al pago de S/ $totalAmount") },
+                            .clickable { onProceedToCheckoutClick() },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("Comprar Todo", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
@@ -102,12 +100,11 @@ fun CartScreen(onBackClick: () -> Unit) {
     ) { paddingValues ->
 
         if (cartItems.isEmpty()) {
-            // Pantalla vacía elegante
             Box(
                 modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Tu carrito está vacío 🛒", fontSize = 18.sp, color = Color.Gray)
+                Text("Tu carrito está vacío", fontSize = 18.sp, color = Color.Gray)
             }
         } else {
             LazyColumn(
@@ -116,7 +113,6 @@ fun CartScreen(onBackClick: () -> Unit) {
                     .padding(paddingValues)
                     .background(Color.White)
             ) {
-                // Pasamos la lista real a tus tarjetas
                 items(cartItems) { item ->
                     CartItemRow(cartItem = item)
                     Divider(color = Color.LightGray, thickness = 1.dp)
@@ -129,13 +125,9 @@ fun CartScreen(onBackClick: () -> Unit) {
 // --- COMPONENTE INTERNO: LA TARJETA DEL PRODUCTO EN EL CARRITO ---
 @Composable
 fun CartItemRow(cartItem: CartItem) {
-    // Extraemos el producto del item para no reescribir todo tu código
+
     val product = cartItem.product
-
-    // El estado de los detalles sí es local de esta vista
     var showDetails by remember { mutableStateOf(false) }
-
-    // Calculamos el subtotal real de esta fila
     val priceNum = product.price.toDoubleOrNull() ?: 0.0
     val subtotal = priceNum * cartItem.quantity
 
@@ -144,7 +136,6 @@ fun CartItemRow(cartItem: CartItem) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // 1. Imagen a la izquierda conectada a Firebase con Coil
         Box(
             modifier = Modifier
                 .width(130.dp)
@@ -181,7 +172,7 @@ fun CartItemRow(cartItem: CartItem) {
                     Text("S/ ${product.price}", fontSize = 12.sp, color = Color.Gray)
                 }
 
-                // Botón rojo de carrito (AHORA ELIMINA REALMENTE EL PRODUCTO)
+                // Botón rojo de carrito
                 Box(
                     modifier = Modifier
                         .size(24.dp)
@@ -226,12 +217,10 @@ fun CartItemRow(cartItem: CartItem) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Mostramos el subtotal en lugar del precio quemado
             Text(text = "Subtotal: S/ $subtotal", fontSize = 13.sp, color = Color.Black, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Selector de Cantidad CONECTADO AL MANAGER
             Row(
                 modifier = Modifier
                     .width(120.dp)
@@ -243,7 +232,6 @@ fun CartItemRow(cartItem: CartItem) {
                 Box(
                     modifier = Modifier.weight(1f).fillMaxHeight()
                         .clickable {
-                            // Le restamos 1 usando la lógica de nuestro manager
                             if (cartItem.quantity > 1) CartManager.addProduct(product, -1)
                         },
                     contentAlignment = Alignment.Center
@@ -260,14 +248,12 @@ fun CartItemRow(cartItem: CartItem) {
                     modifier = Modifier.weight(1f).fillMaxHeight(),
                     contentAlignment = Alignment.Center
                 ) {
-                    // Leemos la cantidad real de la memoria
                     Text(text = cartItem.quantity.toString(), fontSize = 14.sp, color = Color.Black)
                 }
                 Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
                 Box(
                     modifier = Modifier.weight(1f).fillMaxHeight()
                         .clickable {
-                            // Le sumamos 1
                             CartManager.addProduct(product, 1)
                         },
                     contentAlignment = Alignment.Center
@@ -283,7 +269,7 @@ fun CartItemRow(cartItem: CartItem) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Botón Comprar Degradado pequeño (Por ahora solo loguea)
+            // Botón Comprar
             Box(
                 modifier = Modifier
                     .width(120.dp)

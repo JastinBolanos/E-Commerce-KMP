@@ -1,4 +1,4 @@
-package com.remedioz.natura.ui.screens
+package com.remedioz.natura.presentation.features.auth
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -25,7 +25,7 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.remedioz.natura.ui.viewmodel.AuthViewModel
+import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.ic_google_logo
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
@@ -44,8 +44,6 @@ fun AuthScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val loginSuccess by viewModel.loginSuccess.collectAsState()
 
-    // Reacción reactiva a cambios de estado.
-    // Se ejecuta el callback de cierre para limpiar la pila de navegación tras un éxito.
     if (loginSuccess) {
         onClose()
     }
