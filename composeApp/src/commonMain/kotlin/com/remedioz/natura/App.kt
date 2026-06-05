@@ -17,6 +17,8 @@ import com.remedioz.natura.presentation.features.admin.EditProductsScreen
 import com.remedioz.natura.presentation.features.auth.AuthScreen
 import com.remedioz.natura.presentation.features.home.HomeScreen
 import com.remedioz.natura.presentation.features.admin.AdminViewModel
+import com.remedioz.natura.presentation.features.admin.NotificationsScreen
+import com.remedioz.natura.presentation.features.admin.OrdersScreen
 import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 import com.remedioz.natura.presentation.features.home.HomeViewModel
@@ -72,11 +74,21 @@ fun App() {
                 }
 
                 "ORDERS" -> {
-                    // TODO: Aquí irá tu futura Pantalla de Pedidos
+                    // 🟢 PANTALLA DE PEDIDOS (Fase Demo)
+                    OrdersScreen(
+                        onBackClick = { currentScreen = "ADMIN" },
+                        onConfirmClick = { orderId ->
+                            // TODO: En el siguiente paso navegaremos a la pantalla de detalle del Voucher
+                            println("Ir a confirmar pedido: $orderId")
+                        }
+                    )
                 }
 
                 "NOTIFICATIONS" -> {
-                    // TODO: Aquí irá tu futura Pantalla de Notificaciones
+                    // 🟢 PANTALLA DE NOTIFICACIONES (Fase Demo)
+                    NotificationsScreen(
+                        onBackClick = { currentScreen = "ADMIN" }
+                    )
                 }
 
                 "AUTH" -> {
