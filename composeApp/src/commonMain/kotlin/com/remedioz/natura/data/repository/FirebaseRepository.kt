@@ -9,6 +9,8 @@ import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 import dev.gitlive.firebase.storage.storage
 import kotlin.time.Clock
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class FirebaseRepository {
     // --- 1. INSTANCIAS DE FIREBASE ---
@@ -120,4 +122,46 @@ class FirebaseRepository {
             false
         }
     }
+
+    // --- NUEVAS FUNCIONES DE CONFIGURACIÓN DE PAGO ---
+    private val settingsRef = db.collection("settings").document("payment")
+
+    suspend fun updatePaymentSettings(imageBytes: ByteArray?, currentQrUrl: String, newPhoneNumber: String): Boolean {
+        return try {
+            var finalUrl = currentQrUrl
+
+            if (imageBytes != null) {
+                val storageRef = storage.reference.child("payment/qr_code.jpg")
+                storageRef.putData(imageBytes.toFirebaseData())
+                finalUrl = storageRef.getDownloadUrl()
+            }
+
+            settingsRef.set(mapOf(
+                "qrUrl" to finalUrl,
+                "phoneNumber" to newPhoneNumber
+            ))
+            true
+        } catch (e: Exception) {
+            println("Error subiendo configuración: ${e.message}")
+            false
+        }
+    }
+
+    fun observePaymentSettings(): Flow<PaymentSettings> {
+        return settingsRef.snapshots.map { snapshot ->
+            if (snapshot.exists) {
+                PaymentSettings(
+                    qrUrl = snapshot.get<String?>("qrUrl") ?: "",
+                    phoneNumber = snapshot.get<String?>("phoneNumber") ?: "987 654 321"
+                )
+            } else {
+                PaymentSettings()
+            }
+        }
+    }
 }
+
+data class PaymentSettings(
+    val qrUrl: String = "",
+    val phoneNumber: String = "987 654 321"
+)

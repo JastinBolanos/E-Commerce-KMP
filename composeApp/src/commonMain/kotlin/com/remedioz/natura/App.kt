@@ -19,9 +19,11 @@ import com.remedioz.natura.presentation.features.home.HomeScreen
 import com.remedioz.natura.presentation.features.admin.AdminViewModel
 import com.remedioz.natura.presentation.features.admin.NotificationsScreen
 import com.remedioz.natura.presentation.features.admin.OrdersScreen
+import com.remedioz.natura.presentation.features.admin.UpdatePaymentScreen
 import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 import com.remedioz.natura.presentation.features.home.HomeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun App() {
@@ -74,7 +76,7 @@ fun App() {
                 }
 
                 "ORDERS" -> {
-                    // 🟢 PANTALLA DE PEDIDOS (Fase Demo)
+                    // PANTALLA DE PEDIDOS (Fase Demo)
                     OrdersScreen(
                         onBackClick = { currentScreen = "ADMIN" },
                         onConfirmClick = { orderId ->
@@ -84,8 +86,32 @@ fun App() {
                     )
                 }
 
+                "UPDATE_PAYMENT" -> {
+                    val coroutineScope = rememberCoroutineScope()
+                    var isUploadingQr by remember { mutableStateOf(false) }
+                    val paymentSettings by firebaseRepository.observePaymentSettings().collectAsState(initial = com.remedioz.natura.data.repository.PaymentSettings())
+
+                    UpdatePaymentScreen(
+                        currentQrUrl = paymentSettings.qrUrl,
+                        currentPhoneNumber = paymentSettings.phoneNumber,
+                        isLoading = isUploadingQr,
+                        onBackClick = { currentScreen = "ADMIN" },
+                        onSaveClick = { newQrBytes, newPhoneNumber ->
+                            coroutineScope.launch {
+                                isUploadingQr = true
+                                val success = firebaseRepository.updatePaymentSettings(newQrBytes, paymentSettings.qrUrl, newPhoneNumber)
+                                isUploadingQr = false
+
+                                if (success) {
+                                    currentScreen = "ADMIN"
+                                }
+                            }
+                        }
+                    )
+                }
+
                 "NOTIFICATIONS" -> {
-                    // 🟢 PANTALLA DE NOTIFICACIONES (Fase Demo)
+                    // PANTALLA DE NOTIFICACIONES (Fase Demo)
                     NotificationsScreen(
                         onBackClick = { currentScreen = "ADMIN" }
                     )

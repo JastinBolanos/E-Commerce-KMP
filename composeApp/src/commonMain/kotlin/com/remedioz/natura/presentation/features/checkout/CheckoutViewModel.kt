@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+import com.remedioz.natura.data.repository.PaymentSettings
 
 /**
  * Orquestador del proceso de pagos.
@@ -20,6 +23,12 @@ class CheckoutViewModel(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    val paymentSettings: StateFlow<PaymentSettings> = repository.observePaymentSettings().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = PaymentSettings()
+    )
 
     private val _orderSuccess = MutableStateFlow(false)
     val orderSuccess: StateFlow<Boolean> = _orderSuccess.asStateFlow()

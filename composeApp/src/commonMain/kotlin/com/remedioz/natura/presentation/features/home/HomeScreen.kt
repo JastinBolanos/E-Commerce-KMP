@@ -52,7 +52,8 @@ fun HomeScreen(
     val selectedCategory by viewModel.selectedCategory.collectAsState()
 
     val kitsProducts = filteredProducts.filter { it.category.equals("Kits", ignoreCase = true) }
-    val verticalProducts = filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
+    val verticalProducts =
+        filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
     when (currentScreen) {
         "STORE" -> {
@@ -62,7 +63,9 @@ fun HomeScreen(
             ) {
                 item {
                     Column(modifier = Modifier.fillMaxWidth()) {
-                        TopNavBar(onCartClick = { currentScreen = "CART" }, onProfileClick = { onAuthClick() })
+                        TopNavBar(
+                            onCartClick = { currentScreen = "CART" },
+                            onProfileClick = { onAuthClick() })
                         Spacer(modifier = Modifier.height(8.dp))
 
                         SearchInput(
@@ -139,6 +142,7 @@ fun HomeScreen(
         "CHECKOUT" -> {
             val isLoading by checkoutViewModel.isLoading.collectAsState()
             val orderSuccess by checkoutViewModel.orderSuccess.collectAsState()
+            val paymentSettings by checkoutViewModel.paymentSettings.collectAsState()
 
             val total = CartManager.cartItems.value.sumOf { item ->
                 (item.product.price.toDoubleOrNull() ?: 0.0) * item.quantity
@@ -155,6 +159,8 @@ fun HomeScreen(
             CheckoutScreen(
                 totalAmount = total,
                 isLoading = isLoading,
+                qrUrl = paymentSettings.qrUrl,
+                phoneNumber = paymentSettings.phoneNumber,
                 onBackClick = { currentScreen = "CART" },
                 onConfirmOrder = { voucherBytes ->
                     checkoutViewModel.processOrder(

@@ -42,6 +42,8 @@ import kotlinx.coroutines.launch
 fun CheckoutScreen(
     totalAmount: Double,
     isLoading: Boolean,
+    qrUrl: String,
+    phoneNumber: String,
     onBackClick: () -> Unit,
     onConfirmOrder: (ByteArray) -> Unit
 ) {
@@ -111,7 +113,7 @@ fun CheckoutScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // 🟢 EL CUADRADO DEL QR (Preparado para la mutación del Admin)
+                    // EL CUADRADO DEL QR
                     Box(
                         modifier = Modifier
                             .size(160.dp)
@@ -119,22 +121,25 @@ fun CheckoutScreen(
                             .background(Color(0xFFEBEBEB)),
                         contentAlignment = Alignment.Center
                     ) {
-                        // TODO: Aquí irá el AsyncImage que descargará el QR desde Firebase
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Icon(
-                                imageVector = Icons.Default.QrCodeScanner,
-                                contentDescription = "QR de Pago",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(48.dp)
+                        if (qrUrl.isNotEmpty()) {
+                            AsyncImage(
+                                model = qrUrl,
+                                contentDescription = "QR Oficial de Pago",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text("QR dinámico", color = Color.Gray, fontSize = 10.sp)
+                        } else {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Icon(Icons.Default.QrCodeScanner, contentDescription = "QR de Pago", tint = Color.Gray, modifier = Modifier.size(48.dp))
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text("QR dinámico", color = Color.Gray, fontSize = 10.sp)
+                            }
                         }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("987 654 321", fontSize = 24.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+                    Text(text = phoneNumber, fontSize = 24.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
                     Text("Johana Quispe Ortiz", color = Color.Gray, fontSize = 14.sp)
                 }
             }

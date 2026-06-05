@@ -85,7 +85,6 @@ fun NotificationsScreen(
 // --- COMPONENTE: ITEM DE NOTIFICACIÓN ---
 @Composable
 fun NotificationItemDemo(notification: FakeNotification) {
-    // Si no está leída, le ponemos un fondo ligeramente gris para que resalte
     val backgroundColor = if (notification.isUnread) Color(0xFFF9F9F9) else Color.White
 
     Row(
