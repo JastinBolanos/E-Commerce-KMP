@@ -23,7 +23,8 @@ fun AdminScreen(
     onBackClick: () -> Unit,
     onNavigateToOrders: () -> Unit,
     onNavigateToEditProducts: () -> Unit,
-    onNavigateToNotifications: () -> Unit
+    onNavigateToNotifications: () -> Unit,
+    onNavigateToUpdatePayment: () -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
 
@@ -86,6 +87,22 @@ fun AdminScreen(
             ) {
                 Text(
                     text = "Editar Productos",
+                    fontFamily = imperialFont,
+                    fontSize = 32.sp,
+                    color = Color.Black
+                )
+            }
+            HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+
+            // --- ITEM 3: ACTUALIZAR MÉTODO DE PAGO ---
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigateToUpdatePayment() }
+                    .padding(horizontal = 24.dp, vertical = 20.dp)
+            ) {
+                Text(
+                    text = "Actualizar Metodos de Pago", // 👈 NUEVO BOTÓN
                     fontFamily = imperialFont,
                     fontSize = 32.sp,
                     color = Color.Black

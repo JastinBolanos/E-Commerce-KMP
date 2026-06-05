@@ -55,12 +55,12 @@ fun App() {
                 }
 
                 "ADMIN" -> {
-                    // 🟢 EL NUEVO MENÚ PRINCIPAL
                     AdminScreen(
                         onBackClick = { currentScreen = "STORE" },
                         onNavigateToOrders = { currentScreen = "ORDERS" },
                         onNavigateToEditProducts = { currentScreen = "EDIT_PRODUCTS" },
-                        onNavigateToNotifications = { currentScreen = "NOTIFICATIONS" } 
+                        onNavigateToNotifications = { currentScreen = "NOTIFICATIONS" },
+                        onNavigateToUpdatePayment = { currentScreen = "UPDATE_PAYMENT" }
                     )
                 }
 

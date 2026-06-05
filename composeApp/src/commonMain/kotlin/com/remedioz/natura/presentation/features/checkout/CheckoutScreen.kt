@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -101,38 +102,42 @@ fun CheckoutScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text("Escanea o transfiere vía Yape/Plin al:", color = Color.DarkGray, fontSize = 14.sp)
+
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // 🟢 ESPACIO PARA TUS QR (Descomenta cuando tengas las imágenes en composeResources/drawable)
-                    /*
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                    // 🟢 EL CUADRADO DEL QR (Preparado para la mutación del Admin)
+                    Box(
+                        modifier = Modifier
+                            .size(160.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFEBEBEB)),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Image(
-                            painter = painterResource(Res.drawable.qr_yape),
-                            contentDescription = "QR Yape",
-                            modifier = Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(8.dp))
-                        )
-                        Image(
-                            painter = painterResource(Res.drawable.qr_plin),
-                            contentDescription = "QR Plin",
-                            modifier = Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(8.dp))
-                        )
+                        // TODO: Aquí irá el AsyncImage que descargará el QR desde Firebase
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.QrCodeScanner,
+                                contentDescription = "QR de Pago",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(48.dp)
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text("QR dinámico", color = Color.Gray, fontSize = 10.sp)
+                        }
                     }
+
                     Spacer(modifier = Modifier.height(16.dp))
-                    */
 
                     Text("987 654 321", fontSize = 24.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
                     Text("Johana Quispe Ortiz", color = Color.Gray, fontSize = 14.sp)
                 }
             }
-
             Spacer(modifier = Modifier.height(32.dp))
 
             // --- 3. SUBIDA DE VOUCHER (FileKit) ---
