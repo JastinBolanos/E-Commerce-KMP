@@ -157,7 +157,7 @@ fun CartItemRow(cartItem: CartItem) {
 
         // 2. Columna de detalles a la derecha
         Column(modifier = Modifier.weight(1f)) {
-            // Título y botón rojo de eliminar
+            // Título y botón de eliminar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -172,7 +172,7 @@ fun CartItemRow(cartItem: CartItem) {
                     Text("S/ ${product.price}", fontSize = 12.sp, color = Color.Gray)
                 }
 
-                // Botón rojo de carrito
+                // Botón de carrito
                 Box(
                     modifier = Modifier
                         .size(24.dp)

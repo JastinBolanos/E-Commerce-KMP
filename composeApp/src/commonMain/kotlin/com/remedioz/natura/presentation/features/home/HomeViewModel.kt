@@ -16,6 +16,7 @@ class HomeViewModel(
     private val repository: ProductRepository
 ) : ViewModel() {
     private val _products = MutableStateFlow<List<Product>>(emptyList())
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
@@ -37,20 +38,22 @@ class HomeViewModel(
         }
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Companion.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
     )
 
     init {
-        loadProducts()
+        observeProductsInRealTime()
     }
 
-    fun loadProducts() {
+    private fun observeProductsInRealTime() {
         viewModelScope.launch {
             try {
-                _products.value = repository.getProducts()
+                repository.observeProducts().collect { liveProducts ->
+                    _products.value = liveProducts
+                }
             } catch (e: Exception) {
-                println("Error en Home: ${e.message}")
+                println("Error en Home escuchando productos: ${e.message}")
             }
         }
     }

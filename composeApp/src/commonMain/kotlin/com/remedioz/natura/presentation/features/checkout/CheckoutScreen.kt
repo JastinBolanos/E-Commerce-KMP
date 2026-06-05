@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun CheckoutScreen(
     totalAmount: Double,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
     onConfirmOrder: (ByteArray) -> Unit
 ) {
@@ -104,7 +105,29 @@ fun CheckoutScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text("Escanea o transfiere vía Yape/Plin al:", color = Color.DarkGray, fontSize = 14.sp)
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // 🟢 ESPACIO PARA TUS QR (Descomenta cuando tengas las imágenes en composeResources/drawable)
+                    /*
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.qr_yape),
+                            contentDescription = "QR Yape",
+                            modifier = Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(8.dp))
+                        )
+                        Image(
+                            painter = painterResource(Res.drawable.qr_plin),
+                            contentDescription = "QR Plin",
+                            modifier = Modifier.weight(1f).aspectRatio(1f).clip(RoundedCornerShape(8.dp))
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    */
+
                     Text("987 654 321", fontSize = 24.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
                     Text("Johana Quispe Ortiz", color = Color.Gray, fontSize = 14.sp)
                 }
@@ -167,7 +190,11 @@ fun CheckoutScreen(
                     disabledContainerColor = Color.LightGray
                 )
             ) {
-                Text("Confirmar Pago y Enviar Pedido", color = Color.White, fontWeight = FontWeight.Bold)
+                if (isLoading) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+                } else {
+                    Text("Confirmar Pago y Enviar Pedido", color = Color.White, fontWeight = FontWeight.Bold)
+                }
             }
 
             Spacer(modifier = Modifier.height(32.dp))

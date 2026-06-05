@@ -6,6 +6,8 @@ import com.remedioz.natura.domain.repository.ProductRepository
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
 import dev.gitlive.firebase.storage.storage
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ProductRepositoryImpl : ProductRepository {
     private val db = Firebase.firestore
@@ -21,6 +23,14 @@ class ProductRepositoryImpl : ProductRepository {
         }
     }
 
+    override fun observeProducts(): Flow<List<Product>> {
+        return productsCollection.snapshots.map { snapshot ->
+            snapshot.documents.map { document ->
+                document.data<Product>()
+            }
+        }
+    }
+
     override suspend fun addProduct(product: Product, imageBytes: ByteArray?): Boolean {
         return try {
             val newDocRef = productsCollection.document
@@ -28,9 +38,7 @@ class ProductRepositoryImpl : ProductRepository {
 
             if (imageBytes != null) {
                 val imageRef = storage.reference.child("products/${newDocRef.id}.jpg")
-
                 imageRef.putData(imageBytes.toFirebaseData())
-
                 finalImageUrl = imageRef.getDownloadUrl()
             }
 

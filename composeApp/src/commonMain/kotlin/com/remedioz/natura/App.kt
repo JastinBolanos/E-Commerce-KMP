@@ -22,7 +22,7 @@ import com.remedioz.natura.presentation.features.home.HomeViewModel
 
 @Composable
 fun App() {
-    
+
     setSingletonImageLoaderFactory { context ->
         ImageLoader.Builder(context)
             .components {
