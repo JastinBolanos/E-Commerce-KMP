@@ -13,6 +13,7 @@ import coil3.network.ktor2.KtorNetworkFetcherFactory
 import com.remedioz.natura.data.repository.FirebaseRepository
 import com.remedioz.natura.data.repository.ProductRepositoryImpl
 import com.remedioz.natura.presentation.features.admin.AdminScreen
+import com.remedioz.natura.presentation.features.admin.EditProductsScreen
 import com.remedioz.natura.presentation.features.auth.AuthScreen
 import com.remedioz.natura.presentation.features.home.HomeScreen
 import com.remedioz.natura.presentation.features.admin.AdminViewModel
@@ -38,37 +39,58 @@ fun App() {
 
         Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 
-            if (currentScreen == "STORE") {
-                val homeViewModel = viewModel { HomeViewModel(productRepository) }
-                val checkoutViewModel = viewModel { CheckoutViewModel(firebaseRepository) }
+            when (currentScreen) {
+                "STORE" -> {
+                    val homeViewModel = viewModel { HomeViewModel(productRepository) }
+                    val checkoutViewModel = viewModel { CheckoutViewModel(firebaseRepository) }
 
-                HomeScreen(
-                    onAdminClick = { currentScreen = "ADMIN" },
-                    onAuthClick = { currentScreen = "AUTH" },
-                    viewModel = homeViewModel,
-                    checkoutViewModel = checkoutViewModel
-                )
+                    HomeScreen(
+                        onAdminClick = { currentScreen = "ADMIN" },
+                        onAuthClick = { currentScreen = "AUTH" },
+                        viewModel = homeViewModel,
+                        checkoutViewModel = checkoutViewModel
+                    )
+                }
 
-            } else if (currentScreen == "ADMIN") {
-                val adminViewModel = viewModel { AdminViewModel(productRepository) }
+                "ADMIN" -> {
+                    // 🟢 EL NUEVO MENÚ PRINCIPAL
+                    AdminScreen(
+                        onBackClick = { currentScreen = "STORE" },
+                        onNavigateToOrders = { currentScreen = "ORDERS" },
+                        onNavigateToEditProducts = { currentScreen = "EDIT_PRODUCTS" },
+                        onNavigateToNotifications = { currentScreen = "NOTIFICATIONS" } 
+                    )
+                }
 
-                AdminScreen(
-                    onBackClick = { currentScreen = "STORE" },
-                    viewModel = adminViewModel
-                )
+                "EDIT_PRODUCTS" -> {
+                    val adminViewModel = viewModel { AdminViewModel(productRepository) }
 
-            } else if (currentScreen == "AUTH") {
-                // --- PANTALLA DE LOGIN ---
-                val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
+                    EditProductsScreen(
+                        onBackClick = { currentScreen = "ADMIN" },
+                        viewModel = adminViewModel
+                    )
+                }
 
-                AuthScreen(
-                    viewModel = authViewModel,
-                    onClose = { currentScreen = "STORE" },
-                    onGoogleSignInClick = {
-                        println("Disparando Popup de Google...")
-                        // TODO: Aquí implementaremos el puente nativo de Google pronto
-                    }
-                )
+                "ORDERS" -> {
+                    // TODO: Aquí irá tu futura Pantalla de Pedidos
+                }
+
+                "NOTIFICATIONS" -> {
+                    // TODO: Aquí irá tu futura Pantalla de Notificaciones
+                }
+
+                "AUTH" -> {
+                    // --- PANTALLA DE LOGIN ---
+                    val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
+
+                    AuthScreen(
+                        viewModel = authViewModel,
+                        onClose = { currentScreen = "STORE" },
+                        onGoogleSignInClick = {
+                            println("Disparando Popup de Google...")
+                        }
+                    )
+                }
             }
         }
     }
