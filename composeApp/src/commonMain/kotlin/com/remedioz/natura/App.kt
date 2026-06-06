@@ -1,11 +1,22 @@
 package com.remedioz.natura
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
@@ -18,7 +29,9 @@ import com.remedioz.natura.presentation.features.auth.AuthScreen
 import com.remedioz.natura.presentation.features.home.HomeScreen
 import com.remedioz.natura.presentation.features.admin.AdminViewModel
 import com.remedioz.natura.presentation.features.admin.NotificationsScreen
+import com.remedioz.natura.presentation.features.admin.OrderDetailsScreen
 import com.remedioz.natura.presentation.features.admin.OrdersScreen
+import com.remedioz.natura.presentation.features.admin.OrdersViewModel
 import com.remedioz.natura.presentation.features.admin.UpdatePaymentScreen
 import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
@@ -38,6 +51,7 @@ fun App() {
 
     MaterialTheme {
         var currentScreen by remember { mutableStateOf("STORE") }
+        var selectedOrder by remember { mutableStateOf<com.remedioz.natura.domain.model.Order?>(null) }
         val productRepository = remember { ProductRepositoryImpl() }
         val firebaseRepository = remember { FirebaseRepository() }
 
@@ -76,14 +90,64 @@ fun App() {
                 }
 
                 "ORDERS" -> {
-                    // PANTALLA DE PEDIDOS (Fase Demo)
+                    val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
+                    val orders by ordersViewModel.orders.collectAsState()
+
                     OrdersScreen(
+                        orders = orders,
                         onBackClick = { currentScreen = "ADMIN" },
-                        onConfirmClick = { orderId ->
-                            // TODO: En el siguiente paso navegaremos a la pantalla de detalle del Voucher
-                            println("Ir a confirmar pedido: $orderId")
+                        onConfirmClick = { order ->
+                            selectedOrder = order
+
+                            if (order.status.equals("Pendiente", ignoreCase = true)) {
+                                currentScreen = "ORDER_DETAILS"
+                            } else {
+                                currentScreen = "SHIPPING_TIMELINE"
+                            }
                         }
                     )
+                }
+
+                "SHIPPING_TIMELINE" -> {
+                    Box(modifier = Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("🚧 Aquí construiremos la Línea de Tiempo 🚧", fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { currentScreen = "ORDERS" },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
+                            ) {
+                                Text("Volver a Pedidos")
+                            }
+                        }
+                    }
+                }
+
+                "ORDER_DETAILS" -> {
+                    val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
+                    val isLoading by ordersViewModel.isLoading.collectAsState()
+
+                    selectedOrder?.let { order ->
+                        OrderDetailsScreen(
+                            orderId = order.id,
+                            voucherUrl = order.voucherUrl,
+                            customerName = order.customerName,
+                            totalAmount = "S/ ${order.totalAmount}",
+                            status = order.status,
+                            isLoading = isLoading,
+                            onBackClick = { currentScreen = "ORDERS" },
+                            onApproveClick = { orderId ->
+                                ordersViewModel.updateOrderStatus(orderId, "Aprobado") {
+                                    currentScreen = "ORDERS"
+                                }
+                            },
+                            onRejectClick = { orderId ->
+                                ordersViewModel.updateOrderStatus(orderId, "Rechazado") {
+                                    currentScreen = "ORDERS"
+                                }
+                            }
+                        )
+                    }
                 }
 
                 "UPDATE_PAYMENT" -> {

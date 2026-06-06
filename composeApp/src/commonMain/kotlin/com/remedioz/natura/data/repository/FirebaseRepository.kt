@@ -123,7 +123,7 @@ class FirebaseRepository {
         }
     }
 
-    // --- NUEVAS FUNCIONES DE CONFIGURACIÓN DE PAGO ---
+    // --- FUNCIONES DE CONFIGURACIÓN DE PAGO ---
     private val settingsRef = db.collection("settings").document("payment")
 
     suspend fun updatePaymentSettings(imageBytes: ByteArray?, currentQrUrl: String, newPhoneNumber: String): Boolean {
@@ -156,6 +156,33 @@ class FirebaseRepository {
                 )
             } else {
                 PaymentSettings()
+            }
+        }
+    }
+
+    /**
+     * EL MOTOR DE LA LÍNEA DE TIEMPO
+     * Cambia el estado de un pedido en Firestore (Ej: de 'Pendiente' a 'Aprobado')
+     */
+    suspend fun updateOrderStatus(orderId: String, newStatus: String): Boolean {
+        return try {
+            db.collection("orders")
+                .document(orderId)
+                .update(mapOf("status" to newStatus))
+            true
+        } catch (e: Exception) {
+            println("Error al cambiar el estado del pedido: ${e.message}")
+            false
+        }
+    }
+
+    /**
+     * Escucha todos los pedidos en tiempo real para el panel de Administrador
+     */
+    fun observeOrders(): Flow<List<Order>> {
+        return db.collection("orders").snapshots.map { snapshot ->
+            snapshot.documents.map { document ->
+                document.data<Order>()
             }
         }
     }

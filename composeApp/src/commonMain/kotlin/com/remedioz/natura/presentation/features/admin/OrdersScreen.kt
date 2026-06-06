@@ -25,33 +25,24 @@ import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.Font
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
-
-// --- DATOS FALSOS (DEMO) ---
-data class FakeOrder(
-    val id: String,
-    val productName: String,
-    val unitPrice: String,
-    val quantity: String,
-    val totalCost: String,
-    val status: String,
-    val imageUrl: String
-)
-
-val demoOrders = listOf(
-    FakeOrder("1", "StemRenu", "S/ 350", "2", "S/ 700", "Pendiente", "https://picsum.photos/seed/natura1/200/200"),
-    FakeOrder("2", "Colágeno Premium", "S/ 120", "1", "S/ 120", "Pendiente", "https://picsum.photos/seed/natura2/200/200"),
-    FakeOrder("3", "Kit Bienestar", "S/ 450", "3", "S/ 1,350", "Pendiente", "https://picsum.photos/seed/natura3/200/200")
-)
+import com.remedioz.natura.domain.model.Order
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrdersScreen(
+    orders: List<Order>,
     onBackClick: () -> Unit,
-    onConfirmClick: (String) -> Unit
+    onConfirmClick: (Order) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("Pendientes De Confirmacion", "Estado de Envios")
+
+    val displayedOrders = if (selectedTabIndex == 0) {
+        orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
+    } else {
+        orders.filter { !it.status.equals("Pendiente", ignoreCase = true) }
+    }
 
     Scaffold(
         topBar = {
@@ -105,84 +96,92 @@ fun OrdersScreen(
             }
         }
     ) { paddingValues ->
-        // --- LISTA DE PEDIDOS ---
+        // --- LISTA DE PEDIDOS REALES ---
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .background(Color.White)
         ) {
-            items(demoOrders) { order ->
-                OrderCardDemo(order = order, onConfirmClick = onConfirmClick)
+            items(displayedOrders) { order ->
+                OrderCardReal(order = order, onConfirmClick = { onConfirmClick(order) })
                 HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+            }
+            if (displayedOrders.isEmpty()) {
+                item {
+                    Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
+                        Text("No hay pedidos en esta sección.", color = Color.Gray)
+                    }
+                }
             }
         }
     }
 }
 
-// --- COMPONENTE: TARJETA DE PEDIDO ---
+// --- COMPONENTE: TARJETA DE PEDIDO REAL (ACTUALIZADA) ---
 @Composable
-fun OrderCardDemo(order: FakeOrder, onConfirmClick: (String) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        // Columna Izquierda: Imagen y Textos del Producto
+fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
+    val firstProductImage = order.items.firstOrNull()?.product?.imageUrl ?: ""
+    val totalItems = order.items.sumOf { it.quantity }
+    val productSummary = order.items.joinToString(", ") { "${it.quantity}x ${it.product.name}" }
+    val isPending = order.status.equals("Pendiente", ignoreCase = true)
+
+    Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        // Columna Izquierda: Imagen del PRODUCTO (Ya no el voucher)
         Column(modifier = Modifier.weight(1f)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFF0F0F0))
-            ) {
+            Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0F0F0))) {
                 AsyncImage(
-                    model = order.imageUrl,
-                    contentDescription = order.productName,
+                    model = firstProductImage,
+                    contentDescription = "Producto",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = order.productName, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-            Text(text = order.unitPrice, fontSize = 12.sp, color = Color.Gray)
+            Text(text = "Pedido: ${order.id.takeLast(4)}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Columna Derecha: Estadísticas y Botones
+        // Columna Derecha: Estadísticas y Botón Inteligente
         Column(modifier = Modifier.weight(1.5f)) {
-            // Las 3 cajitas con borde
-            OutlinedStatRow(label = "Cantidad:", value = order.quantity)
-            Spacer(modifier = Modifier.height(6.dp))
-            OutlinedStatRow(label = "Costos Totales:", value = order.totalCost)
-            Spacer(modifier = Modifier.height(6.dp))
+            // Resumen de productos comprados
+            Text(
+                text = productSummary,
+                fontSize = 12.sp,
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Medium,
+                maxLines = 2,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Estadísticas
+            OutlinedStatRow(label = "Cant:", value = "$totalItems prod.")
+            Spacer(modifier = Modifier.height(4.dp))
+            OutlinedStatRow(label = "Total:", value = "S/ ${order.totalAmount}")
+            Spacer(modifier = Modifier.height(4.dp))
             OutlinedStatRow(label = "Estado:", value = order.status)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-            // Fila inferior: Ver Detalles y Botón
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Ver Detalles",
-                    fontSize = 12.sp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.clickable { /* TODO: Mostrar detalles extra si se requiere */ }
-                )
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text("Ver Detalles", fontSize = 12.sp, color = Color.DarkGray, modifier = Modifier.clickable { })
 
                 Button(
-                    onClick = { onConfirmClick(order.id) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD9D9D9)),
+                    onClick = onConfirmClick,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (isPending) Color(0xFFD9D9D9) else Color.Black
+                    ),
                     shape = RoundedCornerShape(16.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     modifier = Modifier.height(32.dp)
                 ) {
-                    Text("Ir a Confirmar", color = Color.Black, fontSize = 12.sp)
+                    Text(
+                        text = if (isPending) "Ir a Confirmar" else "Gestionar Envío",
+                        color = if (isPending) Color.Black else Color.White,
+                        fontSize = 12.sp
+                    )
                 }
             }
         }

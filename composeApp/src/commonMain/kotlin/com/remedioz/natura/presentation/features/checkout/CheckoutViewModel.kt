@@ -43,17 +43,28 @@ class CheckoutViewModel(
         viewModelScope.launch {
             _isLoading.value = true
 
-            val order = Order(
+            // 1. ARMAMOS EL PEDIDO
+            val newOrder = Order(
+                id = "",
                 userId = userId,
                 customerName = customerName,
+                totalAmount = total,
                 items = cartItems,
-                totalAmount = total
+                status = "Pendiente",
+                voucherUrl = "",
+                timestamp = 0L
             )
 
-            val success = repository.createOrder(order, voucherBytes)
+            // 2. LO ENVIAMOS A FIREBASE
+            val success = repository.createOrder(newOrder, voucherBytes)
 
-            _orderSuccess.value = success
             _isLoading.value = false
+
+            if (success) {
+                _orderSuccess.value = true
+            } else {
+                println("Error al procesar la orden en Firebase")
+            }
         }
     }
 
