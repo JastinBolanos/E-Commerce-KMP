@@ -61,7 +61,12 @@ fun App() {
                 }
 
                 "ADMIN" -> {
+                    val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
+                    val orders by ordersViewModel.orders.collectAsState()
+                    val pendingCount = orders.count { it.status.equals("Pendiente", ignoreCase = true) }
+
                     AdminScreen(
+                        pendingOrdersCount = pendingCount,
                         onBackClick = { currentScreen = "STORE" },
                         onNavigateToOrders = { currentScreen = "ORDERS" },
                         onNavigateToEditProducts = { currentScreen = "EDIT_PRODUCTS" },

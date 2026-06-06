@@ -20,6 +20,7 @@ import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminScreen(
+    pendingOrdersCount: Int,
     onBackClick: () -> Unit,
     onNavigateToOrders: () -> Unit,
     onNavigateToEditProducts: () -> Unit,
@@ -47,7 +48,19 @@ fun AdminScreen(
                     },
                     actions = {
                         IconButton(onClick = onNavigateToNotifications) {
-                            Icon(Icons.Outlined.Notifications, contentDescription = "Notificaciones", tint = Color.Black)
+                            if (pendingOrdersCount > 0) {
+                                BadgedBox(
+                                    badge = {
+                                        Badge(containerColor = Color(0xFFD32F2F), contentColor = Color.White) {
+                                            Text(pendingOrdersCount.toString())
+                                        }
+                                    }
+                                ) {
+                                    Icon(Icons.Outlined.Notifications, contentDescription = "Notificaciones", tint = Color.Black)
+                                }
+                            } else {
+                                Icon(Icons.Outlined.Notifications, contentDescription = "Notificaciones", tint = Color.Black)
+                            }
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -102,7 +115,7 @@ fun AdminScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
                 Text(
-                    text = "Actualizar Metodos de Pago", // 👈 NUEVO BOTÓN
+                    text = "Actualizar Metodos de Pago",
                     fontFamily = imperialFont,
                     fontSize = 32.sp,
                     color = Color.Black
