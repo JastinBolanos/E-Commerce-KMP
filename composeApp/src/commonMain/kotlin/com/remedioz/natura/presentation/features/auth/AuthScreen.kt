@@ -25,7 +25,6 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.ic_google_logo
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script

@@ -1,11 +1,22 @@
 package com.remedioz.natura
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
@@ -26,6 +37,7 @@ import com.remedioz.natura.presentation.features.auth.AuthViewModel
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 import com.remedioz.natura.presentation.features.home.HomeViewModel
 import com.remedioz.natura.presentation.features.admin.ShippingTimelineScreen
+import com.remedioz.natura.presentation.features.profile.CustomerProfileScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,7 +66,8 @@ fun App() {
 
                     HomeScreen(
                         onAdminClick = { currentScreen = "ADMIN" },
-                        onAuthClick = { currentScreen = "AUTH" },
+                        // EL ATAJO: Cambiamos "AUTH" por "PROFILE" por ahora luego lo cambiaremos
+                        onAuthClick = { currentScreen = "PROFILE" },
                         viewModel = homeViewModel,
                         checkoutViewModel = checkoutViewModel
                     )
@@ -189,6 +202,7 @@ fun App() {
                     )
                 }
 
+                // RUTA DEL LOGIN (MOCK)
                 "AUTH" -> {
                     val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
 
@@ -196,9 +210,42 @@ fun App() {
                         viewModel = authViewModel,
                         onClose = { currentScreen = "STORE" },
                         onGoogleSignInClick = {
-                            println("Disparando Popup de Google...")
+                            // 🚧 ATAJO 2: ¡EL BYPASS DEL LOGIN!
+                            // Al tocar "Continuar con Google", saltamos directo al perfil falso
+                            // sin hacer la validación real por ahora.
+                            currentScreen = "PROFILE"
                         }
                     )
+                }
+                // EL PERFIL FALSO DEL CLIENTE (MOCK)
+                "PROFILE" -> {
+                    val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
+                    val allOrders by ordersViewModel.orders.collectAsState()
+
+                    // OJO: Como es un entorno de pruebas, le estamos mandando TODOS los pedidos.
+                    // Cuando haya login real, aquí filtraremos: allOrders.filter { it.userId == myUserId }
+
+                    CustomerProfileScreen(
+                        orders = allOrders,
+                        onBackClick = { currentScreen = "STORE" },
+                        onTrackOrderClick = { order ->
+                            selectedOrder = order
+                            currentScreen = "CUSTOMER_TIMELINE"
+                        }
+                    )
+                }
+
+                // 🚧 Dejamos preparada la ruta para ver el seguimiento del paquete
+                "CUSTOMER_TIMELINE" -> {
+                    Box(modifier = Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("🚧 Aquí irá el mapa de seguimiento del cliente 🚧", fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(onClick = { currentScreen = "PROFILE" }, colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
+                                Text("Volver a Perfil")
+                            }
+                        }
+                    }
                 }
             }
         }

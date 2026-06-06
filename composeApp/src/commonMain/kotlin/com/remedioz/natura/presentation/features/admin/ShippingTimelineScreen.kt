@@ -94,7 +94,7 @@ fun ShippingTimelineScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- 3. EL BOTÓN (Cambia según el estado) ---
+            // --- 3. EL BOTÓN ---
             if (currentIndex < statusFlow.lastIndex) {
                 val nextStatus = statusFlow[currentIndex + 1]
 
