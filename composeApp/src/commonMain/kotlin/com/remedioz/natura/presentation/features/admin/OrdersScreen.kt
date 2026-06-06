@@ -31,14 +31,15 @@ import com.remedioz.natura.domain.model.Order
 @Composable
 fun OrdersScreen(
     orders: List<Order>,
+    selectedTab: Int,
+    onTabChange: (Int) -> Unit,
     onBackClick: () -> Unit,
     onConfirmClick: (Order) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
-    var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("Pendientes De Confirmacion", "Estado de Envios")
 
-    val displayedOrders = if (selectedTabIndex == 0) {
+    val displayedOrders = if (selectedTab == 0) {
         orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
     } else {
         orders.filter { !it.status.equals("Pendiente", ignoreCase = true) }
@@ -66,12 +67,12 @@ fun OrdersScreen(
 
                 // --- TABS (Pestañas) ---
                 TabRow(
-                    selectedTabIndex = selectedTabIndex,
+                    selectedTabIndex = selectedTab,
                     containerColor = Color.White,
                     contentColor = Color.Black,
                     indicator = { tabPositions ->
                         TabRowDefaults.SecondaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
                             color = Color.Black,
                             height = 2.dp
                         )
@@ -80,14 +81,14 @@ fun OrdersScreen(
                 ) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
-                            selected = selectedTabIndex == index,
-                            onClick = { selectedTabIndex = index },
+                            selected = selectedTab == index,
+                            onClick = { onTabChange(index) },
                             text = {
                                 Text(
                                     text = title,
                                     fontSize = 13.sp,
-                                    fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (selectedTabIndex == index) Color.Black else Color.DarkGray
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
+                                    color = if (selectedTab == index) Color.Black else Color.DarkGray
                                 )
                             }
                         )

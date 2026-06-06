@@ -1,22 +1,12 @@
 package com.remedioz.natura
 
-import androidx.compose.foundation.background
+import com.remedioz.natura.presentation.components.BackHandler
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.ImageLoader
 import coil3.compose.setSingletonImageLoaderFactory
@@ -55,6 +45,7 @@ fun App() {
     MaterialTheme {
         var currentScreen by remember { mutableStateOf("STORE") }
         var selectedOrder by remember { mutableStateOf<com.remedioz.natura.domain.model.Order?>(null) }
+        var adminOrdersTab by remember { mutableIntStateOf(0) }
         val productRepository = remember { ProductRepositoryImpl() }
         val firebaseRepository = remember { FirebaseRepository() }
 
@@ -67,7 +58,6 @@ fun App() {
 
                     HomeScreen(
                         onAdminClick = { currentScreen = "ADMIN" },
-                        // EL ATAJO: Cambiamos "AUTH" por "PROFILE" por ahora luego lo cambiaremos
                         onAuthClick = { currentScreen = "PROFILE" },
                         viewModel = homeViewModel,
                         checkoutViewModel = checkoutViewModel
@@ -75,6 +65,8 @@ fun App() {
                 }
 
                 "ADMIN" -> {
+                    BackHandler { currentScreen = "STORE" }
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
                     val pendingCount = orders.count { it.status.equals("Pendiente", ignoreCase = true) }
@@ -90,6 +82,8 @@ fun App() {
                 }
 
                 "EDIT_PRODUCTS" -> {
+                    BackHandler { currentScreen = "ADMIN" }
+
                     val adminViewModel = viewModel { AdminViewModel(productRepository) }
 
                     EditProductsScreen(
@@ -99,11 +93,15 @@ fun App() {
                 }
 
                 "ORDERS" -> {
+                    BackHandler { currentScreen = "ADMIN" } // 🛡️ Escudo
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
 
                     OrdersScreen(
                         orders = orders,
+                        selectedTab = adminOrdersTab,
+                        onTabChange = { adminOrdersTab = it },
                         onBackClick = { currentScreen = "ADMIN" },
                         onConfirmClick = { order ->
                             selectedOrder = order
@@ -118,6 +116,8 @@ fun App() {
                 }
 
                 "SHIPPING_TIMELINE" -> {
+                    BackHandler { currentScreen = "ORDERS" }
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val isLoading by ordersViewModel.isLoading.collectAsState()
 
@@ -138,6 +138,8 @@ fun App() {
                 }
 
                 "ORDER_DETAILS" -> {
+                    BackHandler { currentScreen = "ORDERS" }
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val isLoading by ordersViewModel.isLoading.collectAsState()
 
@@ -165,6 +167,8 @@ fun App() {
                 }
 
                 "UPDATE_PAYMENT" -> {
+                    BackHandler { currentScreen = "ADMIN" }
+
                     val coroutineScope = rememberCoroutineScope()
                     var isUploadingQr by remember { mutableStateOf(false) }
                     val paymentSettings by firebaseRepository.observePaymentSettings().collectAsState(initial = com.remedioz.natura.data.repository.PaymentSettings())
@@ -189,6 +193,8 @@ fun App() {
                 }
 
                 "NOTIFICATIONS" -> {
+                    BackHandler { currentScreen = "ADMIN" }
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
                     val pendingOrders = orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
@@ -203,28 +209,25 @@ fun App() {
                     )
                 }
 
-                // RUTA DEL LOGIN (MOCK)
                 "AUTH" -> {
+                    BackHandler { currentScreen = "STORE" }
+
                     val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
 
                     AuthScreen(
                         viewModel = authViewModel,
                         onClose = { currentScreen = "STORE" },
                         onGoogleSignInClick = {
-                            // 🚧 ATAJO 2: ¡EL BYPASS DEL LOGIN!
-                            // Al tocar "Continuar con Google", saltamos directo al perfil falso
-                            // sin hacer la validación real por ahora.
                             currentScreen = "PROFILE"
                         }
                     )
                 }
-                // EL PERFIL FALSO DEL CLIENTE (MOCK)
+
                 "PROFILE" -> {
+                    BackHandler { currentScreen = "STORE" }
+
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val allOrders by ordersViewModel.orders.collectAsState()
-
-                    // OJO: Como es un entorno de pruebas, le estamos mandando TODOS los pedidos.
-                    // Cuando haya login real, aquí filtraremos: allOrders.filter { it.userId == myUserId }
 
                     CustomerProfileScreen(
                         orders = allOrders,
@@ -236,8 +239,9 @@ fun App() {
                     )
                 }
 
-                // LA LÍNEA DE TIEMPO DEL CLIENTE (MODO LECTURA)
                 "CUSTOMER_TIMELINE" -> {
+                    BackHandler { currentScreen = "PROFILE" }
+
                     selectedOrder?.let { order ->
                         CustomerTimelineScreen(
                             orderId = order.id,

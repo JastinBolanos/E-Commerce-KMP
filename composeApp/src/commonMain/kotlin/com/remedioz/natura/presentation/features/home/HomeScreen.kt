@@ -21,6 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
 import com.remedioz.natura.presentation.components.CategoryFilter
 import com.remedioz.natura.presentation.components.FooterSection
 import com.remedioz.natura.presentation.components.LandscapeProductCard
@@ -28,12 +33,8 @@ import com.remedioz.natura.presentation.components.ProductCard
 import com.remedioz.natura.presentation.components.SearchInput
 import com.remedioz.natura.presentation.components.TestimonialBanner
 import com.remedioz.natura.presentation.components.TopNavBar
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import com.remedioz.natura.presentation.features.cart.CartScreen
-import androidx.compose.runtime.collectAsState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.LaunchedEffect
+import com.remedioz.natura.presentation.components.BackHandler
 import com.remedioz.natura.presentation.state.CartManager
 import com.remedioz.natura.presentation.features.checkout.CheckoutScreen
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
@@ -133,6 +134,8 @@ fun HomeScreen(
         }
 
         "CART" -> {
+            BackHandler { currentScreen = "STORE" }
+
             CartScreen(
                 onBackClick = { currentScreen = "STORE" },
                 onProceedToCheckoutClick = { currentScreen = "CHECKOUT" }
@@ -140,6 +143,8 @@ fun HomeScreen(
         }
 
         "CHECKOUT" -> {
+            BackHandler { currentScreen = "CART" }
+
             val isLoading by checkoutViewModel.isLoading.collectAsState()
             val orderSuccess by checkoutViewModel.orderSuccess.collectAsState()
             val paymentSettings by checkoutViewModel.paymentSettings.collectAsState()
