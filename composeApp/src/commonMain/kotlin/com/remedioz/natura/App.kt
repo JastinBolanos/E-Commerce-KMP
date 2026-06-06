@@ -175,14 +175,21 @@ fun App() {
                 }
 
                 "NOTIFICATIONS" -> {
-                    // PANTALLA DE NOTIFICACIONES (Fase Demo)
+                    val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
+                    val orders by ordersViewModel.orders.collectAsState()
+                    val pendingOrders = orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
+
                     NotificationsScreen(
-                        onBackClick = { currentScreen = "ADMIN" }
+                        pendingOrders = pendingOrders,
+                        onBackClick = { currentScreen = "ADMIN" },
+                        onNotificationClick = { order ->
+                            selectedOrder = order
+                            currentScreen = "ORDER_DETAILS"
+                        }
                     )
                 }
 
                 "AUTH" -> {
-                    // --- PANTALLA DE LOGIN ---
                     val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
 
                     AuthScreen(

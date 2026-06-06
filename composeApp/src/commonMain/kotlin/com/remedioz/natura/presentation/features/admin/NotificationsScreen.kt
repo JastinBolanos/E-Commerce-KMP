@@ -20,26 +20,15 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.Font
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
-
-// --- DATOS FALSOS (DEMO) ---
-data class FakeNotification(
-    val id: String,
-    val title: String,
-    val message: String,
-    val time: String,
-    val isUnread: Boolean
-)
-
-val demoNotifications = listOf(
-    FakeNotification("1", "Nuevo Pago Recibido", "Has recibido un depósito por S/ 700 para el pedido ORD-123.", "Hace 5 min", true),
-    FakeNotification("2", "Pedido Entregado", "El pedido ORD-089 ha sido marcado como entregado.", "Hace 2 horas", false),
-    FakeNotification("3", "Stock Bajo", "El producto 'Colágeno Premium' tiene menos de 5 unidades en inventario.", "Ayer", false)
-)
+import com.remedioz.natura.domain.model.Order
+import androidx.compose.foundation.clickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationsScreen(
-    onBackClick: () -> Unit
+    pendingOrders: List<Order>,
+    onBackClick: () -> Unit,
+    onNotificationClick: (Order) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
 
@@ -48,12 +37,7 @@ fun NotificationsScreen(
             Column {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text(
-                            text = "Notificaciones",
-                            fontFamily = imperialFont,
-                            fontSize = 36.sp,
-                            color = Color.Black
-                        )
+                        Text("Notificaciones", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
@@ -69,14 +53,22 @@ fun NotificationsScreen(
 
         // --- LISTA DE NOTIFICACIONES ---
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color.White)
+            modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color.White)
         ) {
-            items(demoNotifications) { notification ->
-                NotificationItemDemo(notification)
+            items(pendingOrders) { order ->
+                NotificationItemReal(
+                    order = order,
+                    onClick = { onNotificationClick(order) }
+                )
                 HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
+            }
+
+            if (pendingOrders.isEmpty()) {
+                item {
+                    Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
+                        Text("No tienes notificaciones nuevas.", color = Color.Gray)
+                    }
+                }
             }
         }
     }
@@ -84,22 +76,22 @@ fun NotificationsScreen(
 
 // --- COMPONENTE: ITEM DE NOTIFICACIÓN ---
 @Composable
-fun NotificationItemDemo(notification: FakeNotification) {
-    val backgroundColor = if (notification.isUnread) Color(0xFFF9F9F9) else Color.White
-
+fun NotificationItemReal(order: Order, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundColor)
+            .clickable { onClick() }
+            .background(Color(0xFFF9F9F9))
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.Top
     ) {
+        // Punto de Alerta
         Box(
             modifier = Modifier
                 .padding(top = 6.dp)
                 .size(8.dp)
                 .clip(CircleShape)
-                .background(if (notification.isUnread) Color(0xFF6B4BFF) else Color.Transparent)
+                .background(Color(0xFFD32F2F))
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -111,20 +103,20 @@ fun NotificationItemDemo(notification: FakeNotification) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = notification.title,
+                    text = "Nuevo Pago: ${order.id.takeLast(4)}",
                     fontSize = 14.sp,
-                    fontWeight = if (notification.isUnread) FontWeight.Bold else FontWeight.Medium,
+                    fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
                 Text(
-                    text = notification.time,
+                    text = "Reciente",
                     fontSize = 11.sp,
                     color = Color.Gray
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = notification.message,
+                text = "${order.customerName} ha enviado un comprobante por S/ ${order.totalAmount} y espera tu confirmación.",
                 fontSize = 13.sp,
                 color = Color.DarkGray,
                 lineHeight = 18.sp
