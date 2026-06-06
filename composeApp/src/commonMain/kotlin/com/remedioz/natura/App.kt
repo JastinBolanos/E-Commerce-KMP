@@ -38,6 +38,7 @@ import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 import com.remedioz.natura.presentation.features.home.HomeViewModel
 import com.remedioz.natura.presentation.features.admin.ShippingTimelineScreen
 import com.remedioz.natura.presentation.features.profile.CustomerProfileScreen
+import com.remedioz.natura.presentation.features.profile.CustomerTimelineScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -235,16 +236,14 @@ fun App() {
                     )
                 }
 
-                // 🚧 Dejamos preparada la ruta para ver el seguimiento del paquete
+                // LA LÍNEA DE TIEMPO DEL CLIENTE (MODO LECTURA)
                 "CUSTOMER_TIMELINE" -> {
-                    Box(modifier = Modifier.fillMaxSize().background(Color.White), contentAlignment = Alignment.Center) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text("🚧 Aquí irá el mapa de seguimiento del cliente 🚧", fontWeight = FontWeight.Bold)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(onClick = { currentScreen = "PROFILE" }, colors = ButtonDefaults.buttonColors(containerColor = Color.Black)) {
-                                Text("Volver a Perfil")
-                            }
-                        }
+                    selectedOrder?.let { order ->
+                        CustomerTimelineScreen(
+                            orderId = order.id,
+                            currentStatus = order.status,
+                            onBackClick = { currentScreen = "PROFILE" }
+                        )
                     }
                 }
             }

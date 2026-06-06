@@ -89,7 +89,7 @@ fun CustomerProfileScreen(
                 // --- TÍTULO DE SECCIÓN ---
                 Text(
                     text = "Tus Pedidos",
-                    fontSize = 22.sp,
+                    fontSize = 30.sp,
                     fontFamily = imperialFont,
                     color = Color.Black,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
