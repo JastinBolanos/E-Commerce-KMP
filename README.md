@@ -1,50 +1,111 @@
-# 🌿 Remedioz Natura | Multiplatform E-Commerce
-
-> *"Tu salud, nuestra prioridad. Soluciones naturales y bienestar diario al alcance de tu mano."*
-
-**Remedioz Natura** es el puente digital entre la medicina natural de confianza y la tecnología de vanguardia. Diseñada en exclusiva para **Lima, Perú**, esta plataforma ofrece una experiencia de compra rápida, intuitiva y accesible desde cualquier dispositivo móvil o navegador web, adaptándose perfectamente a la realidad comercial de la capital.
 
 ---
 
-## ✨ Experiencia de Usuario y Funcionalidades
+# 🌿 REMEDIOZ NATURA - MANIFIESTO TÉCNICO Y VISIÓN DE PRODUCTO (V3.0)
 
-* 🔄 **Catálogo Dinámico:** Exploración instantánea de productos, kits y tratamientos con actualizaciones visuales en tiempo real.
-* 🛒 **Carrito Inteligente:** Sincronización ininterrumpida de selecciones a lo largo de toda la navegación del usuario.
-* 🛡️ **Acceso Protegido:** Autenticación fluida y segura para garantizar la privacidad y una experiencia sin barreras.
-* 💳 **Pagos Locales Sin Fricción:** Sistema de validación de compras adaptado al entorno financiero limeño (Yape, Plin y Transferencias). Elimina comisiones de pasarelas internacionales y fortalece la confianza entre la tienda y el paciente mediante la verificación de comprobantes.
-* 💼 **Centro de Control Administrativo:** Backoffice móvil dedicado que permite la gestión instantánea del inventario y la actualización del catálogo directamente desde la palma de la mano.
+## 1. 🎯 Visión Core y Filosofía del Producto
 
----
+**Remedioz Natura** trasciende el concepto de tienda genérica; es una plataforma de e-commerce de nicho, hiper-localizada para Lima, Perú. Nuestro propósito es democratizar el acceso al bienestar y soluciones naturales, fusionando la calidez y confianza del comercio tradicional con la eficiencia inquebrantable de la tecnología moderna.
 
-## 🚀 Motor Tecnológico (Tech Stack)
-
-Construido bajo los estándares más exigentes de la industria móvil y web, garantizando velocidad, escalabilidad y un rendimiento de grado empresarial.
-
-* **Core Multiplataforma:** Kotlin Multiplatform (KMP) para una base de código unificada y eficiente.
-* **Interfaz Declarativa:** Compose Multiplatform, logrando animaciones fluidas y diseños adaptables de primera categoría.
-* **Infraestructura Cloud:** Respaldado por el ecosistema serverless de Firebase (Base de datos NoSQL, Storage multimedia y Auth).
-* **Conectividad y Renderizado:** Ktor Client para un manejo de red ultrarrápido y Coil 3 para la carga y caché asíncrona de imágenes.
+* **El Diferenciador Clave (El Flujo de Confianza):** A diferencia del e-commerce tradicional subordinado a pasarelas de pago automatizadas internacionales (Stripe, PayPal), esta plataforma abraza la idiosincrasia financiera local. El sistema de pago pivota sobre la **Validación Humana por Voucher (Yape / Plin / Transferencia)**. Esto anula comisiones por transacción, mitiga el fraude informático y forja un vínculo de confianza directo y transparente entre vendedor y paciente.
+* **Enfoque MVP (Mínimo Producto Viable sin fricciones):** La retención es nuestra métrica estrella. El acceso se reduce a un solo clic (**Google Login**), pulverizando barreras de entrada como formularios tediosos, para garantizar una tasa de conversión máxima. La filosofía es clara: *Lo que no se puede automatizar a coste cero, se gestiona con inteligencia desde el Backoffice.*
 
 ---
 
-## 📍 Visión Estratégica: Lima Metropolitana
+## 2. 🏛️ Arquitectura de Software (El Stack y la Estructura)
 
-Al enfocar el ecosistema operativo exclusivamente en la ciudad de Lima, la plataforma asegura una logística de entrega impecable, mitiga riesgos de fraude digital y establece un vínculo directo y personalizado. Esto permite un modelo de negocio ágil, libre de comisiones de terceros y enfocado al 100% en el bienestar de la comunidad local.
+El proyecto se rige bajo el paradigma *"Escribir una vez, ejecutar en cualquier lugar"*, cimentado en una estricta **Clean Architecture + Estructura Basada en Funcionalidades (Feature-Based)** para garantizar escalabilidad absoluta.
+
+**El Stack Core:**
+
+* **Framework:** Kotlin Multiplatform (KMP).
+* **UI:** Compose Multiplatform (UI Declarativa y reactiva).
+* **BaaS (Backend as a Service):** Firebase (Firestore NoSQL, Storage para multimedia, Auth para identidad).
+* **Cloud SDK:** `dev.gitlive:firebase-kmp`.
+* **Motor de Renderizado:** Coil 3.
+* **Gestión Nativa de Archivos:** FileKit Compose.
+
+**La Estructura Clean (El Mapa del Proyecto):**
+
+* `domain`: El núcleo puro e inmutable. Contiene modelos de datos (`Product`, `Order`) e interfaces de repositorios. Agnosticismo total: no sabe de Android, iOS, Web ni Compose.
+* `data`: La infraestructura. Implementaciones de repositorios (Firebase) y resolución de código nativo mediante `expect/actual` confinado en `data.platform`.
+* `presentation`: La capa visual dividida quirúrgicamente por módulos de negocio (`home`, `admin`, `checkout`, `profile`), temas, componentes reutilizables y gestores de estado inyectables (`CartManager`).
 
 ---
 
-## 🚧 Estado del Proyecto
+## 3. 🔄 El Flujo de Negocio Principal (Core Business Flow)
 
-**[ EN DESARROLLO ACTIVO ⚙️ ]**
+El ciclo de vida opera en dos ecosistemas altamente optimizados:
 
-La base estructural y el motor del e-commerce están cimentados. Actualmente en la Fase de Consolidación de Flujos:
+### Perspectiva del Comprador (Cliente)
 
-* [x] **Fase 1:** Diseño Adaptativo y Experiencia de Usuario (UI/UX).
-* [x] **Fase 2:** Integración Cloud, Autenticación y Motor de E-Commerce.
-* [x] **Fase 3:** Sistema de Búsqueda Dinámica y Filtrado.
-* [ ] **Fase 4:** Consola de Pedidos y Validación de Pagos.
-* [ ] **Fase 5:** Pruebas de Estrés y Despliegue en Producción.
+* **Exploración:** Navegación por un catálogo dinámico y filtrado con consumo de datos en tiempo real.
+* **Selección:** Gestión del carrito de compras con control de unidades.
+* **Checkout (El Momento de la Verdad):** Cálculo automatizado de costos, visualización de pasarelas locales (QR Yape/Plin), y carga de Voucher (comprobante) directamente desde el sistema de archivos del dispositivo.
+* **Línea de Tiempo y Perfil (Tracking):** Panel personal ("Mis Pedidos") con telemetría visual del estado de su paquete: *Pendiente -> Preparando -> En Camino -> Entregado*.
+
+### Perspectiva del Administrador (Backoffice Móvil)
+
+Un ERP de bolsillo, diseñado con la fuente identitaria *Imperial Script* para diferenciar visualmente los entornos. Dividido en 3 centros de comando:
+
+* **Pedidos (Torre de Control):** Auditoría en tiempo real. Permite visualizar vouchers almacenados en la nube y mutar estados de entrega que se reflejan instantáneamente en el dispositivo del cliente.
+* **Editar Productos:** Gestión de inventario blindada. Creación, edición, eliminación y subida de assets multimedia sin fricción de UI de consumo.
+* **Notificaciones:** El radar del sistema. Alertas reactivas ("Puntito Rojo") de nuevos depósitos o requerimientos, focalizando la atención estrictamente en lo accionable.
 
 ---
 
-*Creado con ❤️, disciplina y Kotlin.*
+## 4. 🗄️ Esquema de Base de Datos (Firestore NoSQL)
+
+Ingeniería de datos diseñada para maximizar el rendimiento y mantener la operatividad dentro de los límites del plan "Spark" (Cero costos de lectura innecesaria).
+
+**Colección `Products**`
+
+* `id` (String): Identificador único.
+* `name` (String)
+* `price` (Double/String)
+* `category` (String)
+* `description` (String)
+* `imageUrl` (String): URL pública (Firebase Storage).
+
+**Colección `Orders**`
+
+* `id` (String)
+* `userId` (String)
+* `customerName` (String)
+* `items` (Array): Nodos de `CartItem` (Producto + Cantidad).
+* `totalAmount` (Double)
+* `voucherUrl` (String): Ruta del asset en Storage.
+* `status` (String): Estado de progreso.
+* `timestamp` (Long): Epoch milliseconds nativo para precisión absoluta.
+
+---
+
+## 5. 🚀 Reglas de Oro del Proyecto (Estándares)
+
+Para sostener la integridad técnica y repeler la deuda tecnológica:
+
+* **Aislamiento del Dominio:** La capa `domain` es un santuario. Prohibida la importación de estados de UI (`MutableState`) o librerías de plataforma.
+* **Principio DRY (Don't Repeat Yourself) en UI:** Componentes como la "Línea de Tiempo" o "Tarjetas de Producto" son entidades agnósticas reutilizables.
+* **UDF (Unidirectional Data Flow):** La UI (`@Composable`) es pasiva. Escucha `StateFlows` desde los ViewModels y emite eventos hacia arriba. Cero peticiones de red directas.
+* **UI Resiliente (Fail-Safe):** Uso estricto de placeholders en `AsyncImage` y variables por defecto para evitar bloqueos visuales ante latencia de red.
+* **Seguridad Cero-Trust:** El archivo `google-services.json` y claves nativas están estrictamente excluidos del control de versiones (`.gitignore`).
+
+---
+
+## 6. 🚧 ESTADO ACTUAL: Fase de Conexión y Pulido
+
+Actualmente, el proyecto ha superado la fase de estructuración UI (Mockups) y se encuentra en la etapa crítica de **Sincronización en Producción**:
+
+* **Cableado Central:** Sustituyendo los bypass de navegación y datos falsos por flujos reales controlados por los repositorios.
+* **Identidad Real:** Conectando el flujo definitivo de autenticación real mediante `Continuar con Google`.
+* **Refinamiento UX/UI:** Pulido de transiciones, validaciones de seguridad (ej. evitar checkouts vacíos o sin voucher) y control de errores en tiempo real.
+
+## 7. 🔮 ROADMAP FUTURO
+
+* **Integración de Diseño (Figma):** En la próxima iteración del README, este documento se enriquecerá visualmente con los prototipos y diagramas de flujo directos de nuestro Board de Figma, solidificando la documentación visual del sistema.
+
+---
+
+*Construido con disciplina, código limpio y visión de producto.*
+
+---
