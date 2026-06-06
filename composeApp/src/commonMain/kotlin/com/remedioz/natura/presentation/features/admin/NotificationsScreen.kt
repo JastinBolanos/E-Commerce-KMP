@@ -109,7 +109,7 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
                     color = Color.Black
                 )
                 Text(
-                    text = "Reciente",
+                    text = formatOrderTime(order.timestamp),
                     fontSize = 11.sp,
                     color = Color.Gray
                 )
@@ -123,4 +123,22 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
             )
         }
     }
+}
+
+// --- HERRAMIENTA: TRADUCTOR DE HORA PARA PERÚ (UTC-5) ---
+fun formatOrderTime(millis: Long): String {
+    if (millis == 0L) return "Reciente"
+
+    val totalSeconds = millis / 1000
+    val currentSeconds = totalSeconds % (24 * 3600)
+
+    // Calculamos la hora en UTC-5 (Hora de Lima, Perú)
+    val hours = ((currentSeconds / 3600) - 5 + 24) % 24
+    val minutes = (currentSeconds % 3600) / 60
+
+    val amPm = if (hours >= 12) "PM" else "AM"
+    val displayHour = if (hours % 12 == 0L) 12L else hours % 12
+    val minStr = if (minutes < 10) "0$minutes" else "$minutes"
+
+    return "$displayHour:$minStr $amPm"
 }

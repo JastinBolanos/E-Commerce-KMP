@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import com.remedioz.natura.data.repository.PaymentSettings
+import kotlin.time.Clock
 
 /**
  * Orquestador del proceso de pagos.
@@ -52,7 +53,7 @@ class CheckoutViewModel(
                 items = cartItems,
                 status = "Pendiente",
                 voucherUrl = "",
-                timestamp = 0L
+                timestamp = Clock.System.now().toEpochMilliseconds()
             )
 
             // 2. LO ENVIAMOS A FIREBASE
