@@ -118,16 +118,30 @@ fun OrdersScreen(
     }
 }
 
-// --- COMPONENTE: TARJETA DE PEDIDO REAL (ACTUALIZADA) ---
+// --- COMPONENTE: TARJETA DE PEDIDO REAL ---
 @Composable
 fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
     val firstProductImage = order.items.firstOrNull()?.product?.imageUrl ?: ""
     val totalItems = order.items.sumOf { it.quantity }
     val productSummary = order.items.joinToString(", ") { "${it.quantity}x ${it.product.name}" }
+
     val isPending = order.status.equals("Pendiente", ignoreCase = true)
+    val isDelivered = order.status.equals("Entregado", ignoreCase = true)
+
+    val buttonColor = when {
+        isPending -> Color(0xFFD9D9D9)
+        isDelivered -> Color(0xFF4CAF50)
+        else -> Color.Black
+    }
+
+    val buttonText = when {
+        isPending -> "Ir a Confirmar"
+        isDelivered -> "Finalizado"
+        else -> "Gestionar Envío"
+    }
 
     Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        // Columna Izquierda: Imagen del PRODUCTO (Ya no el voucher)
+        // Columna Izquierda: Imagen del PRODUCTO
         Column(modifier = Modifier.weight(1f)) {
             Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0F0F0))) {
                 AsyncImage(
@@ -166,19 +180,21 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text("Ver Detalles", fontSize = 12.sp, color = Color.DarkGray, modifier = Modifier.clickable { })
+                Text(
+                    "Ver Detalles",
+                    fontSize = 12.sp,
+                    color = Color.DarkGray,
+                    modifier = Modifier.clickable { })
 
                 Button(
                     onClick = onConfirmClick,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isPending) Color(0xFFD9D9D9) else Color.Black
-                    ),
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
                     shape = RoundedCornerShape(16.dp),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
                     modifier = Modifier.height(32.dp)
                 ) {
                     Text(
-                        text = if (isPending) "Ir a Confirmar" else "Gestionar Envío",
+                        text = buttonText,
                         color = if (isPending) Color.Black else Color.White,
                         fontSize = 12.sp
                     )
@@ -188,7 +204,7 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
     }
 }
 
-// --- COMPONENTE: CAJITA DE ESTADÍSTICA CON BORDE ---
+// --- COMPONENTE: CAJITA DE ESTADÍSTICA ---
 @Composable
 fun OutlinedStatRow(label: String, value: String) {
     Row(
