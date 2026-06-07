@@ -123,7 +123,7 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     val firstProductPrice = firstProduct?.price?.toString() ?: "0.0"
     val totalItems = order.items.sumOf { it.quantity }
     val isDelivered = order.status.equals("Entregado", ignoreCase = true)
-    val buttonColor = if (isDelivered) Color(0xFF00FF00) else Color(0xFFD3D3D3)
+    val buttonColor = if (isDelivered) Color(0xFF65FF66) else Color(0xFFD3D3D3)
     val textColor = Color.Black
 
     Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {

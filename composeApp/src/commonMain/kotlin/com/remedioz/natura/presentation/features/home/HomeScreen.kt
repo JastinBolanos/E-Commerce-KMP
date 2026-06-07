@@ -36,6 +36,7 @@ import com.remedioz.natura.presentation.components.TopNavBar
 import com.remedioz.natura.presentation.features.cart.CartScreen
 import com.remedioz.natura.presentation.components.BackHandler
 import com.remedioz.natura.presentation.state.CartManager
+import com.remedioz.natura.domain.model.CartItem
 import com.remedioz.natura.presentation.features.checkout.CheckoutScreen
 import com.remedioz.natura.presentation.features.checkout.CheckoutViewModel
 
@@ -47,11 +48,10 @@ fun HomeScreen(
     checkoutViewModel: CheckoutViewModel
 ) {
     var currentScreen by remember { mutableStateOf("STORE") }
-
+    var directPurchaseItem by remember { mutableStateOf<CartItem?>(null) }
     val filteredProducts by viewModel.filteredProducts.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
-
     val kitsProducts = filteredProducts.filter { it.category.equals("Kits", ignoreCase = true) }
     val verticalProducts =
         filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
@@ -92,7 +92,11 @@ fun HomeScreen(
                         items(verticalProducts) { product ->
                             ProductCard(
                                 product = product,
-                                modifier = Modifier.width(180.dp)
+                                modifier = Modifier.width(180.dp),
+                                onBuyNowClick = { qty ->
+                                    directPurchaseItem = CartItem(product = product, quantity = qty)
+                                    currentScreen = "CHECKOUT"
+                                }
                             )
                         }
                     }
@@ -115,7 +119,14 @@ fun HomeScreen(
                                 horizontalArrangement = Arrangement.spacedBy(16.dp)
                             ) {
                                 items(kitsProducts) { product ->
-                                    LandscapeProductCard(product = product, modifier = Modifier)
+                                    LandscapeProductCard(
+                                        product = product,
+                                        modifier = Modifier,
+                                        onBuyNowClick = { qty ->
+                                            directPurchaseItem = CartItem(product = product, quantity = qty)
+                                            currentScreen = "CHECKOUT"
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -138,24 +149,38 @@ fun HomeScreen(
 
             CartScreen(
                 onBackClick = { currentScreen = "STORE" },
-                onProceedToCheckoutClick = { currentScreen = "CHECKOUT" }
+                onProceedToCheckoutClick = {
+                    directPurchaseItem = null
+                    currentScreen = "CHECKOUT"
+                }
             )
         }
 
         "CHECKOUT" -> {
-            BackHandler { currentScreen = "CART" }
+            BackHandler {
+                if (directPurchaseItem != null) {
+                    directPurchaseItem = null
+                    currentScreen = "STORE"
+                } else {
+                    currentScreen = "CART"
+                }
+            }
 
             val isLoading by checkoutViewModel.isLoading.collectAsState()
             val orderSuccess by checkoutViewModel.orderSuccess.collectAsState()
             val paymentSettings by checkoutViewModel.paymentSettings.collectAsState()
+            val itemsToBuy = if (directPurchaseItem != null) listOf(directPurchaseItem!!) else CartManager.cartItems.value
 
-            val total = CartManager.cartItems.value.sumOf { item ->
+            val total = itemsToBuy.sumOf { item ->
                 (item.product.price.toDoubleOrNull() ?: 0.0) * item.quantity
             }
 
             LaunchedEffect(orderSuccess) {
                 if (orderSuccess) {
-                    CartManager.clearCart()
+                    if (directPurchaseItem == null) {
+                        CartManager.clearCart()
+                    }
+                    directPurchaseItem = null
                     checkoutViewModel.resetState()
                     currentScreen = "STORE"
                 }
@@ -166,12 +191,19 @@ fun HomeScreen(
                 isLoading = isLoading,
                 qrUrl = paymentSettings.qrUrl,
                 phoneNumber = paymentSettings.phoneNumber,
-                onBackClick = { currentScreen = "CART" },
+                onBackClick = {
+                    if (directPurchaseItem != null) {
+                        directPurchaseItem = null
+                        currentScreen = "STORE"
+                    } else {
+                        currentScreen = "CART"
+                    }
+                },
                 onConfirmOrder = { voucherBytes ->
                     checkoutViewModel.processOrder(
                         userId = "USER-ANONYMOUS",
                         customerName = "Cliente de App",
-                        cartItems = CartManager.cartItems.value,
+                        cartItems = itemsToBuy,
                         total = total,
                         voucherBytes = voucherBytes
                     )

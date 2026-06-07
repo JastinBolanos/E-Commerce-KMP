@@ -34,7 +34,8 @@ fun ProductCard(
     product: Product,
     showCartIcon: Boolean = true,
     isAdminView: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBuyNowClick: (Int) -> Unit = {}
 ) {
     val name = product.name
     val price = product.price
@@ -63,7 +64,6 @@ fun ProductCard(
                 .aspectRatio(0.9f)
                 .background(Color(0xFFEBEBEB))
         ) {
-            // AÑADIMOS COIL PARA MOSTRAR LA FOTO
             if (product.imageUrl.isNotEmpty()) {
                 AsyncImage(
                     model = product.imageUrl,
@@ -166,7 +166,16 @@ fun ProductCard(
                 if (!isAdminView) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text(text = "Precio: S/ $price", fontSize = 15.sp, color = Color.Black)
+                    val unitPrice = price.toDoubleOrNull() ?: 0.0
+                    val calculatedTotal = unitPrice * quantity
+                    val displayPrice = if (calculatedTotal % 1 == 0.0) calculatedTotal.toInt().toString() else calculatedTotal.toString()
+
+                    Text(
+                        text = if (quantity > 1) "Subtotal: S/ $displayPrice" else "Precio: S/ $displayPrice",
+                        fontSize = 15.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Medium
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -213,8 +222,7 @@ fun ProductCard(
                             .clip(RoundedCornerShape(12.dp))
                             .background(Brush.horizontalGradient(listOf(Color(0xFF4CB8FF), Color(0xFFFF7A8A))))
                             .clickable {
-                                CartManager.addProduct(product = product, quantity = quantity)
-                                println("Comprar $quantity $name")
+                                onBuyNowClick(quantity)
                             },
                         contentAlignment = Alignment.Center
                     ) {
