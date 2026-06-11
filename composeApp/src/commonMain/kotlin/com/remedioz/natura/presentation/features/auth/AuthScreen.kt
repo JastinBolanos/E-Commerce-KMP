@@ -45,8 +45,8 @@ import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 fun AuthScreen(
     viewModel: AuthViewModel,
     onClose: () -> Unit,
-    onGoogleSignInClick: () -> Unit,
-    onAdminSuccess: () -> Unit
+    onAdminSuccess: () -> Unit,
+    onClientSuccess: () -> Unit
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val loginSuccess by viewModel.loginSuccess.collectAsState()
@@ -56,8 +56,21 @@ fun AuthScreen(
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    val googleLauncher = rememberGoogleSignInLauncher(
+        onAuthSuccess = { token ->
+            if (token == "WEB_SUCCESS") {
+                onClientSuccess()
+            } else {
+                viewModel.loginWithGoogleToken(token)
+            }
+        },
+        onAuthError = { error ->
+            println("Error en Auth Google: $error")
+        }
+    )
+
     if (loginSuccess) {
-        onClose()
+        onClientSuccess()
     }
 
     Column(
@@ -194,7 +207,7 @@ fun AuthScreen(
             } else {
                 FloatingAuthButton(
                     text = "Continuar con Google",
-                    onClick = onGoogleSignInClick
+                    onClick = googleLauncher
                 )
             }
 

@@ -220,7 +220,7 @@ fun App() {
                         onAdminSuccess = {
                             currentScreen = "ADMIN"
                         },
-                        onGoogleSignInClick = {
+                        onClientSuccess = {
                             currentScreen = "PROFILE"
                         }
                     )
@@ -231,8 +231,20 @@ fun App() {
 
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val allOrders by ordersViewModel.orders.collectAsState()
+                    val authViewModel = viewModel { AuthViewModel(firebaseRepository) }
+
+                    LaunchedEffect(Unit) {
+                        authViewModel.checkCurrentUser()
+                    }
+
+                    val userName by authViewModel.userName.collectAsState()
+                    val userEmail by authViewModel.userEmail.collectAsState()
+                    val userPhotoUrl by authViewModel.userPhotoUrl.collectAsState()
 
                     CustomerProfileScreen(
+                        userName = userName,
+                        userEmail = userEmail,
+                        userPhotoUrl = userPhotoUrl,
                         orders = allOrders,
                         onBackClick = { currentScreen = "STORE" },
                         onTrackOrderClick = { order ->

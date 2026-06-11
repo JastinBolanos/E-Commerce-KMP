@@ -57,6 +57,13 @@ class FirebaseRepository {
     }
 
     /**
+     * Obtiene los datos del usuario logueado en Firebase.
+     */
+    fun getCurrentUser(): dev.gitlive.firebase.auth.FirebaseUser? {
+        return auth.currentUser
+    }
+
+    /**
      * Función para OBTENER todos los productos de la tienda.
      * Usamos 'suspend' porque esta operación toma tiempo (debe viajar a internet y volver)
      * y no queremos que la pantalla se congele mientras carga.

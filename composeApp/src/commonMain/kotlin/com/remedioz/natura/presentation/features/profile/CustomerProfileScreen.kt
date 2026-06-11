@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +31,9 @@ import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerProfileScreen(
+    userName: String?,
+    userEmail: String?,
+    userPhotoUrl: String?,
     orders: List<Order>,
     onBackClick: () -> Unit,
     onTrackOrderClick: (Order) -> Unit
@@ -60,27 +64,39 @@ fun CustomerProfileScreen(
                 .padding(paddingValues)
                 .background(Color.White)
         ) {
-            // --- 1. CABECERA DEL PERFIL (DATOS FALSOS / MOCK) ---
+            // --- 1. CABECERA DEL PERFIL ---
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Círculo de foto de perfil
+                    // Círculo de foto de perfil dinámico
                     Box(
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFAAAAAA))
-                    )
+                            .background(Color(0xFFF0F0F0)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (!userPhotoUrl.isNullOrEmpty()) {
+                            AsyncImage(
+                                model = userPhotoUrl,
+                                contentDescription = "Foto de perfil",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        } else {
+                            Icon(Icons.Default.Person, contentDescription = "Sin foto", tint = Color.Gray, modifier = Modifier.size(50.dp))
+                        }
+                    }
 
                     Spacer(modifier = Modifier.width(24.dp))
 
                     Column {
                         Text("Datos Personales", fontSize = 16.sp, color = Color.Black)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("Cliente de App", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                        Text("cliente@prueba.com", fontSize = 14.sp, color = Color.Gray)
+                        Text(userName ?: "Cliente Natura", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(userEmail ?: "Sin correo registrado", fontSize = 14.sp, color = Color.Gray)
                     }
                 }
 

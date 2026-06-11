@@ -21,8 +21,21 @@ class AuthViewModel(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
+    private val _userName = MutableStateFlow<String?>(null)
+    val userName: StateFlow<String?> = _userName.asStateFlow()
+
+    private val _userEmail = MutableStateFlow<String?>(null)
+    val userEmail: StateFlow<String?> = _userEmail.asStateFlow()
+
+    private val _userPhotoUrl = MutableStateFlow<String?>(null)
+    val userPhotoUrl: StateFlow<String?> = _userPhotoUrl.asStateFlow()
+
+    init {
+        checkCurrentUser()
+    }
+
     /**
-     * 🟢 Inicia sesión con Correo y Contraseña (Exclusivo para el Administrador)
+     * Inicia sesión con Correo y Contraseña (Exclusivo para el Administrador)
      */
     fun loginAdmin(email: String, pass: String, onSuccess: () -> Unit) {
         if (email.isBlank() || pass.isBlank()) {
@@ -55,6 +68,25 @@ class AuthViewModel(
             val success = repository.signInWithGoogle(idToken = idToken)
             _loginSuccess.value = success
             _isLoading.value = false
+            if (success) {
+                checkCurrentUser()
+            }
+        }
+    }
+
+    /**
+     * Revisa si hay un usuario logueado en Firebase y extrae sus datos.
+     */
+    fun checkCurrentUser() {
+        val user = repository.getCurrentUser()
+        if (user != null) {
+            _userName.value = user.displayName
+            _userEmail.value = user.email
+            _userPhotoUrl.value = user.photoURL
+        } else {
+            _userName.value = null
+            _userEmail.value = null
+            _userPhotoUrl.value = null
         }
     }
 }
