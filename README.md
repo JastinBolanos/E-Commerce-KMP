@@ -1,4 +1,3 @@
-
 ---
 
 # 🌿 REMEDIOZ NATURA - MANIFIESTO TÉCNICO Y VISIÓN DE PRODUCTO (V3.0)
@@ -58,7 +57,7 @@ Un ERP de bolsillo, diseñado con la fuente identitaria *Imperial Script* para d
 
 Ingeniería de datos diseñada para maximizar el rendimiento y mantener la operatividad dentro de los límites del plan "Spark" (Cero costos de lectura innecesaria).
 
-**Colección `Products**`
+**Colección `Products`**
 
 * `id` (String): Identificador único.
 * `name` (String)
@@ -67,7 +66,7 @@ Ingeniería de datos diseñada para maximizar el rendimiento y mantener la opera
 * `description` (String)
 * `imageUrl` (String): URL pública (Firebase Storage).
 
-**Colección `Orders**`
+**Colección `Orders`**
 
 * `id` (String)
 * `userId` (String)
@@ -92,15 +91,29 @@ Para sostener la integridad técnica y repeler la deuda tecnológica:
 
 ---
 
-## 6. 🚧 ESTADO ACTUAL: Fase de Conexión y Pulido
+## 6. ⚙️ Configuración del Entorno y Firebase (IMPORTANTE)
+
+Para poder compilar y ejecutar este proyecto en tu máquina (Android Studio), es estrictamente necesario configurar el entorno de Firebase. Por razones de seguridad, las credenciales reales de la base de datos no están incluidas en este repositorio público.
+
+**Pasos para compilar:**
+1. Localiza el archivo de plantilla llamado `google-services-example.json` en la carpeta `composeApp/`.
+2. Duplica ese archivo y renómbralo a **`google-services.json`**.
+3. Al hacer esto, el Plugin de Google Services detectará la configuración simulada y la aplicación compilará perfectamente (ideal para trabajar en UI o refactorizaciones).
+4. *(Opcional para pruebas en Producción)*: Si necesitas conectarte a la base de datos real, contacta al administrador del proyecto para que te proporcione el archivo `google-services.json` oficial y reemplaza tu versión local. ¡Recuerda que este archivo jamás debe subirse en tus commits!
+
+---
+
+## 7. 🚧 ESTADO ACTUAL: Fase de Conexión y Pulido
 
 Actualmente, el proyecto ha superado la fase de estructuración UI (Mockups) y se encuentra en la etapa crítica de **Sincronización en Producción**:
 
 * **Cableado Central:** Sustituyendo los bypass de navegación y datos falsos por flujos reales controlados por los repositorios.
-* **Identidad Real:** Conectando el flujo definitivo de autenticación real mediante `Continuar con Google`.
+* **Identidad Real:** Conectando el flujo definitivo de autenticación real mediante `Continuar con Google` y validación de Administrador.
 * **Refinamiento UX/UI:** Pulido de transiciones, validaciones de seguridad (ej. evitar checkouts vacíos o sin voucher) y control de errores en tiempo real.
 
-## 7. 🔮 ROADMAP FUTURO
+---
+
+## 8. 🔮 ROADMAP FUTURO
 
 * **Integración de Diseño (Figma):** En la próxima iteración del README, este documento se enriquecerá visualmente con los prototipos y diagramas de flujo directos de nuestro Board de Figma, solidificando la documentación visual del sistema.
 
