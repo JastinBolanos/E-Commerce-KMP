@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +27,11 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import remedioznatura_kmp.composeapp.generated.resources.Res
 import remedioznatura_kmp.composeapp.generated.resources.ic_google_logo
 import remedioznatura_kmp.composeapp.generated.resources.imperial_script
@@ -38,10 +45,16 @@ import remedioznatura_kmp.composeapp.generated.resources.imperial_script
 fun AuthScreen(
     viewModel: AuthViewModel,
     onClose: () -> Unit,
-    onGoogleSignInClick: () -> Unit
+    onGoogleSignInClick: () -> Unit,
+    onAdminSuccess: () -> Unit
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val loginSuccess by viewModel.loginSuccess.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     if (loginSuccess) {
         onClose()
@@ -99,6 +112,77 @@ fun AuthScreen(
         }
 
         Spacer(modifier = Modifier.height(48.dp))
+
+        // SECCIÓN DE LOGIN PARA ADMINISTRADOR
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Correo (Solo Admin)") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Black,
+                focusedLabelColor = Color.Black
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Contraseña") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = null)
+                }
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Black,
+                focusedLabelColor = Color.Black
+            )
+        )
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage!!,
+                color = Color.Red,
+                fontSize = 12.sp,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = { viewModel.loginAdmin(email, password, onAdminSuccess) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            enabled = !isLoading,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+            shape = RoundedCornerShape(14.dp)
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+            } else {
+                Text("Ingresar como Admin", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
+            Text(" O ENTRA COMO CLIENTE ", color = Color.Gray, fontSize = 12.sp, modifier = Modifier.padding(horizontal = 8.dp))
+            HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE0E0E0))
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Column(
             modifier = Modifier.fillMaxWidth(),

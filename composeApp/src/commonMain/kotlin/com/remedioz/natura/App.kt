@@ -93,7 +93,7 @@ fun App() {
                 }
 
                 "ORDERS" -> {
-                    BackHandler { currentScreen = "ADMIN" } // 🛡️ Escudo
+                    BackHandler { currentScreen = "ADMIN" }
 
                     val ordersViewModel = viewModel { OrdersViewModel(firebaseRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
@@ -217,6 +217,9 @@ fun App() {
                     AuthScreen(
                         viewModel = authViewModel,
                         onClose = { currentScreen = "STORE" },
+                        onAdminSuccess = {
+                            currentScreen = "ADMIN"
+                        },
                         onGoogleSignInClick = {
                             currentScreen = "PROFILE"
                         }

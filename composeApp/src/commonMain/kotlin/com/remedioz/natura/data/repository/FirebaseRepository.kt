@@ -37,6 +37,19 @@ class FirebaseRepository {
     }
 
     /**
+     * Inicia sesión con Correo y Contraseña (Exclusivo para el Administrador)
+     */
+    suspend fun signInWithEmailAndPassword(email: String, password: String): Boolean {
+        return try {
+            auth.signInWithEmailAndPassword(email, password)
+            true
+        } catch (e: Exception) {
+            println("Error en Login de Admin: ${e.message}")
+            false
+        }
+    }
+
+    /**
      * Verifica si ya hay un usuario logueado al abrir la app.
      */
     fun isUserLoggedIn(): Boolean {

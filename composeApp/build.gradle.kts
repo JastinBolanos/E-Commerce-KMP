@@ -1,5 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -28,7 +26,9 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
             implementation("io.ktor:ktor-client-okhttp:2.3.12")
+            implementation("com.google.android.gms:play-services-auth:21.2.0")
         }
+
         commonMain.dependencies {
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -44,7 +44,7 @@ kotlin {
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor2)
 
-            // 👇 NUEVO: Núcleo de Ktor para que Coil pueda descargar las URLs
+            // 👇 Núcleo de Ktor para que Coil pueda descargar las URLs
             implementation("io.ktor:ktor-client-core:2.3.12")
 
             // Seleccionador de archivos multiplataforma
