@@ -57,8 +57,14 @@ fun App() {
                     val checkoutViewModel = viewModel { CheckoutViewModel(firebaseRepository) }
 
                     HomeScreen(
-                        onAdminClick = { currentScreen = "ADMIN" },
-                        onAuthClick = { currentScreen = "PROFILE" },
+                        onAdminClick = { currentScreen = "AUTH" },
+                        onAuthClick = {
+                            if (firebaseRepository.isUserLoggedIn()) {
+                                currentScreen = "PROFILE"
+                            } else {
+                                currentScreen = "AUTH"
+                            }
+                        },
                         viewModel = homeViewModel,
                         checkoutViewModel = checkoutViewModel
                     )
