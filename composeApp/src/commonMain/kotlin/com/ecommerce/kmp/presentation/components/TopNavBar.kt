@@ -1,0 +1,58 @@
+package com.ecommerce.kmp.presentation.components
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import e_commercekmp.composeapp.generated.resources.Res
+import e_commercekmp.composeapp.generated.resources.imperial_script
+import org.jetbrains.compose.resources.Font
+
+@Composable
+fun TopNavBar(
+    modifier: Modifier = Modifier,
+    onCartClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // --- INICIO DEL LOGO REMEDIOZ NATURA ---
+        Text(
+            text = "Remedioz Natura",
+            fontFamily = FontFamily(Font(Res.font.imperial_script)),
+            fontWeight = FontWeight.Normal,
+            fontSize = 38.sp,
+            lineHeight = 14.8.sp,
+            letterSpacing = 0.sp,
+            color = Color.Black
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+
+            // --- BOTÓN DEL CARRITO ---
+            IconButton(onClick = { onCartClick() }) {
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Carrito", tint = Color.Black)
+            }
+
+            // --- BOTÓN DE PERFIL ---
+            IconButton(onClick = { onProfileClick() }) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Perfil", tint = Color.Black)
+            }
+        }
+    }
+}

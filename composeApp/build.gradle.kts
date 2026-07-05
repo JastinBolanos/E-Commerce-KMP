@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.0.0"
-    id("com.google.gms.google-services") version "4.4.1"
 }
 
 kotlin {
@@ -16,17 +15,21 @@ kotlin {
         }
     }
 
-    js {
-        browser()
-        binaries.executable()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
     }
 
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-            implementation("io.ktor:ktor-client-okhttp:2.3.12")
-            implementation("com.google.android.gms:play-services-auth:21.2.0")
         }
 
         commonMain.dependencies {
@@ -40,20 +43,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.materialIconsExtended)
 
-            // Coil para cargar imágenes desde URL o Bytes en KMP
+            // Coil (Solo la base, en caso de que lo uses para transformaciones, aunque para recursos locales usaremos painterResource)
             implementation(libs.coil.compose)
-            implementation(libs.coil.network.ktor2)
 
-            // 👇 Núcleo de Ktor para que Coil pueda descargar las URLs
-            implementation("io.ktor:ktor-client-core:2.3.12")
-
-            // Seleccionador de archivos multiplataforma
+            // Seleccionador de archivos multiplataforma (Mantenido para la UI del voucher)
             implementation("io.github.vinceglb:filekit-compose:0.8.2")
-
-            // 🔥 FIREBASE KMP (GitLive) - ¡Versión actualizada para soportar Wasm!
-            implementation("dev.gitlive:firebase-auth:1.13.0")
-            implementation("dev.gitlive:firebase-firestore:1.13.0")
-            implementation("dev.gitlive:firebase-storage:1.13.0")
 
             // 📦 SERIALIZACIÓN
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
@@ -68,11 +62,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.remedioz.natura"
+    namespace = "com.ecommerce.natura"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.remedioz.natura"
+        applicationId = "com.ecommerce.kmp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

@@ -1,0 +1,68 @@
+package com.ecommerce.kmp.presentation.components
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+/**
+ * Componente visual de filtrado Stateless (sin estado propio).
+ * Al recibir la categoría activa y emitir eventos mediante State Hoisting,
+ * garantiza que la capa de UI sea estúpida y obedezca estrictamente al ViewModel (UDF).
+ */
+@Composable
+fun CategoryFilter(
+    selectedCategory: String,
+    onCategorySelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val categories = listOf("Todos", "Kits", "Tratamientos", "Belleza", "Cuidados", "Piel", "Otros")
+
+    LazyRow(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(categories) { category ->
+            val isSelected = category == selectedCategory
+
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .clickable {
+                        onCategorySelected(category)
+                    }
+                    .border(
+                        width = 1.dp,
+                        color = if (isSelected) Color.Black else Color.LightGray,
+                        shape = RoundedCornerShape(50)
+                    )
+                    .background(
+                        color = if (isSelected) Color.Black else Color.White,
+                        shape = RoundedCornerShape(50)
+                    )
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = category,
+                    color = if (isSelected) Color.White else Color.DarkGray,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
