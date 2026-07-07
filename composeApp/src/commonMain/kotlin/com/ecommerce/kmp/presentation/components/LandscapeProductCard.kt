@@ -109,6 +109,7 @@ fun LandscapeProductCard(
         }
 
         Column(modifier = Modifier.padding(16.dp)) {
+
             // --- Fila de Título y Flecha ---
             Row(
                 modifier = Modifier
@@ -124,7 +125,7 @@ fun LandscapeProductCard(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text(text = "S/ $price", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "S/ ${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -135,6 +136,15 @@ fun LandscapeProductCard(
 
             // CONTENIDO EXPANDIBLE
             if (expanded) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = product.description,
+                    fontSize = 14.sp,
+                    color = Color.DarkGray,
+                    lineHeight = 20.sp
+                )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // --- Fila Detalles + Botón Ver ---
@@ -163,13 +173,10 @@ fun LandscapeProductCard(
                 if (!isAdminView) {
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Lógica Matemática Optimizada: Usamos directamente el Double del producto
-                    val unitPrice = product.price
-                    val calculatedTotal = unitPrice * quantity
-                    val displayPrice = if (calculatedTotal % 1 == 0.0) calculatedTotal.toInt().toString() else calculatedTotal.toString()
+                    val calculatedTotal = product.price * quantity
 
                     Text(
-                        text = if (quantity > 1) "Subtotal: S/ $displayPrice" else "Precio: S/ $displayPrice",
+                        text = if (quantity > 1) "Subtotal: S/ ${calculatedTotal.format(2)}" else "Precio: S/ ${calculatedTotal.format(2)}",
                         fontSize = 15.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Medium

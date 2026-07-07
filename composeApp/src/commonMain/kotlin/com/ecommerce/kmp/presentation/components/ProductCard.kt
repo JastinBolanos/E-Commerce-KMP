@@ -122,7 +122,7 @@ fun ProductCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                    Text(text = "S/ $price", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "S/ ${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
@@ -134,7 +134,16 @@ fun ProductCard(
 
             // --- 3. ACORDEÓN OCULTO ---
             if (expanded) {
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = product.description,
+                    fontSize = 14.sp,
+                    color = Color.DarkGray,
+                    lineHeight = 20.sp
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // --- Detalles + Botón Ver ---
                 Row(
@@ -166,12 +175,10 @@ fun ProductCard(
                 if (!isAdminView) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    val unitPrice = price
-                    val calculatedTotal = unitPrice * quantity
-                    val displayPrice = if (calculatedTotal.rem(1.0) == 0.0) calculatedTotal.toInt().toString() else calculatedTotal.toString()
+                    val calculatedTotal = product.price * quantity
 
                     Text(
-                        text = if (quantity > 1) "Subtotal: S/ $displayPrice" else "Precio: S/ $displayPrice",
+                        text = if (quantity > 1) "Subtotal: S/ ${calculatedTotal.format(2)}" else "Precio: S/ ${calculatedTotal.format(2)}",
                         fontSize = 15.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Medium
@@ -232,4 +239,12 @@ fun ProductCard(
             }
         }
     }
+}
+
+fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }

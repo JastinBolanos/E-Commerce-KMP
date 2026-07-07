@@ -89,7 +89,7 @@ fun CheckoutScreen(
             // --- 1. RESUMEN DE MONTO ---
             Text("Total a Pagar", fontSize = 16.sp, color = Color.Gray)
             Text(
-                text = "S/ ${totalAmount.toString().replace(".0", ".00")}",
+                text = "S/ ${totalAmount.format(2)}",
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -210,4 +210,12 @@ fun CheckoutScreen(
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+}
+
+fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }

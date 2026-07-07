@@ -41,7 +41,7 @@ fun CartScreen(
 ) {
     val cartItems by CartManager.cartItems.collectAsState()
 
-    // Lógica Matemática Optimizada: el precio ya es numérico
+    // Lógica Matemática Optimizada
     val totalAmount = cartItems.sumOf { item ->
         item.product.price * item.quantity
     }
@@ -78,7 +78,7 @@ fun CartScreen(
                         .background(Color.White)
                         .padding(24.dp)
                 ) {
-                    Text("Total: S/ $totalAmount", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text("Total: S/ ${totalAmount.format(2)}", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -169,7 +169,7 @@ fun CartItemRow(cartItem: CartItem) {
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text("S/ ${product.price}", fontSize = 12.sp, color = Color.Gray)
+                    Text("S/ ${product.price.format(2)}", fontSize = 12.sp, color = Color.Gray)
                 }
 
                 // Botón de carrito
@@ -217,7 +217,7 @@ fun CartItemRow(cartItem: CartItem) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Subtotal: S/ $subtotal", fontSize = 13.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+            Text(text = "Subtotal: S/ ${subtotal.format(2)}", fontSize = 13.sp, color = Color.Black, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -302,4 +302,12 @@ fun CartItemRow(cartItem: CartItem) {
             }
         }
     }
+}
+
+fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }
