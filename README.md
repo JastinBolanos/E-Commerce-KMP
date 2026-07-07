@@ -1,82 +1,64 @@
----
+<div align="center">
+  <img src="docs/logo.remedioznatura.png" alt="Remedioz Natura Logo" width="150" />
+  <h1>E-Commerce KMP | Enterprise-Grade Retail Architecture</h1>
+</div>
 
-# 🌿 REMEDIOZ NATURA - MANIFIESTO TÉCNICO Y VISIÓN DE PRODUCTO (V3.0)
+> **Arquitectura E-Commerce Multiplataforma de Alto Rendimiento, UI Declarativa y Disponibilidad Offline.**
 
-> ### 📢 [NOTA DEL DESARROLLADOR: EL PIVOTE HACIA FRONTEND SHOWCASE]
->
-> **Actualización de Estado:** Tras meses de pulido intensivo en privado, la versión completa y conectada a bases de datos de este software fue adquirida y desplegada exitosamente en producción *(Comercial Exit)*.
-> 
-> Para proteger la propiedad intelectual comercial y el backend de producción, este repositorio público entra en una fase de **"Pivote Arquitectónico"**. El objetivo de esta base de código ha evolucionado: dejará de ser un MVP Full-Stack para convertirse en una **Vitrina de Frontend y Arquitectura Limpia (KMP UI/UX Showcase)**.
-> 
-> **Próximos pasos en el Roadmap de esta rama pública:**
-> 
-> * ✂️ **Desacoplamiento de BaaS:** Se eliminará la dependencia de Firebase y se purgarán las credenciales para permitir una compilación *plug-and-play* (cero configuraciones) para cualquier reclutador o desarrollador que clone el proyecto.
-> * 🏗️ **Mock Data & Clean Architecture:** La capa de `domain` se mantendrá intacta, pero los repositorios de `data` inyectarán datos simulados estáticos, demostrando cómo la UI es completamente agnóstica al origen de los datos.
-> * 🍏 **Expansión Nativa (iOS):** Se descartarán los targets web experimentales para enfocar la arquitectura estrictamente en Mobile Nativo, incorporando el ecosistema de iOS mediante Compose Multiplatform.
-> 
-> *(Una vez completada esta refactorización, este README será reescrito en su totalidad para reflejar la nueva naturaleza "Mocked" e hiper-optimizada del proyecto).*
-
-## 1. 🎯 Visión Core y Filosofía del Producto
-
-**Remedioz Natura** trasciende el concepto de tienda genérica; es una plataforma de e-commerce de nicho, hiper-localizada para Lima, Perú. Nuestro propósito es democratizar el acceso al bienestar y soluciones naturales, fusionando la calidez y confianza del comercio tradicional con la eficiencia inquebrantable de la tecnología moderna.
-
-* **El Diferenciador Clave (El Flujo de Confianza):** A diferencia del e-commerce tradicional subordinado a pasarelas de pago automatizadas internacionales (Stripe, PayPal), esta plataforma abraza la idiosincrasia financiera local. El sistema de pago pivota sobre la **Validación Humana por Voucher (Yape / Plin / Transferencia)**. Esto anula comisiones por transacción, mitiga el fraude informático y forja un vínculo de confianza directo y transparente entre vendedor y paciente.
-* **Enfoque MVP (Mínimo Producto Viable sin fricciones):** La retención es nuestra métrica estrella. El acceso se reduce a un solo clic (**Google Login**), pulverizando barreras de entrada como formularios tediosos, para garantizar una tasa de conversión máxima. La filosofía es clara: *Lo que no se puede automatizar a coste cero, se gestiona con inteligencia desde el Backoffice.*
+**E-Commerce KMP (Edición Remedioz Natura)** no es solo una tienda virtual genérica. Es una demostración arquitectónica de nivel empresarial (*Android & iOS*) diseñada con principios de ingeniería estrictos para garantizar que **la experiencia de compra sea fluida, los estados de la UI sean inmutables y la lógica de negocio esté completamente aislada**, permitiendo una compilación *Plug-and-Play* inmediata gracias a su entorno de datos simulados.
 
 ---
 
-## 2. 🏛️ Arquitectura de Software (El Stack y la Estructura)
+## 1. Visión del Proyecto y Naturaleza del Repositorio
 
-El proyecto se rige bajo el paradigma *"Escribir una vez, ejecutar en cualquier lugar"*, cimentado en una estricta **Clean Architecture + Estructura Basada en Funcionalidades (Feature-Based)** para garantizar escalabilidad absoluta.
+Tras un exitoso ciclo de vida comercial con un backend real, esta base de código ha sido refactorizada quirúrgicamente para convertirse en un **Frontend & Architecture Showcase** de élite. 
+
+Al carecer de dependencias de Backend as a Service (BaaS) o configuraciones de red, cualquier desarrollador o reclutador puede clonar el repositorio y compilarlo instantáneamente sin lidiar con llaves de API o autenticaciones. El diseño refleja un e-commerce hiper-localizado, fusionando la calidez del comercio botánico tradicional con la fluidez innegociable de las aplicaciones nativas modernas.
+
+---
+
+## 2. Arquitectura de Software (El Stack y la Estructura)
+
+El proyecto se rige bajo el paradigma *"Escribir una vez, ejecutar en cualquier lugar"*, cimentado en una estricta **Clean Architecture + Estructura Basada en Funcionalidades (Feature-Based)** para garantizar una separación de responsabilidades absoluta.
 
 **El Stack Core:**
-
-* **Framework:** Kotlin Multiplatform (KMP).
-* **UI:** Compose Multiplatform (UI Declarativa y reactiva).
-* **Motor de Renderizado:** Coil 3.
-* **Gestión Nativa de Archivos:** FileKit Compose.
+* **Framework:** Kotlin Multiplatform (KMP) enfocado en Mobile Nativo (iOS & Android).
+* **UI:** Compose Multiplatform (UI Declarativa, reactiva y fluida).
+* **Gestor de Estado:** StateFlow / Corrutinas (Unidirectional Data Flow).
+* **Motor de Renderizado Multimedia:** Coil 3.
 
 **La Estructura Clean (El Mapa del Proyecto):**
-
-* `domain`: El núcleo puro e inmutable. Contiene modelos de datos (`Product`, `Order`) e interfaces de repositorios. Agnosticismo total: no sabe de Android, iOS, Web ni Compose.
-* `data`: La infraestructura. Implementaciones de repositorios (Firebase) y resolución de código nativo mediante `expect/actual` confinado en `data.platform`.
-* `presentation`: La capa visual dividida quirúrgicamente por módulos de negocio (`home`, `admin`, `checkout`, `profile`), temas, componentes reutilizables y gestores de estado inyectables (`CartManager`).
-
----
-
-## 3. 🔄 El Flujo de Negocio Principal (Core Business Flow)
-
-El ciclo de vida opera en dos ecosistemas altamente optimizados:
-
-### Perspectiva del Comprador (Cliente)
-
-* **Exploración:** Navegación por un catálogo dinámico y filtrado con consumo de datos en tiempo real.
-* **Selección:** Gestión del carrito de compras con control de unidades.
-* **Checkout (El Momento de la Verdad):** Cálculo automatizado de costos, visualización de pasarelas locales (QR Yape/Plin), y carga de Voucher (comprobante) directamente desde el sistema de archivos del dispositivo.
-* **Línea de Tiempo y Perfil (Tracking):** Panel personal ("Mis Pedidos") con telemetría visual del estado de su paquete: *Pendiente -> Preparando -> En Camino -> Entregado*.
-
-### Perspectiva del Administrador (Backoffice Móvil)
-
-Un ERP de bolsillo, diseñado con la fuente identitaria *Imperial Script* para diferenciar visualmente los entornos. Dividido en 3 centros de comando:
-
-* **Pedidos (Torre de Control):** Auditoría en tiempo real. Permite visualizar vouchers almacenados en la nube y mutar estados de entrega que se reflejan instantáneamente en el dispositivo del cliente.
-* **Editar Productos:** Gestión de inventario blindada. Creación, edición, eliminación y subida de assets multimedia sin fricción de UI de consumo.
-* **Notificaciones:** El radar del sistema. Alertas reactivas ("Puntito Rojo") de nuevos depósitos o requerimientos, focalizando la atención estrictamente en lo accionable.
+* `domain`: El núcleo puro e inmutable. Contiene modelos de datos (`Product`, `Order`) e interfaces de repositorios. Agnosticismo total: no sabe de Android, iOS, ni Compose.
+* `data`: La infraestructura. Implementaciones mockeadas (`MockProductRepositoryImpl`, `MockOrderRepositoryImpl`) que inyectan datos estáticos para mantener viva la interfaz sin necesidad de servidores. Incluye resolución nativa mediante `expect/actual` en `data.platform`.
+* `presentation`: La capa visual dividida quirúrgicamente por módulos de negocio (`home`, `admin`, `checkout`, `profile`), temas genéricos, componentes reutilizables y gestores de estado inyectables (`CartManager`).
 
 ---
 
-## 4. 🚀 Reglas de Oro del Proyecto (Estándares)
+## 3. El Flujo de Negocio Simulado (Core Business Flow)
 
-Para sostener la integridad técnica y repeler la deuda tecnológica:
+Aunque los datos son generados localmente, la aplicación simula un ciclo de vida comercial completo y complejo en dos ecosistemas altamente optimizados:
 
-* **Aislamiento del Dominio:** La capa `domain` es un santuario. Prohibida la importación de estados de UI (`MutableState`) o librerías de plataforma.
-* **Principio DRY (Don't Repeat Yourself) en UI:** Componentes como la "Línea de Tiempo" o "Tarjetas de Producto" son entidades agnósticas reutilizables.
-* **UDF (Unidirectional Data Flow):** La UI (`@Composable`) es pasiva. Escucha `StateFlows` desde los ViewModels y emite eventos hacia arriba. Cero peticiones de red directas.
-* **UI Resiliente (Fail-Safe):** Uso estricto de placeholders en `AsyncImage` y variables por defecto para evitar bloqueos visuales ante latencia de red.
-* **Seguridad Cero-Trust:** El archivo `google-services.json` y claves nativas están estrictamente excluidos del control de versiones (`.gitignore`).
+### Experiencia de Usuario (Perspectiva del Cliente)
+* **Exploración:** Navegación por un catálogo dinámico con categorización y filtrado en tiempo real.
+* **Selección:** Gestión del carrito de compras con control de unidades dinámico y cálculos matemáticos exactos.
+* **Checkout Local:** Simulación de un pago validado por transferencia (Yape / Plin), reflejando la idiosincrasia financiera del mercado latinoamericano, culminando en la subida simulada de un comprobante (Voucher).
+* **Línea de Tiempo (Tracking):** Panel personal con telemetría visual del estado de su paquete: *Pendiente -> Preparando -> En Camino -> Entregado*.
+
+### Backoffice Móvil (Perspectiva del Administrador)
+Un ERP de bolsillo diseñado para la gestión de la tienda, evidenciando el manejo de múltiples roles de usuario en Compose:
+* **Torre de Control (Pedidos):** Auditoría visual para mutar estados de entrega y simular la aprobación de comprobantes de pago.
+* **Gestor de Inventario:** Interfaz blindada con demostración de formularios dinámicos para creación y edición del catálogo de productos.
 
 ---
 
-*Construido con disciplina, código limpio y visión de producto.*
+## 4. Reglas de Oro del Código (Estándares Implementados)
+
+Este repositorio actúa como un manifiesto de buenas prácticas de ingeniería de software para entornos móviles:
+
+* **Aislamiento del Dominio:** La capa `domain` es un santuario. Está estrictamente prohibida la importación de estados de UI (`MutableState`) o dependencias gráficas de plataforma.
+* **Principio DRY (Don't Repeat Yourself) en UI:** Componentes como `ProductCard`, la "Línea de Tiempo" y `TopNavBar` son entidades agnósticas y reutilizables en múltiples pantallas.
+* **Reactividad Unidireccional (UDF):** La UI (`@Composable`) es completamente pasiva. Se limita a escuchar `StateFlows` provenientes de los ViewModels y emite eventos hacia arriba.
+* **Compilación Resiliente:** Ausencia de strings "hardcodeados" fuera de sus componentes lógicos y stubbing nativo (como el uso de `BackHandler` adaptado para no romper el ecosistema de iOS).
 
 ---
+*Construido con disciplina, código limpio y pasión por el desarrollo multiplataforma.*
