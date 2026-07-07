@@ -213,15 +213,12 @@ fun App() {
                 "AUTH" -> {
                     BackHandler { currentScreen = "STORE" }
 
-                    val authViewModel = viewModel { AuthViewModel() } // Ya no necesita Firebase
+                    val authViewModel = viewModel { AuthViewModel() }
 
                     AuthScreen(
                         viewModel = authViewModel,
                         onClose = { currentScreen = "STORE" },
-                        onAdminSuccess = {
-                            isUserLoggedIn = true
-                            currentScreen = "ADMIN"
-                        },
+
                         onClientSuccess = {
                             isUserLoggedIn = true
                             currentScreen = "PROFILE"
