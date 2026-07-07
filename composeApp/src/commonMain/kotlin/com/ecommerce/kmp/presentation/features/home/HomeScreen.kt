@@ -189,8 +189,8 @@ fun HomeScreen(
             CheckoutScreen(
                 totalAmount = total,
                 isLoading = isLoading,
-                qrUrl = "", // Omitimos QR dinámico ya que no hay Firebase
-                phoneNumber = paymentSettings.yapeNumber, // Adaptado a nuestro Mock PaymentSettings
+                qrUrl = "",
+                phoneNumber = paymentSettings.yapeNumber,
                 onBackClick = {
                     if (directPurchaseItem != null) {
                         directPurchaseItem = null
