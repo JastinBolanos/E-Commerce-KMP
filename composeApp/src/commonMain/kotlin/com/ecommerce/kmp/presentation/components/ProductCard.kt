@@ -139,15 +139,6 @@ fun ProductCard(
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = product.description,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
-                    lineHeight = 20.sp
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // --- Detalles + Botón Ver ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -170,6 +161,7 @@ fun ProductCard(
                     if (showDetails) {
                         ProductDetailDialog(
                             product = product,
+                            imagePainter = getProductImagePainter(product.imageUrl),
                             onDismiss = { showDetails = false }
                         )
                     }

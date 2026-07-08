@@ -1,5 +1,6 @@
 package com.ecommerce.kmp.presentation.features.checkout
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -9,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -27,6 +27,8 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerMode
 import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
+import e_commercekmp.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.painterResource
 
 /**
  * Pantalla de finalización de compra y recaudo de pagos (Checkout).
@@ -116,20 +118,12 @@ fun CheckoutScreen(
                             .background(Color(0xFFEBEBEB)),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (qrUrl.isNotEmpty()) {
-                            AsyncImage(
-                                model = qrUrl,
-                                contentDescription = "QR Oficial de Pago",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        } else {
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Icon(Icons.Default.QrCodeScanner, contentDescription = "QR de Pago", tint = Color.Gray, modifier = Modifier.size(48.dp))
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text("QR dinámico", color = Color.Gray, fontSize = 10.sp)
-                            }
-                        }
+                        Image(
+                            painter = painterResource(Res.drawable.img_pago_qr),
+                            contentDescription = "QR Oficial de Pago",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))

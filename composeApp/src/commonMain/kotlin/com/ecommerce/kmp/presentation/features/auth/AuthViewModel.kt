@@ -29,11 +29,6 @@ class AuthViewModel : ViewModel() {
     private val _userPhotoUrl = MutableStateFlow<String?>(null)
     val userPhotoUrl: StateFlow<String?> = _userPhotoUrl.asStateFlow()
 
-    init {
-        // En una app real, aquí revisaríamos si hay sesión.
-        // Para el showcase, empezamos sin sesión para mostrar la pantalla de Login.
-    }
-
     /**
      * Inicia sesión simulada para el Administrador
      */
@@ -46,13 +41,11 @@ class AuthViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
-
-            // Simulamos el tiempo de carga del servidor (1.5 segundos) para lucir la UI
             delay(1500)
 
             _isLoading.value = false
 
-            // Para el portafolio, dejamos pasar cualquier credencial,
+            // Dejamos pasar cualquier credencial,
             // pero podríamos poner un if(email == "admin@admin.com") si quisieras restringirlo.
             onSuccess()
         }
@@ -69,9 +62,9 @@ class AuthViewModel : ViewModel() {
             delay(1500)
 
             // Inyectamos datos falsos para que el perfil de usuario se vea bonito
-            _userName.value = "Usuario Portafolio"
-            _userEmail.value = "reclutador@ejemplo.com"
-            _userPhotoUrl.value = "" // Dejamos vacío para que Coil use el placeholder por defecto
+            _userName.value = "LAURA VERACRUZ"
+            _userEmail.value = "laura.official@gmail.com"
+            _userPhotoUrl.value = ""
 
             _loginSuccess.value = true
             _isLoading.value = false

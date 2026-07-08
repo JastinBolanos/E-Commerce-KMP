@@ -26,8 +26,6 @@ class CheckoutViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    // Exponemos los datos falsos para que la UI los pinte de inmediato sin ir a la red
     private val _paymentSettings = MutableStateFlow(PaymentSettings())
     val paymentSettings: StateFlow<PaymentSettings> = _paymentSettings.asStateFlow()
 
@@ -43,13 +41,8 @@ class CheckoutViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             _isLoading.value = true
-
-            // Simulamos el tiempo que tardaría subir la foto del Voucher y guardar en la BD
             delay(2500)
-
             _isLoading.value = false
-
-            // Para el portafolio, siempre asumimos que la compra fue un éxito
             _orderSuccess.value = true
         }
     }

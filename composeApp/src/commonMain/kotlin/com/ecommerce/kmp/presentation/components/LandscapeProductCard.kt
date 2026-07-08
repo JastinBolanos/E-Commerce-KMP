@@ -142,15 +142,6 @@ fun LandscapeProductCard(
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = product.description,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
-                    lineHeight = 20.sp
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // --- Fila Detalles + Botón Ver ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -241,6 +232,7 @@ fun LandscapeProductCard(
     if (showDetails) {
         ProductDetailDialog(
             product = product,
+            imagePainter = getKitImagePainter(product.imageUrl),
             onDismiss = { showDetails = false }
         )
     }

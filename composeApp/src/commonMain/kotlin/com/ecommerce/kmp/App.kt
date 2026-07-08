@@ -184,7 +184,7 @@ fun App() {
                         onSaveClick = { newQrBytes, newPhoneNumber ->
                             coroutineScope.launch {
                                 isUploadingQr = true
-                                delay(1500) // Simular subida
+                                delay(1500)
                                 currentPhone = newPhoneNumber
                                 isUploadingQr = false
                                 currentScreen = "ADMIN"

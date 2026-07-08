@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.ecommerce.kmp.domain.model.CartItem
 import com.ecommerce.kmp.presentation.components.ProductDetailDialog
+import com.ecommerce.kmp.presentation.components.getKitImagePainter
 import com.ecommerce.kmp.presentation.state.CartManager
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
@@ -297,6 +298,7 @@ fun CartItemRow(cartItem: CartItem) {
             if (showDetails) {
                 ProductDetailDialog(
                     product = product,
+                    imagePainter = getKitImagePainter(product.imageUrl),
                     onDismiss = { showDetails = false }
                 )
             }

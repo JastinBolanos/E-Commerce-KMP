@@ -108,7 +108,6 @@ fun AuthScreen(
                 )
             }
 
-            // Mantenemos el manejo de errores por si falla el login de Google
             if (errorMessage != null) {
                 Text(
                     text = errorMessage!!,
