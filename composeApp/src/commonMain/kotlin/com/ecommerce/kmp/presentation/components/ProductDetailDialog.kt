@@ -94,7 +94,7 @@ fun ProductDetailDialog(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = "S/ ${product.price}",
+                            text = "S/ ${product.price.format(2)}",
                             fontSize = 20.sp,
                             color = Color(0xFF67B2C5),
                             fontWeight = FontWeight.Medium
