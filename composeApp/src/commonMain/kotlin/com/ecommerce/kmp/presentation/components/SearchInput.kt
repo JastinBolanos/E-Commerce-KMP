@@ -67,7 +67,7 @@ fun SearchInput(
                                     Color(0xFFE0E0E0),
                                     Color(0xFFE0E0E0),
                                     Color(0xFF9E9E9E),
-                                    Color(0xFF424242),
+                                    Color(0xFF505050),
                                     Color(0xFF9E9E9E),
                                     Color(0xFFE0E0E0),
                                     Color(0xFFE0E0E0)

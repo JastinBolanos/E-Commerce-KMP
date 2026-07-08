@@ -186,6 +186,10 @@ fun HomeScreen(
                 onProceedToCheckoutClick = {
                     directPurchaseItem = null
                     currentScreen = "CHECKOUT"
+                },
+                onDirectPurchaseClick = { itemToBuy ->
+                    directPurchaseItem = itemToBuy
+                    currentScreen = "CHECKOUT"
                 }
             )
         }
@@ -194,7 +198,7 @@ fun HomeScreen(
             BackHandler {
                 if (directPurchaseItem != null) {
                     directPurchaseItem = null
-                    currentScreen = "STORE"
+                    currentScreen = "CART"
                 } else {
                     currentScreen = "CART"
                 }
@@ -228,7 +232,7 @@ fun HomeScreen(
                 onBackClick = {
                     if (directPurchaseItem != null) {
                         directPurchaseItem = null
-                        currentScreen = "STORE"
+                        currentScreen = "CART"
                     } else {
                         currentScreen = "CART"
                     }

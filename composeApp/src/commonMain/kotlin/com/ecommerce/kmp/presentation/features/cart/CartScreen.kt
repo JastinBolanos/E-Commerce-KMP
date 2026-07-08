@@ -1,5 +1,6 @@
 package com.ecommerce.kmp.presentation.features.cart
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,10 +26,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.ecommerce.kmp.domain.model.CartItem
 import com.ecommerce.kmp.presentation.components.ProductDetailDialog
 import com.ecommerce.kmp.presentation.components.getKitImagePainter
+import com.ecommerce.kmp.presentation.components.getProductImagePainter
 import com.ecommerce.kmp.presentation.state.CartManager
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
@@ -38,11 +39,11 @@ import org.jetbrains.compose.resources.Font
 @Composable
 fun CartScreen(
     onBackClick: () -> Unit,
-    onProceedToCheckoutClick: () -> Unit
+    onProceedToCheckoutClick: () -> Unit,
+    onDirectPurchaseClick: (CartItem) -> Unit
 ) {
     val cartItems by CartManager.cartItems.collectAsState()
 
-    // Lógica Matemática Optimizada
     val totalAmount = cartItems.sumOf { item ->
         item.product.price * item.quantity
     }
@@ -114,7 +115,10 @@ fun CartScreen(
                     .background(Color.White)
             ) {
                 items(cartItems) { item ->
-                    CartItemRow(cartItem = item)
+                    CartItemRow(
+                        cartItem = item,
+                        onDirectPurchaseClick = onDirectPurchaseClick
+                    )
                     HorizontalDivider(color = Color.LightGray, thickness = 1.dp)
                 }
             }
@@ -124,13 +128,20 @@ fun CartScreen(
 
 // --- COMPONENTE INTERNO: LA TARJETA DEL PRODUCTO EN EL CARRITO ---
 @Composable
-fun CartItemRow(cartItem: CartItem) {
-
+fun CartItemRow(
+    cartItem: CartItem,
+    onDirectPurchaseClick: (CartItem) -> Unit
+) {
     val product = cartItem.product
     var showDetails by remember { mutableStateOf(false) }
-
-    // Cálculo de subtotal directo
     val subtotal = product.price * cartItem.quantity
+
+    val isKit = product.category.equals("Kits", ignoreCase = true)
+    val imagePainter = if (isKit) {
+        getKitImagePainter(product.imageUrl)
+    } else {
+        getProductImagePainter(product.imageUrl)
+    }
 
     Row(
         modifier = Modifier
@@ -144,14 +155,12 @@ fun CartItemRow(cartItem: CartItem) {
                 .clip(RoundedCornerShape(20.dp))
                 .background(Color(0xFFEBEBEB))
         ) {
-            if (product.imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = product.imageUrl,
-                    contentDescription = product.name,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
+            Image(
+                painter = imagePainter,
+                contentDescription = product.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -284,7 +293,9 @@ fun CartItemRow(cartItem: CartItem) {
                             )
                         )
                     )
-                    .clickable { println("Comprar directo: ${cartItem.quantity} ${product.name}") },
+                    .clickable {
+                        onDirectPurchaseClick(cartItem)
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -298,7 +309,7 @@ fun CartItemRow(cartItem: CartItem) {
             if (showDetails) {
                 ProductDetailDialog(
                     product = product,
-                    imagePainter = getKitImagePainter(product.imageUrl),
+                    imagePainter = imagePainter,
                     onDismiss = { showDetails = false }
                 )
             }
@@ -306,7 +317,7 @@ fun CartItemRow(cartItem: CartItem) {
     }
 }
 
-fun Double.format(digits: Int): String {
+private fun Double.format(digits: Int): String {
     val rounded = (this * 100).toLong() / 100.0
     val parts = rounded.toString().split(".")
     val whole = parts[0]
