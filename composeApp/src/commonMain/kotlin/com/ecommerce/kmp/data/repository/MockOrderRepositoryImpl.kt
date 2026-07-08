@@ -11,8 +11,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MockOrderRepositoryImpl : OrderRepository {
 
-    // 1. Productos de nuestro nuevo catálogo para los pedidos iniciales
-    private val dummyProduct1 = Product(
+    // --- 1. PRODUCTOS DE DEMOSTRACIÓN PARA LOS PEDIDOS ---
+
+    private val productArgan = Product(
         id = "13",
         name = "Aceite Esencial de Argán Puro",
         price = 58.0,
@@ -21,7 +22,7 @@ class MockOrderRepositoryImpl : OrderRepository {
         imageUrl = "img_aceite_dorado"
     )
 
-    private val dummyProduct2 = Product(
+    private val productKitBotanico = Product(
         id = "26",
         name = "Kit Spa Botánico Premium",
         price = 195.0,
@@ -30,25 +31,88 @@ class MockOrderRepositoryImpl : OrderRepository {
         imageUrl = "img_kit_botanico"
     )
 
-    // 2. Base de datos en RAM con pedidos de prueba
+    private val productSerumPink = Product(
+        id = "1",
+        name = "Sérum Iluminador Pink Peptide",
+        price = 85.0,
+        category = "Piel",
+        description = "El secreto de la cosmética coreana. Péptidos concentrados que aportan un brillo de cristal y firmeza instantánea a tu rostro.",
+        imageUrl = "img_serum_pink_peptide"
+    )
+
+    private val productPerfumeOceano = Product(
+        id = "10",
+        name = "Eau de Parfum Brisa Oceánica",
+        price = 130.0,
+        category = "Belleza",
+        description = "Frescura pura envasada. Notas de flor de loto, jazmín de agua y brisa marina que te envuelven en una sensación de limpieza y paz durante todo el día.",
+        imageUrl = "img_perfume_azul"
+    )
+
+    private val productKitCitrico = Product(
+        id = "25",
+        name = "Kit Regalo Energía Cítrica",
+        price = 155.0,
+        category = "Kits",
+        description = "El regalo perfecto para revitalizar los sentidos. Incluye perfume, crema de manos y loción corporal con notas vibrantes de mandarina en una hermosa caja de edición especial.",
+        imageUrl = "img_kit_citrico"
+    )
+
+    // --- 2. BASE DE DATOS EN RAM CON 5 ESTADOS DIFERENTES ---
+
     private val mockOrders = mutableListOf(
+        // ESTADO 1: Entregado (Histórico)
         Order(
             id = "ORD-77382",
             userId = "USER-ANONYMOUS",
             customerName = "Usuario Portafolio",
-            items = listOf(CartItem(dummyProduct1, 2)), // Compró 2 aceites (2 * 58.0)
+            items = listOf(CartItem(productArgan, 2)),
             totalAmount = 116.0,
             voucherUrl = "url_voucher_1",
             status = "Entregado",
-            timestamp = 1704067200000L
+            timestamp = getCurrentTimeMillis() - 864000000L
         ),
+        // ESTADO 2: En Camino
+        Order(
+            id = "ORD-88102",
+            userId = "USER-ANONYMOUS",
+            customerName = "Usuario Portafolio",
+            items = listOf(CartItem(productKitCitrico, 1)),
+            totalAmount = 155.0,
+            voucherUrl = "url_voucher_2",
+            status = "En Camino",
+            timestamp = getCurrentTimeMillis() - 172800000L
+        ),
+        // ESTADO 3: Preparando Paquete
+        Order(
+            id = "ORD-92034",
+            userId = "USER-ANONYMOUS",
+            customerName = "Usuario Portafolio",
+            items = listOf(CartItem(productPerfumeOceano, 2)),
+            totalAmount = 260.0,
+            voucherUrl = "url_voucher_3",
+            status = "Preparando Paquete",
+            timestamp = getCurrentTimeMillis() - 86400000L
+        ),
+        // ESTADO 4: Aprobado
+        Order(
+            id = "ORD-98011",
+            userId = "USER-ANONYMOUS",
+            customerName = "Usuario Portafolio",
+            items = listOf(CartItem(productSerumPink, 1)),
+            totalAmount = 85.0,
+            voucherUrl = "url_voucher_4",
+            status = "Aprobado",
+            timestamp = getCurrentTimeMillis() - 3600000L
+        ),
+        // ESTADO 5: Pendiente (El más reciente)
         Order(
             id = "ORD-99124",
             userId = "USER-ANONYMOUS",
             customerName = "Usuario Portafolio",
-            items = listOf(CartItem(dummyProduct2, 1)), // Compró 1 Kit (1 * 195.0)
+            items = listOf(CartItem(productKitBotanico, 1)),
             totalAmount = 195.0,
-            voucherUrl = "url_voucher_2",
+            voucherUrl = "url_voucher_5",
             status = "Pendiente",
             timestamp = getCurrentTimeMillis()
         )

@@ -1,5 +1,12 @@
 package com.ecommerce.kmp.presentation.features.profile
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -10,22 +17,28 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.painterResource
 import com.ecommerce.kmp.domain.model.Order
+import com.ecommerce.kmp.presentation.components.getKitImagePainter
+import com.ecommerce.kmp.presentation.components.getProductImagePainter
 import e_commercekmp.composeapp.generated.resources.Res
+import e_commercekmp.composeapp.generated.resources.img_perfil
 import e_commercekmp.composeapp.generated.resources.imperial_script
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +52,18 @@ fun CustomerProfileScreen(
     onTrackOrderClick: (Order) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
+
+    // MOTOR DE ANIMACIÓN PARA EL BORDE DEL PERFIL
+    val infiniteTransition = rememberInfiniteTransition(label = "profile_border_animation")
+    val angle by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "rotation"
+    )
 
     Scaffold(
         topBar = {
@@ -70,24 +95,40 @@ fun CustomerProfileScreen(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Círculo de foto de perfil dinámico
+                    // CÍRCULO DE FOTO CON BORDE ANIMADO
                     Box(
                         modifier = Modifier
-                            .size(100.dp)
+                            .size(106.dp)
+                            .clip(CircleShape)
+                            .drawBehind {
+                                rotate(angle) {
+                                    drawCircle(
+                                        brush = Brush.sweepGradient(
+                                            colors = listOf(
+                                                Color(0xFFE0E0E0),
+                                                Color(0xFFE0E0E0),
+                                                Color(0xFF9E9E9E),
+                                                Color(0xFF424242),
+                                                Color(0xFF9E9E9E),
+                                                Color(0xFFE0E0E0),
+                                                Color(0xFFE0E0E0)
+                                            )
+                                        ),
+                                        radius = size.width
+                                    )
+                                }
+                            }
+                            .padding(3.dp)
                             .clip(CircleShape)
                             .background(Color(0xFFF0F0F0)),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (!userPhotoUrl.isNullOrEmpty()) {
-                            AsyncImage(
-                                model = userPhotoUrl,
-                                contentDescription = "Foto de perfil",
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        } else {
-                            Icon(Icons.Default.Person, contentDescription = "Sin foto", tint = Color.Gray, modifier = Modifier.size(50.dp))
-                        }
+                        Image(
+                            painter = painterResource(Res.drawable.img_perfil),
+                            contentDescription = "Foto de perfil",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
 
                     Spacer(modifier = Modifier.width(24.dp))
@@ -95,8 +136,8 @@ fun CustomerProfileScreen(
                     Column {
                         Text("Datos Personales", fontSize = 16.sp, color = Color.Black)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(userName ?: "Cliente Natura", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                        Text(userEmail ?: "Sin correo registrado", fontSize = 14.sp, color = Color.Gray)
+                        Text(userName ?: "Laura Veracruz", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(userEmail ?: "laura.official@gmail.com", fontSize = 14.sp, color = Color.Gray)
                     }
                 }
 
@@ -137,9 +178,18 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     val firstProductImage = firstProduct?.imageUrl ?: ""
     val firstProductName = firstProduct?.name ?: "Producto Natura"
     val firstProductPrice = firstProduct?.price?.format(2) ?: "0.00"
+
+    // LÓGICA DE TRADUCCIÓN DE IMÁGENES
+    val isKit = firstProduct?.category.equals("Kits", ignoreCase = true)
+    val imagePainter = if (isKit) {
+        getKitImagePainter(firstProductImage)
+    } else {
+        getProductImagePainter(firstProductImage)
+    }
+
     val totalItems = order.items.sumOf { it.quantity }
     val isDelivered = order.status.equals("Entregado", ignoreCase = true)
-    val buttonColor = if (isDelivered) Color(0xFF65FF66) else Color(0xFFD3D3D3)
+    val buttonColor = if (isDelivered) Color(0xFF97DAFD) else Color(0xFFD3D3D3)
     val textColor = Color.Black
 
     Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
@@ -152,8 +202,8 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(0xFFF0F0F0))
             ) {
-                AsyncImage(
-                    model = firstProductImage,
+                Image(
+                    painter = imagePainter,
                     contentDescription = "Producto",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -204,7 +254,7 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     }
 }
 
-fun Double.format(digits: Int): String {
+private fun Double.format(digits: Int): String {
     val rounded = (this * 100).toLong() / 100.0
     val parts = rounded.toString().split(".")
     val whole = parts[0]
