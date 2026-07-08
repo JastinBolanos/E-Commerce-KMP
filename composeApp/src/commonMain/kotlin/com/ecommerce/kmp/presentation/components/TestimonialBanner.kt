@@ -41,7 +41,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .height(400.dp) // ¡Tus 400.dp reinando aquí!
+            .height(400.dp)
             .clip(RoundedCornerShape(24.dp))
     ) {
 
@@ -56,9 +56,9 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
                                 colors = listOf(
                                     Color.Transparent,
                                     Color.Transparent,
-                                    Color(0xFF67B2C5),
+                                    Color(0xFF70B6C7),
                                     Color.White,
-                                    Color(0xFF67B2C5),
+                                    Color(0xFF76B8C9),
                                     Color.Transparent,
                                     Color.Transparent
                                 )

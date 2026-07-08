@@ -2,6 +2,7 @@ package com.ecommerce.kmp.presentation.features.admin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,6 +37,7 @@ import com.ecommerce.kmp.presentation.components.ProductCard
 import com.ecommerce.kmp.presentation.components.SearchInput
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
+import androidx.compose.ui.platform.LocalFocusManager
 
 /**
  * Consola de Administración (UI Host protegido).
@@ -52,6 +54,8 @@ fun EditProductsScreen(
     var selectedProduct by remember { mutableStateOf<Product?>(null) }
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
+    var isSearchFocused by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
     val filteredProducts by viewModel.filteredProducts.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
@@ -59,6 +63,10 @@ fun EditProductsScreen(
     val verticalProducts = filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
     Scaffold(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        ) { focusManager.clearFocus() },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -100,8 +108,11 @@ fun EditProductsScreen(
             SearchInput(
                 query = searchQuery,
                 onQueryChange = { viewModel.updateSearchQuery(it) },
+                isFocused = isSearchFocused,
+                onFocusChange = { isSearchFocused = it },
                 modifier = Modifier.padding(top = 8.dp)
             )
+
             CategoryFilter(
                 selectedCategory = selectedCategory,
                 onCategorySelected = { viewModel.updateCategory(it) },
@@ -180,10 +191,7 @@ fun EditProductSheetContent(
     onCloseSheet: () -> Unit
 ) {
     var name by remember { mutableStateOf(product?.name ?: "") }
-
-    // Convertimos el Double a String para que el TextField lo pueda leer
     var priceInput by remember { mutableStateOf(if (product != null && product.price > 0.0) product.price.toString() else "") }
-
     var category by remember { mutableStateOf(product?.category?.takeIf { it.isNotEmpty() } ?: "Tratamientos") }
     var description by remember { mutableStateOf(product?.description ?: "") }
     val allowedCategories = listOf("Kits", "Tratamientos", "Belleza", "Cuidados", "Piel", "Otros")
@@ -298,7 +306,6 @@ fun EditProductSheetContent(
 
         Button(
             onClick = {
-                // Convertimos el String de nuevo a Double para guardarlo en la base de datos Mock
                 val productToSave = Product(
                     id = product?.id ?: "",
                     name = name,
