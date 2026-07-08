@@ -11,10 +11,10 @@ import kotlinx.coroutines.launch
 
 // Mock de configuración de pagos para que la UI muestre los QR o números locales
 data class PaymentSettings(
-    val yapeNumber: String = "999 888 777",
+    val yapeNumber: String = "987 654 321",
     val yapeName: String = "Remedioz Natura S.A.C",
-    val plinNumber: String = "999 888 777",
-    val cci: String = "0011-0222-0200333344-11"
+    val plinNumber: String = "987 654 321",
+    val cci: String = "0011-0222-0200733364-11"
 )
 
 /**

@@ -136,10 +136,7 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     val firstProduct = order.items.firstOrNull()?.product
     val firstProductImage = firstProduct?.imageUrl ?: ""
     val firstProductName = firstProduct?.name ?: "Producto Natura"
-
-    // Ahora usa el Double del precio directamente
-    val firstProductPrice = firstProduct?.price?.toString() ?: "0.0"
-
+    val firstProductPrice = firstProduct?.price?.format(2) ?: "0.00"
     val totalItems = order.items.sumOf { it.quantity }
     val isDelivered = order.status.equals("Entregado", ignoreCase = true)
     val buttonColor = if (isDelivered) Color(0xFF65FF66) else Color(0xFFD3D3D3)
@@ -173,7 +170,8 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
         Column(modifier = Modifier.weight(1.5f)) {
             CustomerOutlinedStatRow(label = "Cantidad:", value = totalItems.toString())
             Spacer(modifier = Modifier.height(6.dp))
-            CustomerOutlinedStatRow(label = "Costos Totales:", value = "S/ ${order.totalAmount}")
+            CustomerOutlinedStatRow(label = "Costos Totales:", value = "S/ ${order.totalAmount.format(2)}")
+
             Spacer(modifier = Modifier.height(6.dp))
             CustomerOutlinedStatRow(label = "Estado:", value = order.status)
 
@@ -204,6 +202,14 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
             }
         }
     }
+}
+
+fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }
 
 // Cajita de estadísticas

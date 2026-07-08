@@ -31,11 +31,6 @@ import kotlinx.coroutines.launch
 /**
  * Pantalla de finalización de compra y recaudo de pagos (Checkout).
  * Permite al usuario visualizar el monto final y adjuntar su comprobante de pago (Voucher).
- * Se comunica de forma ascendente (State Hoisting) emitiendo el voucher en formato ByteArray.
- *
- * @param totalAmount Monto total calculado desde el carrito.
- * @param onBackClick Navegación hacia atrás (regresar al carrito).
- * @param onConfirmOrder Dispara el proceso de guardado en la nube enviando la foto del voucher.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -140,7 +135,7 @@ fun CheckoutScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(text = phoneNumber, fontSize = 24.sp, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
-                    Text("Johana Quispe Ortiz", color = Color.Gray, fontSize = 14.sp)
+                    Text("Luciana Valdivia Montes", color = Color.Gray, fontSize = 14.sp)
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))
