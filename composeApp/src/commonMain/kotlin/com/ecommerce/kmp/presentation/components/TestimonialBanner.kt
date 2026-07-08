@@ -63,7 +63,6 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
                                     Color.Transparent
                                 )
                             ),
-                            // Hacemos el radio lo suficientemente grande para cubrir todo el rectángulo
                             radius = size.width
                         )
                     }

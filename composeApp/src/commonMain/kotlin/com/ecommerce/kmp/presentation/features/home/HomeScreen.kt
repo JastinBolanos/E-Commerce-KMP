@@ -114,14 +114,19 @@ fun HomeScreen(
                 item {
                     if (kitsProducts.isNotEmpty()) {
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            Spacer(modifier = Modifier.height(32.dp))
-                            Text(
-                                text = "Kits y Promociones",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            )
+                            val isKitsCategory = selectedCategory.equals("Kits", ignoreCase = true)
+
+                            if (!isKitsCategory) {
+                                Spacer(modifier = Modifier.height(32.dp))
+                                Text(
+                                    text = "Kits y Promociones",
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                                )
+                            }
+
                             LazyRow(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentPadding = PaddingValues(horizontal = 16.dp),
