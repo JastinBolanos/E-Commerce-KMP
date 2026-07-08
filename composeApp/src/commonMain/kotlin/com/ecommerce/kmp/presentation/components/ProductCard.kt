@@ -1,6 +1,7 @@
 package com.ecommerce.kmp.presentation.components
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,13 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.ecommerce.kmp.domain.model.Product
 import com.ecommerce.kmp.presentation.state.CartManager
+import e_commercekmp.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProductCard(
@@ -65,8 +68,8 @@ fun ProductCard(
                 .background(Color(0xFFEBEBEB))
         ) {
             if (product.imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = product.imageUrl,
+                Image(
+                    painter = getProductImagePainter(product.imageUrl),
                     contentDescription = name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -247,4 +250,45 @@ fun Double.format(digits: Int): String {
     val whole = parts[0]
     val fraction = if (parts.size > 1) parts[1] else "0"
     return "$whole.${fraction.padEnd(digits, '0')}"
+}
+
+@Composable
+fun getProductImagePainter(imageUrl: String): Painter {
+    val imageRes = when (imageUrl) {
+        // --- CATEGORÍA 1: PIEL ---
+        "img_serum_pink_peptide" -> Res.drawable.img_serum_pink_peptide
+        "img_crema_dolkong" -> Res.drawable.img_crema_dolkong
+        "img_tonico_purificante" -> Res.drawable.img_tonico_purificante
+        "img_crema_noche" -> Res.drawable.img_crema_noche
+        "img_jabon_manzanilla" -> Res.drawable.img_jabon_manzanilla
+        "img_jabon_arcilla" -> Res.drawable.img_jabon_arcilla
+
+        // --- CATEGORÍA 2: BELLEZA ---
+        "img_balsamo_citrico" -> Res.drawable.img_balsamo_citrico
+        "img_perfume_rojo" -> Res.drawable.img_perfume_rojo
+        "img_tinte_seda" -> Res.drawable.img_tinte_seda
+        "img_perfume_azul" -> Res.drawable.img_perfume_azul
+        "img_rubor_liquido" -> Res.drawable.img_rubor_liquido
+        "img_balsamo_herbal" -> Res.drawable.img_balsamo_herbal
+
+        // --- CATEGORÍA 3: CUIDADOS ---
+        "img_aceite_dorado" -> Res.drawable.img_aceite_dorado
+        "img_mantequilla_caramelo" -> Res.drawable.img_mantequilla_caramelo
+        "img_aceite_macadamia" -> Res.drawable.img_aceite_macadamia
+        "img_shampoo_solido" -> Res.drawable.img_shampoo_solido
+        "img_exfoliante_corporal" -> Res.drawable.img_exfoliante_corporal
+        "img_jabon_avena" -> Res.drawable.img_jabon_avena
+
+        // --- CATEGORÍA 4: TRATAMIENTOS ---
+        "img_esencia_lechosa" -> Res.drawable.img_esencia_lechosa
+        "img_mascarilla_citrica" -> Res.drawable.img_mascarilla_citrica
+        "img_tratamiento_capilar" -> Res.drawable.img_tratamiento_capilar
+        "img_gel_vitamina_c" -> Res.drawable.img_gel_vitamina_c
+        "img_tratamiento_cuero_cabelludo" -> Res.drawable.img_tratamiento_cuero_cabelludo
+        "img_mascarilla_miel" -> Res.drawable.img_mascarilla_miel
+
+        // --- FALLBACK (Por si alguna imagen no se encuentra) ---
+        else -> Res.drawable.img_tinte_seda
+    }
+    return painterResource(imageRes)
 }

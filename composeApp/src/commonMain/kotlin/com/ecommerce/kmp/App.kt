@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ecommerce.kmp.data.repository.MockKitRepositoryImpl
 import com.ecommerce.kmp.data.repository.MockOrderRepositoryImpl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,19 +37,18 @@ fun App() {
         var currentScreen by remember { mutableStateOf("STORE") }
         var selectedOrder by remember { mutableStateOf<com.ecommerce.kmp.domain.model.Order?>(null) }
         var adminOrdersTab by remember { mutableIntStateOf(0) }
-
-        // Simulación de sesión local para el portafolio
         var isUserLoggedIn by remember { mutableStateOf(false) }
 
         // --- INYECCIÓN DE DEPENDENCIAS (NUESTRAS BASES DE DATOS FALSAS) ---
         val productRepository = remember { MockProductRepositoryImpl() }
         val orderRepository = remember { MockOrderRepositoryImpl() }
+        val kitRepository = remember { MockKitRepositoryImpl() }
 
         Box(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
 
             when (currentScreen) {
                 "STORE" -> {
-                    val homeViewModel = viewModel { HomeViewModel(productRepository) }
+                    val homeViewModel = viewModel { HomeViewModel(productRepository, kitRepository) }
                     val checkoutViewModel = viewModel { CheckoutViewModel() }
 
                     HomeScreen(
@@ -177,7 +177,7 @@ fun App() {
                     var currentPhone by remember { mutableStateOf("999 888 777") }
 
                     UpdatePaymentScreen(
-                        currentQrUrl = "", // Omitido por ser local
+                        currentQrUrl = "",
                         currentPhoneNumber = currentPhone,
                         isLoading = isUploadingQr,
                         onBackClick = { currentScreen = "ADMIN" },

@@ -1,6 +1,7 @@
 package com.ecommerce.kmp.presentation.components
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,13 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.ecommerce.kmp.domain.model.Product
 import com.ecommerce.kmp.presentation.state.CartManager
+import e_commercekmp.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LandscapeProductCard(
@@ -64,8 +67,9 @@ fun LandscapeProductCard(
                 .background(Color(0xFFD6D6D6))
         ) {
             if (product.imageUrl.isNotEmpty()) {
-                AsyncImage(
-                    model = product.imageUrl,
+                // Traductor de Kits
+                Image(
+                    painter = getKitImagePainter(product.imageUrl),
                     contentDescription = name,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -240,4 +244,19 @@ fun LandscapeProductCard(
             onDismiss = { showDetails = false }
         )
     }
+}
+
+// Traductor para los KITS (Categoría 5)
+@Composable
+fun getKitImagePainter(imageUrl: String): Painter {
+    val imageRes = when (imageUrl) {
+        "img_kit_citrico" -> Res.drawable.img_kit_citrico
+        "img_kit_botanico" -> Res.drawable.img_kit_botanico
+        "img_kit_minimalista" -> Res.drawable.img_kit_minimalista
+        "img_kit_centella" -> Res.drawable.img_kit_centella
+        "img_kit_higo" -> Res.drawable.img_kit_higo
+        "img_kit_rosas" -> Res.drawable.img_kit_rosas
+        else -> Res.drawable.img_kit_citrico
+    }
+    return painterResource(imageRes)
 }

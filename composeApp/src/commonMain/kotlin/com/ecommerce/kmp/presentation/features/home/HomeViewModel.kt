@@ -2,6 +2,9 @@ package com.ecommerce.kmp.presentation.features.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ecommerce.kmp.domain.model.Product
+import com.ecommerce.kmp.domain.repository.KitRepository
+import com.ecommerce.kmp.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -9,13 +12,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import com.ecommerce.kmp.domain.model.Product
-import com.ecommerce.kmp.domain.repository.ProductRepository
 
 class HomeViewModel(
-    private val repository: ProductRepository
+    private val repository: ProductRepository,
+    private val kitRepository: KitRepository
 ) : ViewModel() {
+
     private val _products = MutableStateFlow<List<Product>>(emptyList())
+
+    private val _kits = MutableStateFlow<List<Product>>(emptyList())
+    val kits: StateFlow<List<Product>> = _kits.asStateFlow()
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
@@ -43,10 +49,10 @@ class HomeViewModel(
     )
 
     init {
-        observeProductsInRealTime()
+        observeDataInRealTime()
     }
 
-    private fun observeProductsInRealTime() {
+    private fun observeDataInRealTime() {
         viewModelScope.launch {
             try {
                 repository.observeProducts().collect { liveProducts ->
@@ -54,6 +60,16 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 println("Error en Home escuchando productos: ${e.message}")
+            }
+        }
+
+        viewModelScope.launch {
+            try {
+                kitRepository.observeKits().collect { liveKits ->
+                    _kits.value = liveKits
+                }
+            } catch (e: Exception) {
+                println("Error en Home escuchando kits: ${e.message}")
             }
         }
     }

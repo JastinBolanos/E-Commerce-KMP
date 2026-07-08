@@ -50,10 +50,18 @@ fun HomeScreen(
     var currentScreen by remember { mutableStateOf("STORE") }
     var directPurchaseItem by remember { mutableStateOf<CartItem?>(null) }
     val filteredProducts by viewModel.filteredProducts.collectAsState()
+    val rawKits by viewModel.kits.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
-    val kitsProducts = filteredProducts.filter { it.category.equals("Kits", ignoreCase = true) }
-    val verticalProducts = filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
+    val verticalProducts = filteredProducts
+
+    val kitsProducts = rawKits.filter { kit ->
+        val matchesQuery = kit.name.contains(searchQuery, ignoreCase = true) ||
+                kit.description.contains(searchQuery, ignoreCase = true)
+        val matchesCategory = selectedCategory == "Todos" || selectedCategory.equals("Kits", ignoreCase = true)
+
+        matchesQuery && matchesCategory
+    }
 
     when (currentScreen) {
         "STORE" -> {
@@ -83,20 +91,22 @@ fun HomeScreen(
                 }
 
                 item {
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(verticalProducts) { product ->
-                            ProductCard(
-                                product = product,
-                                modifier = Modifier.width(180.dp),
-                                onBuyNowClick = { qty ->
-                                    directPurchaseItem = CartItem(product = product, quantity = qty)
-                                    currentScreen = "CHECKOUT"
-                                }
-                            )
+                    if (verticalProducts.isNotEmpty()) {
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            items(verticalProducts) { product ->
+                                ProductCard(
+                                    product = product,
+                                    modifier = Modifier.width(180.dp),
+                                    onBuyNowClick = { qty ->
+                                        directPurchaseItem = CartItem(product = product, quantity = qty)
+                                        currentScreen = "CHECKOUT"
+                                    }
+                                )
+                            }
                         }
                     }
                 }
@@ -170,7 +180,6 @@ fun HomeScreen(
             val paymentSettings by checkoutViewModel.paymentSettings.collectAsState()
             val itemsToBuy = if (directPurchaseItem != null) listOf(directPurchaseItem!!) else CartManager.cartItems.value
 
-            // Lógica Matemática Optimizada
             val total = itemsToBuy.sumOf { item ->
                 item.product.price * item.quantity
             }

@@ -11,33 +11,33 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MockOrderRepositoryImpl : OrderRepository {
 
-    // 1. un par de productos de tu catálogo para los pedidos iniciales
+    // 1. Productos de nuestro nuevo catálogo para los pedidos iniciales
     private val dummyProduct1 = Product(
-        id = "1",
-        name = "Aceite Esencial de Lavanda",
-        price = 45.0,
+        id = "13",
+        name = "Aceite Esencial de Argán Puro",
+        price = 58.0,
         category = "Cuidados",
-        description = "Extracto puro 100% natural para aliviar el estrés y mejorar el sueño nocturno.",
-        imageUrl = "img_lavanda"
+        description = "El \"oro líquido\" para tu rutina. Un aceite puro multiusos ideal para hidratar profundamente la piel y revitalizar las puntas secas del cabello.",
+        imageUrl = "img_aceite_dorado"
     )
 
     private val dummyProduct2 = Product(
-        id = "4",
-        name = "Kit Bienestar Integral",
-        price = 85.0,
+        id = "26",
+        name = "Kit Spa Botánico Premium",
+        price = 195.0,
         category = "Kits",
-        description = "El combo perfecto: Aceite de lavanda, infusión relajante y crema hidratante a un precio especial.",
-        imageUrl = "img_placeholder"
+        description = "Una experiencia de spa de lujo en casa. Colección completa de aceites, sales de baño y lociones en envases de vidrio ecológico para una relajación absoluta.",
+        imageUrl = "img_kit_botanico"
     )
 
-    // 2. base de datos en RAM con pedidos de prueba
+    // 2. Base de datos en RAM con pedidos de prueba
     private val mockOrders = mutableListOf(
         Order(
             id = "ORD-77382",
             userId = "USER-ANONYMOUS",
             customerName = "Usuario Portafolio",
-            items = listOf(CartItem(dummyProduct1, 2)),
-            totalAmount = 90.0,
+            items = listOf(CartItem(dummyProduct1, 2)), // Compró 2 aceites (2 * 58.0)
+            totalAmount = 116.0,
             voucherUrl = "url_voucher_1",
             status = "Entregado",
             timestamp = 1704067200000L
@@ -46,8 +46,8 @@ class MockOrderRepositoryImpl : OrderRepository {
             id = "ORD-99124",
             userId = "USER-ANONYMOUS",
             customerName = "Usuario Portafolio",
-            items = listOf(CartItem(dummyProduct2, 1)),
-            totalAmount = 85.0,
+            items = listOf(CartItem(dummyProduct2, 1)), // Compró 1 Kit (1 * 195.0)
+            totalAmount = 195.0,
             voucherUrl = "url_voucher_2",
             status = "Pendiente",
             timestamp = getCurrentTimeMillis()
