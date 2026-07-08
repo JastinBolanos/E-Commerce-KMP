@@ -7,7 +7,56 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object CartManager {
-    private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
+
+    // --- DATOS DE DEMOSTRACIÓN PARA UI/UX ---
+    private val demoItems = listOf(
+        CartItem(
+            product = Product(
+                id = "demo_1",
+                name = "Sérum Iluminador Pink Peptide",
+                price = 85.00,
+                category = "Tratamientos",
+                description = "El secreto de la cosmética coreana. Péptidos concentrados que aportan un brillo de cristal y firmeza instantánea a tu rostro.",
+                imageUrl = "img_serum_pink_peptide"
+            ),
+            quantity = 1
+        ),
+        CartItem(
+            product = Product(
+                id = "demo_2",
+                name = "Eau de Parfum Brisa Oceánica",
+                price = 130.00,
+                category = "Belleza",
+                description = "Frescura pura envasada. Notas de flor de loto, jazmín de agua y brisa marina que te envuelven en una sensación de limpieza y paz durante todo el día.",
+                imageUrl = "img_perfume_azul"
+            ),
+            quantity = 1
+        ),
+        CartItem(
+            product = Product(
+                id = "demo_3",
+                name = "Aceite Esencial de Argán Puro",
+                price = 58.00,
+                category = "Cuidados",
+                description = "El \"oro líquido\" para tu rutina. Un aceite puro multiusos ideal para hidratar profundamente la piel y revitalizar las puntas secas del cabello.",
+                imageUrl = "img_aceite_dorado"
+            ),
+            quantity = 1
+        ),
+        CartItem(
+            product = Product(
+                id = "demo_4",
+                name = "Colección Rosas y Frutos Rojos",
+                price = 210.00,
+                category = "Kits",
+                description = "El lujo máximo en cuidado facial. Infusiones de rosas reales y frutos rojos antioxidantes que combaten el envejecimiento prematuro dejando una tez de porcelana.",
+                imageUrl = "img_kit_rosas"
+            ),
+            quantity = 1
+        )
+    )
+
+    private val _cartItems = MutableStateFlow<List<CartItem>>(demoItems)
     val cartItems: StateFlow<List<CartItem>> = _cartItems.asStateFlow()
 
     /**
