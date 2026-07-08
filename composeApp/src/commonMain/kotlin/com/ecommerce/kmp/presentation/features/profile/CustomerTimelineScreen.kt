@@ -65,7 +65,7 @@ fun CustomerTimelineScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    CustomerTimelineDetailRow("ID Pedido:", orderId.takeLast(6).uppercase())
+                    CustomerTimelineDetailRow("ID Pedido:", orderId.uppercase())
                     Spacer(modifier = Modifier.height(8.dp))
 
                     val statusColor = when {

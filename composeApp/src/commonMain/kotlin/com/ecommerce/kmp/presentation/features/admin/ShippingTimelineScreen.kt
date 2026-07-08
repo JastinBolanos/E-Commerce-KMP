@@ -67,7 +67,7 @@ fun ShippingTimelineScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    TimelineDetailRow("ID Pedido:", orderId.takeLast(6).uppercase())
+                    TimelineDetailRow("ID Pedido:", orderId.uppercase())
                     Spacer(modifier = Modifier.height(8.dp))
                     TimelineDetailRow("Cliente:", customerName)
                     Spacer(modifier = Modifier.height(8.dp))
