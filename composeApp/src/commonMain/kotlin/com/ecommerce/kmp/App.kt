@@ -49,10 +49,10 @@ fun App() {
             when (currentScreen) {
                 "STORE" -> {
                     val homeViewModel = viewModel { HomeViewModel(productRepository) }
-                    val checkoutViewModel = viewModel { CheckoutViewModel() } // Ya no necesita Firebase
+                    val checkoutViewModel = viewModel { CheckoutViewModel() }
 
                     HomeScreen(
-                        onAdminClick = { currentScreen = "AUTH" },
+                        onAdminClick = { currentScreen = "ADMIN" },
                         onAuthClick = {
                             if (isUserLoggedIn) {
                                 currentScreen = "PROFILE"
