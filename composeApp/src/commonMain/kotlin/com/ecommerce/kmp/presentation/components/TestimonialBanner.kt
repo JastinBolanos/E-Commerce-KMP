@@ -36,13 +36,13 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Más que una tienda, somos un equipo dedicado a guiarte en tu camino hacia una vida más saludable con soluciones naturales diseñadas para tu bienestar diario.",
+                text = "Descubre el poder de la naturaleza en cada aspecto de tu vida. Desde el cuidado profundo de tu piel hasta aromas que inspiran, te ofrecemos una selección integral para resaltar tu belleza y bienestar auténtico.",
                 color = Color.White.copy(alpha = 0.9f),
                 fontSize = 12.sp,
                 lineHeight = 18.sp
             )
             Spacer(modifier = Modifier.height(24.dp))
-            Text("Johana Quispe Ortiz", color = Color.White, fontWeight = FontWeight.Bold)
+            Text("Luciana Valdivia Montes", color = Color.White, fontWeight = FontWeight.Bold)
             Text("Especialista en Salud y Belleza", color = Color.White.copy(alpha = 0.7f), fontSize = 12.sp)
         }
     }
