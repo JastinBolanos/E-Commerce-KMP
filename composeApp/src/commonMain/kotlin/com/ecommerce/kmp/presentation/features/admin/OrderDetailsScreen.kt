@@ -1,6 +1,7 @@
 package com.ecommerce.kmp.presentation.features.admin
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image // 👇 Importado para imagen local
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -20,8 +21,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import org.jetbrains.compose.resources.painterResource // 👇 Importado para cargar recursos locales
 import e_commercekmp.composeapp.generated.resources.Res
+import e_commercekmp.composeapp.generated.resources.img_voucher // 👇 La imagen del comprobante
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
@@ -39,6 +41,7 @@ fun OrderDetailsScreen(
     onRejectClick: (String) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
+    val formattedTotal = totalAmount.replace("S/ ", "").toDoubleOrNull()?.format(2) ?: "0.00"
 
     Scaffold(
         topBar = {
@@ -79,16 +82,12 @@ fun OrderDetailsScreen(
                     .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                if (voucherUrl.isNotEmpty()) {
-                    AsyncImage(
-                        model = voucherUrl,
-                        contentDescription = "Voucher",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    CircularProgressIndicator(color = Color.Black)
-                }
+                Image(
+                    painter = painterResource(Res.drawable.img_voucher),
+                    contentDescription = "Voucher del cliente",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -104,7 +103,7 @@ fun OrderDetailsScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     DetailRow("Cliente:", customerName)
                     Spacer(modifier = Modifier.height(8.dp))
-                    DetailRow("Monto Total:", totalAmount)
+                    DetailRow("Monto Total:", "S/ $formattedTotal")
                     Spacer(modifier = Modifier.height(8.dp))
                     DetailRow("Estado Actual:", status, valueColor = Color(0xFFD32F2F))
                 }
@@ -155,4 +154,12 @@ fun DetailRow(label: String, value: String, valueColor: Color = Color.Black) {
         Text(text = label, color = Color.Gray, fontSize = 14.sp)
         Text(text = value, color = valueColor, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
     }
+}
+
+private fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }

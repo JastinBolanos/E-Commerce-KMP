@@ -89,9 +89,9 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
         Box(
             modifier = Modifier
                 .padding(top = 6.dp)
-                .size(8.dp)
+                .size(7.dp)
                 .clip(CircleShape)
-                .background(Color(0xFFD32F2F))
+                .background(Color(0xFF5474FF))
         )
 
         Spacer(modifier = Modifier.width(16.dp))

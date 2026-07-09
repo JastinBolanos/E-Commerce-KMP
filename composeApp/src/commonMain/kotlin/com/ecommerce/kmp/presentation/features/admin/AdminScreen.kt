@@ -51,7 +51,7 @@ fun AdminScreen(
                             if (pendingOrdersCount > 0) {
                                 BadgedBox(
                                     badge = {
-                                        Badge(containerColor = Color(0xFFD32F2F), contentColor = Color.White) {
+                                        Badge(containerColor = Color(0xFF5474FF), contentColor = Color.White) {
                                             Text(pendingOrdersCount.toString())
                                         }
                                     }

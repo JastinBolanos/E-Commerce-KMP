@@ -25,7 +25,7 @@ class MockOrderRepositoryImpl : OrderRepository {
     private val productKitBotanico = Product(
         id = "26",
         name = "Kit Spa Botánico Premium",
-        price = 195.0,
+        price = 270.0,
         category = "Kits",
         description = "Una experiencia de spa de lujo en casa. Colección completa de aceites, sales de baño y lociones en envases de vidrio ecológico para una relajación absoluta.",
         imageUrl = "img_kit_botanico"
@@ -111,7 +111,7 @@ class MockOrderRepositoryImpl : OrderRepository {
             userId = "USER-LAURA",
             customerName = "Laura Veracruz",
             items = listOf(CartItem(productKitBotanico, 1)),
-            totalAmount = 195.0,
+            totalAmount = 270.0,
             voucherUrl = "url_voucher_5",
             status = "Pendiente",
             timestamp = getCurrentTimeMillis()
