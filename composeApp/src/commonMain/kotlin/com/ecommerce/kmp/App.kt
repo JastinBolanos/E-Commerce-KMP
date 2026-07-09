@@ -85,7 +85,10 @@ fun App() {
                 "EDIT_PRODUCTS" -> {
                     BackHandler { currentScreen = "ADMIN" }
 
-                    val adminViewModel = viewModel { AdminViewModel(productRepository) }
+                    val adminViewModel = AdminViewModel(
+                        repository = MockProductRepositoryImpl(),
+                        kitRepository = MockKitRepositoryImpl()
+                    )
 
                     EditProductsScreen(
                         onBackClick = { currentScreen = "ADMIN" },

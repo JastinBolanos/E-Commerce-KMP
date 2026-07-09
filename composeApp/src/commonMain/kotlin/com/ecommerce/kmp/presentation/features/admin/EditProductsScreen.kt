@@ -1,5 +1,6 @@
 package com.ecommerce.kmp.presentation.features.admin
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -35,16 +36,12 @@ import com.ecommerce.kmp.presentation.components.CategoryFilter
 import com.ecommerce.kmp.presentation.components.LandscapeProductCard
 import com.ecommerce.kmp.presentation.components.ProductCard
 import com.ecommerce.kmp.presentation.components.SearchInput
+import com.ecommerce.kmp.presentation.components.getKitImagePainter
+import com.ecommerce.kmp.presentation.components.getProductImagePainter
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import androidx.compose.ui.platform.LocalFocusManager
 
-/**
- * Consola de Administración (UI Host protegido).
- * Implementa un patrón maestro-detalle usando [ModalBottomSheet] para la edición in-place.
- * Escucha el estado reactivo del [AdminViewModel] para reflejar filtros y búsquedas
- * en tiempo real sin mutar la fuente de datos original.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProductsScreen(
@@ -120,6 +117,7 @@ fun EditProductsScreen(
             )
 
             LazyRow(
+                modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -140,26 +138,29 @@ fun EditProductsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                "Kits y Promociones",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(kitsProducts) { product ->
-                    LandscapeProductCard(
-                        product = product,
-                        showCartIcon = false,
-                        isAdminView = true,
-                        modifier = Modifier.clickable {
-                            selectedProduct = product
-                            showSheet = true
-                        }
-                    )
+            if (kitsProducts.isNotEmpty()) {
+                Text(
+                    "Kits y Promociones",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(kitsProducts) { product ->
+                        LandscapeProductCard(
+                            product = product,
+                            showCartIcon = false,
+                            isAdminView = true,
+                            modifier = Modifier.clickable {
+                                selectedProduct = product
+                                showSheet = true
+                            }
+                        )
+                    }
                 }
             }
 
@@ -238,8 +239,9 @@ fun EditProductSheetContent(
                 )
             }
             else if (!product?.imageUrl.isNullOrEmpty()) {
-                AsyncImage(
-                    model = product!!.imageUrl,
+                val isKit = category.equals("Kits", ignoreCase = true)
+                Image(
+                    painter = if (isKit) getKitImagePainter(product!!.imageUrl) else getProductImagePainter(product!!.imageUrl),
                     contentDescription = "Foto actual",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()

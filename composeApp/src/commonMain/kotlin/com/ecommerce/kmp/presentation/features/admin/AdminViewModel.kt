@@ -3,6 +3,7 @@ package com.ecommerce.kmp.presentation.features.admin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ecommerce.kmp.domain.model.Product
+import com.ecommerce.kmp.domain.repository.KitRepository
 import com.ecommerce.kmp.domain.repository.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,13 +13,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * Orquestador de estado y lógica de negocio para la consola de administración.
- * Aplica UDF (Unidirectional Data Flow) aislando las mutaciones de la base de datos
- * y exponiendo estados inmutables para garantizar consistencia y seguridad en la UI.
- */
 class AdminViewModel(
-    private val repository: ProductRepository
+    private val repository: ProductRepository,
+    private val kitRepository: KitRepository
 ) : ViewModel() {
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
@@ -33,9 +30,6 @@ class AdminViewModel(
     private val _selectedCategory = MutableStateFlow("Todos")
     val selectedCategory: StateFlow<String> = _selectedCategory.asStateFlow()
 
-    // Cálculo reactivo asíncrono.
-    // Centraliza el filtrado aquí para evitar la sobrecarga del Main Thread (Recomposición de UI)
-    // frente a catálogos masivos, manteniendo el ViewModel como Única Fuente de Verdad.
     val filteredProducts: StateFlow<List<Product>> = combine(
         _products, _searchQuery, _selectedCategory
     ) { products, query, category ->
@@ -50,7 +44,7 @@ class AdminViewModel(
 
             matchesQuery && matchesCategory
         }
-    }.stateIn(viewModelScope, SharingStarted.Companion.WhileSubscribed(5000), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     init {
         loadProducts()
@@ -60,9 +54,12 @@ class AdminViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _products.value = repository.getProducts()
+                val normalProducts = repository.getProducts()
+                val kitProducts = kitRepository.getKits()
+
+                _products.value = normalProducts + kitProducts
             } catch (e: Exception) {
-                println("Error cargando productos: ${e.message}")
+                println("Error cargando productos/kits: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -81,7 +78,14 @@ class AdminViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val success = repository.addProduct(product, imageBytes)
+                val isKit = product.category.equals("Kits", ignoreCase = true)
+
+                val success = if (isKit) {
+                    kitRepository.addKit(product, imageBytes)
+                } else {
+                    repository.addProduct(product, imageBytes)
+                }
+
                 if (success) {
                     loadProducts()
                 } else {
