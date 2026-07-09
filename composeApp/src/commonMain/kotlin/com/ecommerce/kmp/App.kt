@@ -49,7 +49,7 @@ fun App() {
             when (currentScreen) {
                 "STORE" -> {
                     val homeViewModel = viewModel { HomeViewModel(productRepository, kitRepository) }
-                    val checkoutViewModel = viewModel { CheckoutViewModel() }
+                    val checkoutViewModel = viewModel { CheckoutViewModel(orderRepository) }
 
                     HomeScreen(
                         onAdminClick = { currentScreen = "ADMIN" },

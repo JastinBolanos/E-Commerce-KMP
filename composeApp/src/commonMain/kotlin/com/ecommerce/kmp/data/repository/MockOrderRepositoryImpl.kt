@@ -124,6 +124,12 @@ class MockOrderRepositoryImpl : OrderRepository {
         return ordersFlow.asStateFlow()
     }
 
+    override suspend fun addOrder(order: Order): Boolean {
+        mockOrders.add(0, order)
+        ordersFlow.value = mockOrders.toList()
+        return true
+    }
+
     override suspend fun updateOrderStatus(orderId: String, newStatus: String): Boolean {
         val index = mockOrders.indexOfFirst { it.id == orderId }
 
