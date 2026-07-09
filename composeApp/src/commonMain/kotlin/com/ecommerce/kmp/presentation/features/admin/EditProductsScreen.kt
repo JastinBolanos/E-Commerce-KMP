@@ -56,6 +56,7 @@ fun EditProductsScreen(
     val filteredProducts by viewModel.filteredProducts.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val selectedCategory by viewModel.selectedCategory.collectAsState()
+
     val kitsProducts = filteredProducts.filter { it.category.equals("Kits", ignoreCase = true) }
     val verticalProducts = filteredProducts.filter { !it.category.equals("Kits", ignoreCase = true) }
 
@@ -116,35 +117,41 @@ fun EditProductsScreen(
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(verticalProducts) { product ->
-                    ProductCard(
-                        product = product,
-                        showCartIcon = false,
-                        isAdminView = true,
-                        modifier = Modifier
-                            .width(230.dp)
-                            .clickable {
-                                selectedProduct = product
-                                showSheet = true
-                            }
-                    )
+            if (verticalProducts.isNotEmpty()) {
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(verticalProducts) { product ->
+                        ProductCard(
+                            product = product,
+                            showCartIcon = false,
+                            isAdminView = true,
+                            modifier = Modifier
+                                .width(230.dp)
+                                .clickable {
+                                    selectedProduct = product
+                                    showSheet = true
+                                }
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
             if (kitsProducts.isNotEmpty()) {
-                Text(
-                    "Kits y Promociones",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+                if (selectedCategory.equals("Todos", ignoreCase = true)) {
+                    Text(
+                        "Kits y Promociones",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 16.dp),

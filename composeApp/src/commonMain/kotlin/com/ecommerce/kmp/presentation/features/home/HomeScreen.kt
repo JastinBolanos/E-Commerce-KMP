@@ -136,7 +136,7 @@ fun HomeScreen(
                                 val isKitsCategory = selectedCategory.equals("Kits", ignoreCase = true)
 
                                 if (!isKitsCategory) {
-                                    Spacer(modifier = Modifier.height(32.dp))
+                                    Spacer(modifier = Modifier.height(20.dp))
                                     Text(
                                         text = "Kits y Promociones",
                                         fontSize = 18.sp,
