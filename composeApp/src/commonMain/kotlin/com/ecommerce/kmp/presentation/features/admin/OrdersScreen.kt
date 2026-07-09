@@ -1,5 +1,6 @@
 package com.ecommerce.kmp.presentation.features.admin
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,8 +22,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
 import com.ecommerce.kmp.domain.model.Order
+import com.ecommerce.kmp.presentation.components.ProductDetailDialog
+import com.ecommerce.kmp.presentation.components.getKitImagePainter
+import com.ecommerce.kmp.presentation.components.getProductImagePainter
 import org.jetbrains.compose.resources.Font
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
@@ -122,7 +125,21 @@ fun OrdersScreen(
 // --- COMPONENTE: TARJETA DE PEDIDO REAL ---
 @Composable
 fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
-    val firstProductImage = order.items.firstOrNull()?.product?.imageUrl ?: ""
+    // 1. Extraemos el primer producto para la imagen y el diálogo
+    val firstProduct = order.items.firstOrNull()?.product
+    val firstProductImage = firstProduct?.imageUrl ?: ""
+    val isKit = firstProduct?.category.equals("Kits", ignoreCase = true)
+
+    // 2. Traductor nativo de imágenes
+    val imagePainter = if (isKit) {
+        getKitImagePainter(firstProductImage)
+    } else {
+        getProductImagePainter(firstProductImage)
+    }
+
+    // 3. Estado para controlar el diálogo
+    var showDetailsDialog by remember { mutableStateOf(false) }
+
     val totalItems = order.items.sumOf { it.quantity }
     val productSummary = order.items.joinToString(", ") { "${it.quantity}x ${it.product.name}" }
 
@@ -145,8 +162,8 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
         // Columna Izquierda: Imagen del PRODUCTO
         Column(modifier = Modifier.weight(1f)) {
             Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0F0F0))) {
-                AsyncImage(
-                    model = firstProductImage,
+                Image(
+                    painter = imagePainter,
                     contentDescription = "Producto",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
@@ -174,10 +191,11 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
             // Estadísticas
             OutlinedStatRow(label = "Cant:", value = "$totalItems prod.")
             Spacer(modifier = Modifier.height(4.dp))
-            OutlinedStatRow(label = "Total:", value = "S/ ${order.totalAmount}")
-            Spacer(modifier = Modifier.height(4.dp))
-            OutlinedStatRow(label = "Estado:", value = order.status)
 
+            OutlinedStatRow(label = "Total:", value = "S/ ${order.totalAmount.format(2)}")
+            Spacer(modifier = Modifier.height(4.dp))
+
+            OutlinedStatRow(label = "Estado:", value = order.status)
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -185,7 +203,9 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
                     "Ver Detalles",
                     fontSize = 12.sp,
                     color = Color.DarkGray,
-                    modifier = Modifier.clickable { })
+                    modifier = Modifier.clickable {
+                        showDetailsDialog = true
+                    })
 
                 Button(
                     onClick = onConfirmClick,
@@ -203,6 +223,14 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
             }
         }
     }
+
+    if (showDetailsDialog && firstProduct != null) {
+        ProductDetailDialog(
+            product = firstProduct,
+            imagePainter = imagePainter,
+            onDismiss = { showDetailsDialog = false }
+        )
+    }
 }
 
 // --- COMPONENTE: CAJITA DE ESTADÍSTICA ---
@@ -219,4 +247,12 @@ fun OutlinedStatRow(label: String, value: String) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = value, fontSize = 11.sp, color = Color.Black, fontWeight = FontWeight.Medium)
     }
+}
+
+private fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }

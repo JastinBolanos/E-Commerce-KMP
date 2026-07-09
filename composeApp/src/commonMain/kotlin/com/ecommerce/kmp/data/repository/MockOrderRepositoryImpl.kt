@@ -58,14 +58,14 @@ class MockOrderRepositoryImpl : OrderRepository {
         imageUrl = "img_kit_citrico"
     )
 
-    // --- 2. BASE DE DATOS EN RAM CON 5 ESTADOS DIFERENTES ---
+    // --- 2. BASE DE DATOS EN RAM CON 5 ESTADOS DIFERENTES Y CLIENTES FICTICIOS ---
 
     private val mockOrders = mutableListOf(
-        // ESTADO 1: Entregado (Histórico)
+        // ESTADO 1: Entregado
         Order(
             id = "ORD-77382",
-            userId = "USER-ANONYMOUS",
-            customerName = "Usuario Portafolio",
+            userId = "USER-LAURA",
+            customerName = "Laura Veracruz",
             items = listOf(CartItem(productArgan, 2)),
             totalAmount = 116.0,
             voucherUrl = "url_voucher_1",
@@ -75,8 +75,8 @@ class MockOrderRepositoryImpl : OrderRepository {
         // ESTADO 2: En Camino
         Order(
             id = "ORD-88102",
-            userId = "USER-ANONYMOUS",
-            customerName = "Usuario Portafolio",
+            userId = "USER-ANDREA",
+            customerName = "Andrea Castañeda",
             items = listOf(CartItem(productKitCitrico, 1)),
             totalAmount = 155.0,
             voucherUrl = "url_voucher_2",
@@ -86,8 +86,8 @@ class MockOrderRepositoryImpl : OrderRepository {
         // ESTADO 3: Preparando Paquete
         Order(
             id = "ORD-92034",
-            userId = "USER-ANONYMOUS",
-            customerName = "Usuario Portafolio",
+            userId = "USER-ISABELLA",
+            customerName = "Isabella Santillán",
             items = listOf(CartItem(productPerfumeOceano, 2)),
             totalAmount = 260.0,
             voucherUrl = "url_voucher_3",
@@ -97,8 +97,8 @@ class MockOrderRepositoryImpl : OrderRepository {
         // ESTADO 4: Aprobado
         Order(
             id = "ORD-98011",
-            userId = "USER-ANONYMOUS",
-            customerName = "Usuario Portafolio",
+            userId = "USER-CAMILA",
+            customerName = "Camila de la Fuente",
             items = listOf(CartItem(productSerumPink, 1)),
             totalAmount = 85.0,
             voucherUrl = "url_voucher_4",
@@ -108,8 +108,8 @@ class MockOrderRepositoryImpl : OrderRepository {
         // ESTADO 5: Pendiente (El más reciente)
         Order(
             id = "ORD-99124",
-            userId = "USER-ANONYMOUS",
-            customerName = "Usuario Portafolio",
+            userId = "USER-LAURA",
+            customerName = "Laura Veracruz",
             items = listOf(CartItem(productKitBotanico, 1)),
             totalAmount = 195.0,
             voucherUrl = "url_voucher_5",
