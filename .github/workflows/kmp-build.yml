@@ -1,0 +1,33 @@
+name: Compilación Multiplataforma (CI)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-kmp:
+    name: Compilar en Mac OS (Android & iOS)
+    runs-on: macos-latest
+
+    steps:
+      - name: 📥 Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: ☕ Configurar Java 11 (Para motor Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: 🔑 Dar permisos al Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: 🤖 Compilar Android (Verificar dependencias)
+        run: ./gradlew assembleDebug
+
+      - name: 🍏 Compilar iOS (Simulador iPhone 15)
+        run: |
+          cd iosApp
+          xcodebuild -project iosApp.xcodeproj -scheme iosApp -destination 'platform=iOS Simulator,name=iPhone 15' build
