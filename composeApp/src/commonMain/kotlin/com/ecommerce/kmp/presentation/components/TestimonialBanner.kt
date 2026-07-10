@@ -22,6 +22,25 @@ import androidx.compose.ui.unit.dp
 import e_commercekmp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 
+/**
+ * ============================================================================
+ * 💫 ANIMATED TESTIMONIAL BANNER (GPU OPTIMIZED)
+ * ============================================================================
+ * * @description
+ * This component renders a promotional banner featuring a continuous,
+ * rotating glowing border effect. It is strictly presentational and stateless.
+ * * Key Compose Performance Best Practices implemented:
+ * - Deferred State Reading: The infinite rotation animation (`angle`) is read
+ * exclusively inside the `drawBehind` lambda. This bypasses the Compose
+ * Recomposition and Layout phases entirely, sending the rotation math directly
+ * to the GPU drawing phase. This guarantees a silky smooth 60 FPS animation
+ * without draining the device's battery or dropping frames.
+ * - Layer Masking: Creates a dynamic border by nesting a solid image box
+ * with a `3.dp` padding over the rotating `sweepGradient` background.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun TestimonialBanner(modifier: Modifier = Modifier) {
 

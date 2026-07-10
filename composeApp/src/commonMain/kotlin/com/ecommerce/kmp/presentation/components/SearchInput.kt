@@ -32,6 +32,28 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 
+/**
+ * ============================================================================
+ * 🔎 ANIMATED SEARCH INPUT (STATELESS & GPU-OPTIMIZED)
+ * ============================================================================
+ * * @description
+ * This component provides a custom-styled search field featuring an interactive,
+ * GPU-accelerated glowing border that activates exclusively upon user focus.
+ * It strictly follows the Unidirectional Data Flow (UDF) architecture by
+ * hoisting the `query` and `isFocused` states to the parent orchestrator.
+ * * Key Compose Performance Best Practices implemented:
+ * - Conditional GPU Drawing: The infinite rotation animation (`angle`) is executed
+ * inside a `drawBehind` lambda, bypassing the Compose layout phase. Crucially,
+ * the animation only renders when `isFocused == true`, falling back to a cheap
+ * static `drawRect` otherwise to preserve device battery during idle states.
+ * - Clever Layer Masking: Achieves a dynamic `1.2.dp` border by nesting
+ * `clip` and `padding` modifiers over the drawn background.
+ * - Focus Delegation: Seamlessly interacts with `LocalFocusManager` to dismiss
+ * the software keyboard when the trailing search icon is pressed.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun SearchInput(
     query: String,

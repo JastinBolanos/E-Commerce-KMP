@@ -30,6 +30,31 @@ import com.ecommerce.kmp.presentation.features.home.HomeViewModel
 import com.ecommerce.kmp.presentation.features.profile.CustomerProfileScreen
 import com.ecommerce.kmp.presentation.features.profile.CustomerTimelineScreen
 
+/**
+ * ============================================================================
+ * MAIN APP NAVIGATOR & DEPENDENCY INJECTION HUB
+ * ============================================================================
+ * * @description
+ * This is the Root file of the Compose Multiplatform application.
+ * It acts as the main orchestrator handling:
+ * 1. Screen routing (State-based Navigation).
+ * 2. Manual Dependency Injection (DI) for Repositories and ViewModels.
+ * 3. Lifecycle of shared states (In-memory Singletons).
+ * * NOTE FOR BACKEND / INTEGRATION TEAM:
+ * Currently, the app uses in-memory (RAM) repositories for zero-latency
+ * UI/UX demonstration purposes (`MockOrderRepositoryImpl`, etc.).
+ * * To connect the app to a real environment (Firebase, REST API, GraphQL, Ktor),
+ * there is NO need to modify screens or ViewModels.
+ * Simply create new classes that implement the domain interfaces
+ * (`OrderRepository`, `ProductRepository`, etc.) and replace the instances
+ * in the "DEPENDENCY INJECTION" section of this file.
+ * * Migration Example:
+ * val productRepository = remember { ApiProductRepositoryImpl(ktorClient) }
+ * val orderRepository = remember { FirebaseOrderRepositoryImpl(firestore) }
+ * * @layer Presentation / Root
+ * ============================================================================
+ */
+
 @Composable
 fun App() {
 
@@ -86,8 +111,8 @@ fun App() {
                     BackHandler { currentScreen = "ADMIN" }
 
                     val adminViewModel = AdminViewModel(
-                        repository = MockProductRepositoryImpl(),
-                        kitRepository = MockKitRepositoryImpl()
+                        repository = productRepository,
+                        kitRepository = kitRepository
                     )
 
                     EditProductsScreen(

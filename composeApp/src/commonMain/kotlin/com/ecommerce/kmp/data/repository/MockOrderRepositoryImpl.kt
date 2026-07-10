@@ -9,6 +9,30 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * ============================================================================
+ * 🗄️ MOCK ORDER REPOSITORY (IN-MEMORY DATABASE)
+ * ============================================================================
+ * * @description
+ * This class provides a concrete, in-memory implementation of the
+ * `OrderRepository` interface. It serves as a mock local database, pre-populated
+ * with a realistic dataset of orders spanning the entire fulfillment lifecycle
+ * (Pending, Approved, Packing, In-Transit, Delivered) using relative timestamps.
+ * * Key Architecture Features:
+ * - Reactive Pipeline: Backed by a `MutableStateFlow` to guarantee that state
+ * mutations (`updateOrderStatus`, `addOrder`) instantly trigger UI recompositions
+ * across both the Customer and Admin dashboards.
+ * - Immutable Updates: Utilizes Kotlin's data class `.copy()` mechanism to
+ * safely transition order statuses without mutating the original object references.
+ * * 🔌 NOTE FOR BACKEND TEAM:
+ * This repository is designed for offline UI prototyping and portfolio showcase.
+ * For production, this must be replaced with a real infrastructure implementation
+ * (e.g., `FirestoreOrderRepositoryImpl` or `SupabaseOrderRepositoryImpl`) that
+ * handles remote CRUD operations and listens to real-time WebSocket/Snapshot events.
+ * * @layer Data / Repository
+ * ============================================================================
+ */
+
 class MockOrderRepositoryImpl : OrderRepository {
 
     // --- 1. PRODUCTOS DE DEMOSTRACIÓN PARA LOS PEDIDOS ---

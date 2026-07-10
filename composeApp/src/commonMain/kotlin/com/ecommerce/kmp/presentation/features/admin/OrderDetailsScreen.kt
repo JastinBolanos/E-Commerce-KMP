@@ -27,6 +27,32 @@ import e_commercekmp.composeapp.generated.resources.img_voucher // 👇 La image
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * ⚖️ ADMIN ORDER VERDICT & VOUCHER REVIEW SCREEN
+ * ============================================================================
+ * * @description
+ * This screen provides the Store Administrator with the interface to manually
+ * review incoming payment vouchers and transition the Order state from
+ * "Pending" to either "Approved" (triggering fulfillment) or "Rejected".
+ * * Key UX Features implemented:
+ * - Large viewport for secure voucher inspection.
+ * - Concurrency protection: Action buttons are safely disabled (`!isLoading`)
+ * during state transitions to prevent duplicate API calls.
+ * - Idempotency UI: Hides action buttons if the order is already processed.
+ * * 🔌 NOTE FOR BACKEND / PAYMENTS TEAM:
+ * In this showcase version, the `voucherUrl` is ignored, and a local drawable
+ * (`img_voucher`) is rendered to demonstrate the UI layout.
+ * When migrating to Production:
+ * 1. Replace the local `Image` component with an `AsyncImage` (Coil).
+ * 2. Pass the real `voucherUrl` string fetched from your Cloud Storage.
+ * 3. Ensure the `onApproveClick` and `onRejectClick` lambdas trigger an HTTP
+ * PATCH request to the backend (e.g., `PATCH /api/v1/orders/{id}/status`)
+ * to secure the state transition on the server side.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrderDetailsScreen(

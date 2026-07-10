@@ -31,6 +31,29 @@ import e_commercekmp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 
 /**
+ * ============================================================================
+ * 💳 CHECKOUT & PAYMENT COLLECTION SCREEN
+ * ============================================================================
+ * * @description
+ * This screen handles the final stage of the user journey: Payment Verification.
+ * It presents the dynamic total amount, banking details (QR/Phone), and features
+ * a native file picker (`vinceglb/filekit`) to upload the payment voucher securely.
+ * * Key UX Features implemented:
+ * - Form validation: Submission is strictly blocked until a voucher is provided.
+ * - Multiplatform FilePicker: Selects images directly from iOS/Android galleries.
+ * - AsyncImage rendering for local byte-array previews.
+ * * 🔌 NOTE FOR BACKEND / PAYMENTS TEAM:
+ * In this version, payments are handled manually (Off-Platform P2P Transfers)
+ * with a manual voucher upload process.
+ * If the business scales, this UI can easily be replaced by integrating a native
+ * Payment SDK (Stripe, MercadoPago, Niubiz). In that scenario, instead of
+ * `onConfirmOrder(ByteArray)`, this screen would trigger the SDK's drop-in UI,
+ * await the Webhook success token from the server, and then proceed.
+ * * @layer Presentation / Features / Checkout
+ * ============================================================================
+ */
+
+/**
  * Pantalla de finalización de compra y recaudo de pagos (Checkout).
  * Permite al usuario visualizar el monto final y adjuntar su comprobante de pago (Voucher).
  */

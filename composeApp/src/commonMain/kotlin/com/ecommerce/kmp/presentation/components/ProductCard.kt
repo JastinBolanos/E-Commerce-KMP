@@ -32,6 +32,32 @@ import com.ecommerce.kmp.presentation.state.CartManager
 import e_commercekmp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 
+/**
+ * ============================================================================
+ * 🛍️ INTERACTIVE PRODUCT CARD COMPONENT
+ * ============================================================================
+ * * @description
+ * This is the primary product display unit. It functions as a reactive accordion,
+ * housing an expandable UI that reveals quantity selectors and purchasing calls
+ * to action. It inherently observes the global `CartManager` state to reflect
+ * real-time cart inclusion status via the quick-add floating action button.
+ * * Key Compose UI/UX Features implemented:
+ * - Layout Animation: Utilizes `animateContentSize()` to smoothly tween the
+ * card boundaries during accordion expand/collapse events.
+ * - Multi-Context Reusability: Respects the `isAdminView` flag to conditionally
+ * hide transactional controls (Buy/Cart logic) when rendered within the
+ * Administrator dashboard.
+ * - Resource Mapping Factory: The `getProductImagePainter` acts as a local
+ * fallback mechanism, mapping string identifiers to native drawable resources.
+ * * 🔌 NOTE FOR BACKEND / ASSETS TEAM:
+ * In this offline-first showcase, `getProductImagePainter` binds hardcoded
+ * string IDs to local Kotlin Multiplatform resources. When migrating to a live
+ * Database, replace this function call with an `AsyncImage` (e.g., Coil or Glide)
+ * that loads the raw CDN URL provided by the `product.imageUrl` field.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun ProductCard(
     product: Product,

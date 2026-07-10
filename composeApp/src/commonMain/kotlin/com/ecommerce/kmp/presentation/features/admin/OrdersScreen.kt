@@ -30,6 +30,32 @@ import org.jetbrains.compose.resources.Font
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 
+/**
+ * ============================================================================
+ * 📋 ADMIN ORDERS MANAGEMENT & TABBED ROUTING SCREEN
+ * ============================================================================
+ * * @description
+ * This screen serves as the primary operational dashboard for the Store Admin
+ * to track and process incoming orders. It implements a reactive `TabRow`
+ * architecture to seamlessly filter the global order state into actionable
+ * lists (Pending vs. In-Transit/Delivered) without triggering heavy recompositions
+ * or new navigation events.
+ * * Key UX Features implemented:
+ * - Dynamic UI State Machine: Action buttons inside the `OrderCardReal` adapt
+ * their color, text, and availability purely based on the domain-level `Order.status`.
+ * - Safe Text Truncation: Prevents UI clipping on large carts using `TextOverflow.Ellipsis`.
+ * - Shared Product Dialogs: Reuses the `ProductDetailDialog` to inspect items directly
+ * from the order timeline.
+ * * 🔌 NOTE FOR BACKEND / DATA TEAM:
+ * The current filtering (`orders.filter { ... }`) happens entirely client-side
+ * in the device's RAM. For a production environment with thousands of orders,
+ * this Tab interaction should be refactored to trigger server-side pagination
+ * queries (e.g., `GET /api/v1/orders?status=pending&page=1&limit=20`) to
+ * conserve device memory and data bandwidth.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OrdersScreen(

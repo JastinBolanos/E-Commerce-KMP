@@ -20,3 +20,19 @@ node_modules/
 
 # Google Services
 google-services.json
+
+# --- SEGURIDAD Y FIRMAS (¡CRÍTICO!) ---
+*.jks
+*.keystore
+*.key
+.env
+
+# --- ECOSISTEMA iOS Y COCOAPODS ---
+Pods/
+.swiftpm/
+DerivedData/
+
+# --- DESECHOS DE OTROS SISTEMAS OPERATIVOS ---
+Thumbs.db
+ehthumbs.db
+.DS_Store?

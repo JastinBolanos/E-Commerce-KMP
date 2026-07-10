@@ -42,6 +42,33 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import androidx.compose.ui.platform.LocalFocusManager
 
+/**
+ * ============================================================================
+ * ✏️ ADMIN PRODUCT & KIT MANAGEMENT SCREEN
+ * ============================================================================
+ * * @description
+ * This screen provides a highly interactive CRUD (Create, Read, Update, Delete)
+ * interface for the Store Administrator. It features a reactive search and
+ * filter system, alongside a unified `ModalBottomSheet` that intelligently
+ * handles both new product creation and existing product mutation.
+ * * Key UX Features implemented:
+ * - Smart Spacing: Conditionally collapses layout bounds when categories are empty.
+ * - Multiplatform FilePicker: Uses `FileKit` to read native image files into RAM.
+ * - Reactive Form UI: Real-time form rendering based on the `selectedProduct` state.
+ * * 🔌 NOTE FOR BACKEND / CONTENT TEAM:
+ * The form currently packages the input fields into a new `Product` data class
+ * and pairs it with the raw `selectedImageBytes`.
+ * When migrating to a Production API:
+ * 1. Implement secure presigned URLs for image uploads (e.g., S3 `putObject`).
+ * 2. Ensure the Dropdown Menu (`allowedCategories`) is hydrated dynamically
+ * via a `/api/v1/categories` endpoint rather than being hardcoded.
+ * 3. Add Server-Side Validation handling (e.g., catching 400 Bad Request if
+ * the price format is invalid or the name is duplicated) and map it back
+ * to the UI text fields.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProductsScreen(

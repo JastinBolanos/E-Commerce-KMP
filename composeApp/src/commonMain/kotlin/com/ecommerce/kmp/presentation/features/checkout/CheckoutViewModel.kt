@@ -12,6 +12,29 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * ============================================================================
+ * 💸 CHECKOUT VIEW MODEL & TRANSACTION ORCHESTRATOR
+ * ============================================================================
+ * * @description
+ * This ViewModel manages the business logic and asynchronous state during the
+ * final payment verification process. It handles UI loading states, provides
+ * mock payment settings (Bank details/QR), and constructs the final `Order`
+ * object to be injected into the global `OrderRepository`.
+ * * 🔌 NOTE FOR BACKEND / CLOUD ARCHITECTURE TEAM:
+ * In this showcase version, the `processOrder` function simulates a network
+ * delay and creates an in-memory order. The `voucherBytes` (the image uploaded
+ * by the user) is currently bypassed with a "local_demo_voucher" string.
+ * * To migrate to a real Cloud Backend (AWS, Firebase, Supabase):
+ * 1. Convert `voucherBytes` into a File or multipart-form data.
+ * 2. Upload the bytes to a Cloud Storage bucket (e.g., Firebase Storage / AWS S3).
+ * 3. Await the secure download URL from the bucket.
+ * 4. Perform an HTTP POST request (via Ktor/Retrofit) to create the Order in
+ * the actual database, passing the real `voucherUrl`.
+ * * @layer Presentation / Features / Checkout
+ * ============================================================================
+ */
+
 data class PaymentSettings(
     val yapeNumber: String = "987 654 321",
     val yapeName: String = "Remedioz Natura S.A.C",

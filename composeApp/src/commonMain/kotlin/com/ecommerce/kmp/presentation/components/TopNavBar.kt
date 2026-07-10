@@ -19,6 +19,25 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 🔝 TOP NAVIGATION BAR (STATELESS COMPONENT)
+ * ============================================================================
+ * * @description
+ * This is a purely presentational, stateless Composable component representing
+ * the top application bar. It strictly adheres to the Unidirectional Data Flow
+ * (UDF) pattern by elevating all user interactions (clicks) up to the parent
+ * orchestrator via lambda functions (`onCartClick`, `onProfileClick`).
+ * * Key Compose Best Practices implemented:
+ * - Modifier Delegation: Accepts a default `Modifier` as the first parameter,
+ * allowing parent containers to adjust layout bounds flexibly without altering
+ * the internal component logic.
+ * - Multiplatform Typography: Securely loads custom fonts (`imperial_script`)
+ * using the JetBrains Compose Resources library.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun TopNavBar(
     modifier: Modifier = Modifier,

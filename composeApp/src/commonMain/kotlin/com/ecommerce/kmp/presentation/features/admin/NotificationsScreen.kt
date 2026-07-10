@@ -23,6 +23,28 @@ import com.ecommerce.kmp.domain.model.Order
 import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 
+/**
+ * ============================================================================
+ * 🔔 ADMIN NOTIFICATIONS INBOX & ALERTS
+ * ============================================================================
+ * * @description
+ * This screen acts as the real-time alert inbox for the Store Administrator.
+ * It observes the global stream of incoming purchases and filters them to
+ * display only actionable, "Pending" orders.
+ * It features empty-state handling and a custom, lightweight timestamp parser
+ * to convert raw epoch milliseconds into a localized timezone (UTC-5) format.
+ * * 🔌 NOTE FOR BACKEND / INFRASTRUCTURE TEAM:
+ * Currently, this inbox updates reactively via the in-memory `StateFlow`.
+ * In a production cloud environment, this screen must be supported by native
+ * Push Notifications (Firebase Cloud Messaging - FCM, or Apple APNs).
+ * When a background push payload arrives from the server, the app should
+ * trigger a silent background fetch (`GET /api/v1/orders?status=pending`)
+ * to update the local repository, which will instantly and automatically
+ * recompose this UI without user intervention.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotificationsScreen(
@@ -116,7 +138,7 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${order.customerName} ha enviado un comprobante por S/ ${order.totalAmount} y espera tu confirmación.",
+                text = "${order.customerName} ha enviado un comprobante por S/ ${order.totalAmount.format(2)} y espera tu confirmación.",
                 fontSize = 13.sp,
                 color = Color.DarkGray,
                 lineHeight = 18.sp
@@ -141,4 +163,12 @@ fun formatOrderTime(millis: Long): String {
     val minStr = if (minutes < 10) "0$minutes" else "$minutes"
 
     return "$displayHour:$minStr $amPm"
+}
+
+private fun Double.format(digits: Int): String {
+    val rounded = (this * 100).toLong() / 100.0
+    val parts = rounded.toString().split(".")
+    val whole = parts[0]
+    val fraction = if (parts.size > 1) parts[1] else "0"
+    return "$whole.${fraction.padEnd(digits, '0')}"
 }

@@ -8,6 +8,31 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * ============================================================================
+ * 🛡️ AUTHENTICATION VIEW MODEL & SESSION MANAGER
+ * ============================================================================
+ * * @description
+ * This ViewModel manages the reactive state for the authentication flows
+ * (both Admin and Customer). It strictly encapsulates mutable states using
+ * the `MutableStateFlow` / `StateFlow` backing property pattern. It handles
+ * simulated network latency, basic input validation, and session data
+ * persistence in memory.
+ * * 🔌 NOTE FOR BACKEND / IDENTITY TEAM:
+ * This file currently utilizes mock delays (`delay(1500)`) and hardcoded
+ * profile data to demonstrate the UI loading transitions.
+ * To implement production Authentication:
+ * 1. Inject an `AuthRepository` or `SessionManager` via the constructor.
+ * 2. Replace the `delay()` in `loginAdmin` with a secure HTTP POST request
+ * (e.g., Ktor/Retrofit call to `/api/v1/auth/login`), parse the response,
+ * and store the resulting JWT token securely (e.g., EncryptedSharedPreferences).
+ * 3. For `loginAsClient`, accept the native OAuth token provided by the UI,
+ * send it to the backend for cryptographic validation, and map the real
+ * JSON User payload to the `_userName`, `_userEmail`, and `_userPhotoUrl` states.
+ * * @layer Presentation / Features / Auth
+ * ============================================================================
+ */
+
 class AuthViewModel : ViewModel() {
 
     private val _isLoading = MutableStateFlow(false)

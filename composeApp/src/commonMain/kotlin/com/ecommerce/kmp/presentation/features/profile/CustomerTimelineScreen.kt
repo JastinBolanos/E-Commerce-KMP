@@ -27,6 +27,30 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 📦 CUSTOMER ORDER TRACKING & TIMELINE SCREEN
+ * ============================================================================
+ * * @description
+ * This screen provides a visual state-machine representation of an Order's
+ * fulfillment journey. It dynamically calculates the active step based on the
+ * `currentStatus` string and renders a vertical step-by-step progress tracker.
+ * * Key UX Features implemented:
+ * - Dynamic color coding (Green for success, Blue for active, Red for exceptions).
+ * - Intrinsic UI measurement for seamless vertical connector lines.
+ * - Exception handling routing (Dedicated UI block for "Rejected" states
+ * with a call-to-action for customer support).
+ * * 🔌 NOTE FOR BACKEND / LOGISTICS TEAM:
+ * The timeline progression relies on exact string matching from the `statusFlow`
+ * list. When integrating with a real logistics or shipping API (like Shippo,
+ * DHL, or a custom backend), ensure the server's status enums strictly map to
+ * these strings, or update the `statusFlow` list to match the server's payload.
+ * For optimal UX, this screen should be connected to a Real-Time stream
+ * (WebSockets/FCM) to watch the status move live without manual refreshing.
+ * * @layer Presentation / Features / Profile
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerTimelineScreen(

@@ -7,6 +7,30 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * ============================================================================
+ * 🗄️ MOCK PRODUCT REPOSITORY (IN-MEMORY DATABASE)
+ * ============================================================================
+ * * @description
+ * This class provides a concrete, in-memory implementation of the
+ * `ProductRepository` interface. It serves as a mock local database,
+ * pre-populated with a comprehensive catalog of 24 cosmetic products
+ * across 4 domains (Piel, Belleza, Cuidados, Tratamientos).
+ * * Key Architecture Features:
+ * - Simulated Latency: Uses `delay()` in suspend functions to mimic
+ * real-world network operations, ensuring UI loading states are testable.
+ * - Reactive State: Backed by a `MutableStateFlow` to guarantee that any
+ * mutations (like `addProduct`) instantly propagate to all observing
+ * ViewModels via `observeProducts()`.
+ * * 🔌 NOTE FOR BACKEND TEAM:
+ * This file is strictly for prototyping and offline showcases. Before
+ * production release, replace this implementation with a remote data
+ * source (e.g., `KtorProductRepositoryImpl`) that performs actual HTTP
+ * GET/POST requests and handles real image multipart uploads.
+ * * @layer Data / Repository
+ * ============================================================================
+ */
+
 class MockProductRepositoryImpl : ProductRepository {
 
     // Simula nuestra base de datos en la nube, pero vive en la memoria RAM

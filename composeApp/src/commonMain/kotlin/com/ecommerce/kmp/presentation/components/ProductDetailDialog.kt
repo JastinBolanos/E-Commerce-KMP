@@ -27,6 +27,26 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
 import com.ecommerce.kmp.domain.model.Product
 
+/**
+ * ============================================================================
+ * 🛍️ PRODUCT DETAIL MODAL DIALOG
+ * ============================================================================
+ * * @description
+ * This stateless component renders a responsive modal dialog to display
+ * full product details, including a large cover image, price, and description.
+ * * Key Compose UI/UX Features implemented:
+ * - Custom Dimensions: Overrides default platform dialog constraints using
+ * `DialogProperties(usePlatformDefaultWidth = false)` to achieve a 90% width
+ * and 85% height immersive view.
+ * - Z-Index Layering: Employs a floating Action Button (Close) anchored
+ * to the TopEnd with a semi-transparent background and elevated `zIndex`
+ * to ensure it remains clickable regardless of image dimensions.
+ * - Scrollable Content: Implements `verticalScroll` to guarantee accessibility
+ * on smaller devices or when product descriptions are lengthy.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun ProductDetailDialog(
     product: Product,

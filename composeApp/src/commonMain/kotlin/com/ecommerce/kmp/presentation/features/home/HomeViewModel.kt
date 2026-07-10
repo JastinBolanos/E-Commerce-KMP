@@ -13,6 +13,27 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * ============================================================================
+ * 🧠 HOME VIEW MODEL & REACTIVE STATE ORCHESTRATOR
+ * ============================================================================
+ * * @description
+ * This ViewModel serves as the reactive brain for the Customer Home Screen.
+ * It strictly adheres to the Unidirectional Data Flow (UDF) architecture.
+ * It utilizes Kotlin Coroutines and Flows (`combine`, `stateIn`) to seamlessly
+ * derive the UI state (filtered lists) based on multiple asynchronous inputs
+ * (search queries, category selection, and raw repository data).
+ * * 🔌 NOTE FOR BACKEND / DATA INTEGRATION TEAM:
+ * This ViewModel is fully optimized for Real-Time data streams (e.g., WebSockets,
+ * Firebase Firestore snapshots, or Supabase real-time).
+ * It continuously collects data from `repository.observeProducts()`. If the backend
+ * pushes a change (like a price update or an out-of-stock flag), the Repositories
+ * simply emit a new list through their Flow, and this ViewModel will automatically
+ * trigger a UI recomposition without any additional imperative logic.
+ * * @layer Presentation / Features / Home
+ * ============================================================================
+ */
+
 class HomeViewModel(
     private val repository: ProductRepository,
     private val kitRepository: KitRepository

@@ -32,6 +32,32 @@ import com.ecommerce.kmp.presentation.state.CartManager
 import e_commercekmp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.painterResource
 
+/**
+ * ============================================================================
+ * 🎁 LANDSCAPE PRODUCT CARD (PROMOTIONAL KITS)
+ * ============================================================================
+ * * @description
+ * This component is a horizontally-biased variant of the standard ProductCard.
+ * It is specifically engineered to be rendered within horizontal carousels
+ * (`LazyRow`), maintaining an optimal 1.6:1 aspect ratio for promotional
+ * kits or bundle photography.
+ * * Key Compose UI/UX Features implemented:
+ * - Carousel Optimization: Enforces a fixed `280.dp` width, ensuring consistent
+ * off-screen peeking for horizontal scroll discoverability.
+ * - Reactive Accordion: Leverages `animateContentSize()` to expand vertically
+ * without disrupting the horizontal bounds of its parent container.
+ * - Context-Aware Action Buttons: Synchronizes seamlessly with the global
+ * `CartManager` state and conditionally hides transactional UI layers when
+ * accessed via the `isAdminView`.
+ * * 🔌 NOTE FOR BACKEND / ASSETS TEAM:
+ * The `getKitImagePainter` function handles local fallback mapping. When
+ * transitioning to a live database, swap this local painter instantiation
+ * with a remote asynchronous image loader (e.g., Coil `AsyncImage`) utilizing
+ * the payload from `product.imageUrl`.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun LandscapeProductCard(
     product: Product,

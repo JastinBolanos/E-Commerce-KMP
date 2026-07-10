@@ -17,6 +17,31 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 🛠️ ADMIN DASHBOARD & ROUTING HUB
+ * ============================================================================
+ * * @description
+ * This screen serves as the primary navigation hub for users with Administrative
+ * privileges. It provides a clean, list-based routing menu to access order
+ * management, product catalog editing, and payment configuration settings.
+ * * Key UX Features implemented:
+ * - Reactive Notification Badge: Utilizes Material 3 `BadgedBox` hooked to the
+ * `pendingOrdersCount` state. It dynamically updates the unread order counter
+ * in real-time as new purchases flow into the global state without requiring
+ * manual screen refreshes or pull-to-refresh gestures.
+ * * 🔌 NOTE FOR BACKEND / ROUTING TEAM:
+ * This screen currently acts as a stateless view (purely relying on lambda
+ * callbacks for navigation). If integrating a robust navigation library
+ * (e.g., Voyager, Jetpack Navigation), replace the `onNavigateTo...` lambdas
+ * with direct Navigator push/replace calls.
+ * Ensure the `pendingOrdersCount` parameter is driven by a real-time stream
+ * (e.g., Firestore snapshot listener or WebSocket subscription) fetching the
+ * count of orders where `status == "Pendiente"`.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminScreen(

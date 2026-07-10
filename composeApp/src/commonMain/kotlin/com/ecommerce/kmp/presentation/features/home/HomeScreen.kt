@@ -44,6 +44,30 @@ import com.ecommerce.kmp.presentation.features.checkout.CheckoutScreen
 import com.ecommerce.kmp.presentation.features.checkout.CheckoutViewModel
 import com.ecommerce.kmp.presentation.state.CartManager
 
+/**
+ * ============================================================================
+ * 🏠 HOME SCREEN & CUSTOMER FLOW ORCHESTRATOR
+ * ============================================================================
+ * * @description
+ * This is the primary UI container for the Customer-facing application.
+ * It acts as a nested state-machine managing the shopping journey:
+ * `STORE` (Browsing) <-> `CART` (Review) <-> `CHECKOUT` (Payment).
+ * * It handles complex UI behaviors such as:
+ * - Dynamic Category filtering with conditional spacer rendering.
+ * - Horizontal scrolling lists for Products and Kits.
+ * - 'Direct Purchase' (Buy Now) vs 'Cart Checkout' logic routing.
+ * * 🔌 NOTE FOR BACKEND / UI INTEGRATION TEAM:
+ * This screen purely observes `StateFlows` exposed by `HomeViewModel` and
+ * `CheckoutViewModel`. If the backend API changes the structure of `Product`
+ * or `Kit` objects, or adds new categories, only the Repositories need updating.
+ * The UI automatically reacts and recomposes.
+ * For deep linking (e.g., opening the app directly to a specific product),
+ * the `currentScreen` state mechanism here should be replaced or integrated
+ * with the native routing library (e.g., Compose Navigation).
+ * * @layer Presentation / Features / Home
+ * ============================================================================
+ */
+
 @Composable
 fun HomeScreen(
     onAdminClick: () -> Unit,

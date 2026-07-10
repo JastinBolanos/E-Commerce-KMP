@@ -29,6 +29,33 @@ import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
+/**
+ * ============================================================================
+ * 🔐 AUTHENTICATION & ONBOARDING SCREEN
+ * ============================================================================
+ * * @description
+ * This screen serves as the secure entry point for customer authentication.
+ * It features a modern, clean UI with a custom-built OAuth provider button
+ * (Google Sign-In) and handles asynchronous UI states (Loading, Errors)
+ * reactively through the `AuthViewModel`.
+ * * Key UX Features implemented:
+ * - Scrollable container to prevent UI clipping on smaller form factors.
+ * - Clear state feedback (CircularProgressIndicator during auth flows).
+ * - Isolated, reusable `FloatingAuthButton` component for OAuth providers.
+ * * 🔌 NOTE FOR BACKEND / SECURITY TEAM:
+ * Currently, this screen triggers a simulated login flow (`loginAsClient`).
+ * To implement real Google Sign-In (or Apple/Facebook), you must integrate
+ * the native Auth SDKs (or a KMP wrapper like Firebase Auth / Supabase).
+ * The migration steps are:
+ * 1. The `onClick` should launch the native OAuth Intent/BottomSheet.
+ * 2. Receive the Google `idToken` from the OS.
+ * 3. Pass the token to your backend/IdP for JWT verification.
+ * 4. Once validated and the session is secure, invoke the `onClientSuccess`
+ * callback to route the user to their profile or checkout.
+ * * @layer Presentation / Features / Auth
+ * ============================================================================
+ */
+
 @Composable
 fun AuthScreen(
     viewModel: AuthViewModel,

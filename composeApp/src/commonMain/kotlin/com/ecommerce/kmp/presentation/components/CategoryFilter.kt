@@ -18,10 +18,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 /**
- * Componente visual de filtrado Stateless (sin estado propio).
- * Al recibir la categoría activa y emitir eventos mediante State Hoisting,
- * garantiza que la capa de UI sea estúpida y obedezca estrictamente al ViewModel (UDF).
+ * ============================================================================
+ * 🏷️ CATEGORY FILTER CHIP ROW (STATELESS)
+ * ============================================================================
+ * * @description
+ * This component renders a horizontally scrollable row of category filter chips.
+ * It is strictly stateless, adhering perfectly to the Unidirectional Data Flow
+ * (UDF) pattern. It receives the `selectedCategory` as a read-only state and
+ * emits user intent upwards via the `onCategorySelected` lambda.
+ * * Key Compose Performance Best Practices implemented:
+ * - List Virtualization: Utilizes `LazyRow` to efficiently recycle chip
+ * composables off-screen, maintaining performance even if the category list grows.
+ * - Modifier Delegation: Accepts a base `Modifier` to allow parent containers
+ * to dictate external spacing without breaking internal padding.
+ * * 🔌 NOTE FOR BACKEND TEAM:
+ * The `categories` list is currently hardcoded for showcase purposes. When
+ * migrating to production, this component should receive the `List<String>`
+ * as a parameter, populated dynamically by a `GET /api/v1/categories` endpoint.
+ * * @layer Presentation / Components
+ * ============================================================================
  */
+
 @Composable
 fun CategoryFilter(
     selectedCategory: String,

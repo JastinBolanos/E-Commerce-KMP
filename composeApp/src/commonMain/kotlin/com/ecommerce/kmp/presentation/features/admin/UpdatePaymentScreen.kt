@@ -33,6 +33,33 @@ import io.github.vinceglb.filekit.core.PickerType
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 🏦 ADMIN PAYMENT CONFIGURATION SCREEN
+ * ============================================================================
+ * * @description
+ * This screen empowers the Store Administrator to dynamically mutate the global
+ * payment collection details (P2P Transfer Numbers and QR Codes). Changes made
+ * here immediately reflect in the Customer-facing `CheckoutScreen`.
+ * * Key UX Features implemented:
+ * - Smart Submission State: Utilizes a `hasChanges` derived state to disable
+ * the Save button, preventing redundant network requests and identical data writes.
+ * - Multi-tiered Image Rendering: Prioritizes local `ByteArray` previews over
+ * remote URLs to provide instant visual feedback after file selection.
+ * - Input Optimization: Uses `KeyboardType.Phone` to trigger the native numeric
+ * dialpad directly, reducing input friction.
+ * * 🔌 NOTE FOR BACKEND / DEVOPS TEAM:
+ * The `onSaveClick` lambda currently emits a `ByteArray` for the image and a String
+ * for the phone number. In a Cloud environment:
+ * 1. The `ByteArray` must be uploaded to a secure CDN/Storage bucket first.
+ * 2. The resulting public URL, alongside the new phone number, must be patched
+ * into the global `StoreSettings` document in your NoSQL/SQL database.
+ * 3. The `PaymentSettings` state flow observed by the Checkout Screen should
+ * instantly react to this database mutation.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdatePaymentScreen(

@@ -41,6 +41,30 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.img_perfil
 import e_commercekmp.composeapp.generated.resources.imperial_script
 
+/**
+ * ============================================================================
+ * 👤 CUSTOMER PROFILE & ORDER HISTORY SCREEN
+ * ============================================================================
+ * * @description
+ * This screen displays the authenticated user's personal information and their
+ * complete order history. It features high-performance UI components, such as
+ * a GPU-accelerated infinite rotation animation for the profile avatar using
+ * `drawBehind` to prevent unnecessary recompositions.
+ * * Key UX Features implemented:
+ * - Real-time state reflection of Order Statuses (e.g., Pending, Delivered).
+ * - Safe UI data extraction (displaying the first item's image as the Order cover).
+ * - Empty state handling for new users.
+ * * 🔌 NOTE FOR BACKEND / AUTHENTICATION TEAM:
+ * The `userName`, `userEmail`, and `userPhotoUrl` parameters are currently
+ * passed down from the UI state. When migrating to a real Identity Provider
+ * (like Firebase Auth, Auth0, or AWS Cognito), this screen should be fed
+ * directly by an `AuthViewModel` that observes the current session state.
+ * The `orders` list should be fetched via a secure API endpoint
+ * (e.g., `GET /api/v1/orders/me`) authenticated with the user's Bearer token.
+ * * @layer Presentation / Features / Profile
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomerProfileScreen(

@@ -7,6 +7,30 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * ============================================================================
+ * 🎁 MOCK KIT REPOSITORY (IN-MEMORY DATABASE)
+ * ============================================================================
+ * * @description
+ * This class provides a concrete, in-memory implementation of the
+ * `KitRepository` interface. It serves as a mock local database exclusively
+ * dedicated to managing "Promotional Kits" and bundle offers, pre-populated
+ * with 6 aesthetic collections.
+ * * Key Architecture Features:
+ * - Simulated Latency: Employs `delay()` within suspend functions to replicate
+ * real-world network operations for UI loading state verification.
+ * - Reactive State Management: Backed by a `MutableStateFlow` to ensure that
+ * when an administrator adds a new Kit (`addKit`), the horizontally scrolling
+ * `LazyRow` in the consumer Home screen automatically recomposes with the new data.
+ * * 🔌 NOTE FOR BACKEND TEAM:
+ * This repository is constructed strictly for UI prototyping and offline portfolio
+ * demonstration. For a production release, replace this with a remote data
+ * source implementation (e.g., Ktor or Retrofit) capable of handling multipart
+ * form data for kit image uploads.
+ * * @layer Data / Repository
+ * ============================================================================
+ */
+
 class MockKitRepositoryImpl : KitRepository {
 
     // Simula nuestra base de datos en la nube exclusiva para Kits

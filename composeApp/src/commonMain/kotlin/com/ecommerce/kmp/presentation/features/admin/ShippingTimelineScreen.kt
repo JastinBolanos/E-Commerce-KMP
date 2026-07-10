@@ -25,6 +25,33 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 🚚 ADMIN SHIPPING TIMELINE & FULFILLMENT TRACKER
+ * ============================================================================
+ * * @description
+ * This screen provides the Store Administrator with a visual state-machine to
+ * push an Order through its fulfillment lifecycle (Approved -> Packing ->
+ * In Transit -> Delivered). It mirrors the Customer's timeline UI but
+ * introduces state-mutation capabilities.
+ * * Key UX Features implemented:
+ * - Dynamic Action Buttons: The main CTA automatically infers the *next* logical
+ * status in the `statusFlow` pipeline.
+ * - Idempotency UI: Once the final "Delivered" state is reached, mutation
+ * actions are hidden and replaced with a success banner.
+ * - Guardrail Alert Dialogs: Prevents accidental status mutations by requiring
+ * explicit confirmation, which is crucial as these actions usually trigger
+ * external side-effects (like customer SMS/Email notifications).
+ * * 🔌 NOTE FOR BACKEND / NOTIFICATIONS TEAM:
+ * Advancing the state here triggers `onUpdateStatusClick(String)`. When connected
+ * to a production server, this action should not only PATCH the database but
+ * also trigger a Cloud Function (e.g., Firebase Functions / AWS Lambda) that
+ * handles sending transactional emails (SendGrid) or SMS (Twilio) to the customer,
+ * informing them that their package has moved to the next phase.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShippingTimelineScreen(

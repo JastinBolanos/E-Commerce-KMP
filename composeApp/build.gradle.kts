@@ -42,8 +42,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(compose.materialIconsExtended)
-
-            // Coil (Solo la base, en caso de que lo uses para transformaciones, aunque para recursos locales usaremos painterResource)
             implementation(libs.coil.compose)
 
             // Seleccionador de archivos multiplataforma (Mantenido para la UI del voucher)

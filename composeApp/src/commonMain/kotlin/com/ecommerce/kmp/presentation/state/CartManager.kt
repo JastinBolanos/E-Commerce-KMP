@@ -6,6 +6,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+/**
+ * ============================================================================
+ * 🛒 GLOBAL CART STATE MANAGER (IN-MEMORY SINGLETON)
+ * ============================================================================
+ * * @description
+ * This object acts as a global Singleton managing the Shopping Cart's reactive
+ * state via Kotlin Coroutines `StateFlow`. It handles the core business logic
+ * for adding, updating quantities, removing, and clearing items synchronously
+ * across the entire application lifecycle.
+ * * 🔌 NOTE FOR BACKEND / DATA PERSISTENCE TEAM:
+ * Currently, the cart state is purely in-memory (RAM) and pre-populated with
+ * demo data for UI/UX showcase purposes. If the application is killed, the
+ * cart data is lost.
+ * For a production environment, this Singleton pattern should be refactored
+ * into a `CartRepository` interface managed by a Dependency Injection framework
+ * (like Koin or Dagger). The local state should be persisted using a local DB
+ * (SQLDelight/Room) and/or synchronized remotely via a backend Cart API.
+ * * @layer Presentation / Global State
+ * ============================================================================
+ */
+
 object CartManager {
 
     // --- DATOS DE DEMOSTRACIÓN PARA UI/UX ---

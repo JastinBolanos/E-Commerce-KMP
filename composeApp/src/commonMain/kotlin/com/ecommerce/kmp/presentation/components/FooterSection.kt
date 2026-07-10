@@ -22,6 +22,33 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * ============================================================================
+ * 🕵️‍♂️ FOOTER SECTION & HIDDEN ADMIN PORTAL
+ * ============================================================================
+ * * @description
+ * This component acts as the standard application footer, displaying brand
+ * information, standard legal/help routing links, and copyright data.
+ * Crucially, it houses a hidden "Easter Egg" administrative login portal
+ * that expands via an interactive chevron, keeping the consumer-facing UX
+ * uncluttered while maintaining admin accessibility.
+ * * Key Compose UI/UX Features implemented:
+ * - Expandable State: Uses local `remember { mutableStateOf(false) }` to
+ * conditionally animate and render the admin input fields.
+ * - Secure Text Entry: Utilizes `PasswordVisualTransformation` to mask sensitive
+ * administrative credentials from screen-readers and shoulder-surfers.
+ * - Dark Mode Aesthetics: Hardcoded dark theme (`Color(0xFF0A0A0A)`) to visually
+ * anchor the bottom of the scrollable lists.
+ * * 🔌 NOTE FOR BACKEND / AUTH TEAM:
+ * The current `onAdminLoginClick` lambda is parameter-less, acting purely as a
+ * routing trigger for showcase purposes. When migrating to real authentication,
+ * update the lambda signature to `(email: String, password: String) -> Unit`
+ * to pass the captured internal states directly to the `AuthViewModel` for
+ * JWT validation.
+ * * @layer Presentation / Components
+ * ============================================================================
+ */
+
 @Composable
 fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) {
     // --- MEMORIA DEL COMPONENTE ---

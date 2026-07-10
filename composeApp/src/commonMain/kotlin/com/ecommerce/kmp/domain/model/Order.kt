@@ -3,9 +3,17 @@ package com.ecommerce.kmp.domain.model
 import kotlinx.serialization.Serializable
 
 /**
- * Representa un pedido realizado por un cliente.
- * Contiene el estado del pago y la referencia al voucher.
+ * ============================================================================
+ * 📦 ORDER DOMAIN ENTITY
+ * ============================================================================
+ * * @description
+ * Central domain model representing a customer's purchase transaction.
+ * Encapsulates the cart items, financial totals, tracking timestamp, and the
+ * fulfillment lifecycle (`status`) alongside its payment proof (`voucherUrl`).
+ * * @layer Domain / Model
+ * ============================================================================
  */
+
 @Serializable
 data class Order(
     val id: String = "",

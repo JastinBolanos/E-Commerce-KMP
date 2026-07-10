@@ -35,6 +35,30 @@ import e_commercekmp.composeapp.generated.resources.Res
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
+/**
+ * ============================================================================
+ * 🛍️ SHOPPING CART SCREEN & REACTIVE UI
+ * ============================================================================
+ * * @description
+ * This screen provides the visual interface for the user's shopping cart.
+ * It is completely state-driven, observing the `CartManager` singleton via
+ * `collectAsState()`. This means any addition, removal, or quantity update
+ * triggers an automatic and isolated recomposition of the total amounts and
+ * item rows without manual UI refreshing.
+ * * Key UX Features implemented:
+ * - Real-time Subtotal and Total calculations.
+ * - Granular item manipulation (+/- stepper controls).
+ * - Multi-path checkout: 'Buy All' (global cart) vs 'Buy Now' (single item).
+ * - Dynamic image loading separating Kits from standard Products.
+ * * 🔌 NOTE FOR BACKEND / PRICING TEAM:
+ * The price calculations (`sumOf`) here rely purely on the client-side state.
+ * When hooking up to a real payment gateway (Stripe, PayPal, Niubiz), the
+ * final `totalAmount` MUST be recalculated and validated on the Backend server
+ * before processing the transaction to prevent client-side manipulation/fraud.
+ * * @layer Presentation / Features / Cart
+ * ============================================================================
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(

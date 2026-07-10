@@ -11,6 +11,29 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * ============================================================================
+ * ⚙️ ADMIN ORDERS VIEW MODEL & REACTIVE PIPELINE
+ * ============================================================================
+ * * @description
+ * This ViewModel orchestrates the real-time order tracking and lifecycle
+ * management for the Administrator dashboard. It establishes a direct,
+ * hot `StateFlow` pipeline from the `OrderRepository` to the UI layer,
+ * leveraging `stateIn` with `WhileSubscribed(5000)` to optimize background
+ * resource consumption and prevent memory leaks.
+ * * 🔌 NOTE FOR BACKEND / DATABASE TEAM:
+ * The `orders` property is a continuous stream. In this architecture,
+ * the UI does not "ask" for new orders; it simply reacts to emissions
+ * from the repository. When migrating to a real Cloud Database (like Firestore
+ * or Supabase Realtime), the `observeOrders()` implementation in the repository
+ * must be connected to a live Snapshot Listener or WebSocket.
+ * The `updateOrderStatus` method currently performs local mutation. In production,
+ * this must execute an HTTP PATCH request and await a 200 OK response before
+ * invoking the `onSuccess` callback to ensure data consistency.
+ * * @layer Presentation / Features / Admin
+ * ============================================================================
+ */
+
 class OrdersViewModel(private val repository: OrderRepository) : ViewModel() {
 
     // Escucha todos los pedidos en vivo (ahora desde el Mock local)
