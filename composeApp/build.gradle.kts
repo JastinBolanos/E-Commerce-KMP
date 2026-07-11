@@ -48,7 +48,7 @@ kotlin {
             implementation("io.github.vinceglb:filekit-compose:0.8.2")
 
             // 📦 SERIALIZACIÓN
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 
             // 🧵 COROUTINES
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
