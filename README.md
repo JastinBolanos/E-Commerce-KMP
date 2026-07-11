@@ -136,11 +136,11 @@ graph TD
 
 ---
 
-## 5. Software Architecture (Project Map)
+## 6. Clean Architecture & Engineering Principles
 
-The code follows a **Clean Architecture** approach structured by features (*Feature-Based*), ensuring a strict separation of concerns:
+The codebase follows a rigorous **Clean Architecture** approach structured by features (*Feature-Based*), ensuring a strict separation of concerns:
 
-* `domain`: The pure, immutable core. Contains data models ("Product", "Order") and repository interfaces. Completely agnostic: it is entirely unaware of Android, iOS, or Compose.
+* `domain`: The pure, immutable core. Contains data models (`Product`, `Order`) and repository interfaces. Completely agnostic: it is entirely unaware of Android, iOS, or Compose.
 * `data`: The infrastructure layer. Controlled implementations (e.g., `MockProductRepositoryImpl`) that inject static data with simulated latency (`delay()`) to verify UI loading states. Native resource resolution using the `expect/actual` pattern.
 * `presentation`: The visual layer, surgically divided into business modules (`home`, `admin`, `checkout`), global themes, and injectable state managers like `CartManager`.
 
@@ -151,7 +151,7 @@ The code follows a **Clean Architecture** approach structured by features (*Feat
 
 ---
 
-## 6. Build Instructions
+## 7. Build Instructions
 
 ### Prerequisites
 * **Android:** Android Studio Ladybug (or higher) with the KMP plugin enabled.
@@ -172,7 +172,7 @@ The code follows a **Clean Architecture** approach structured by features (*Feat
 
 ---
 
-## 7 License and Intellectual Property
+## 8. License and Intellectual Property
 
 This repository and all its contents are protected under a **Proprietary Restricted-Use License**.
 
