@@ -108,30 +108,30 @@ The following diagram illustrates the routing and business logic implemented in 
 
 ```mermaid
 graph TD
-    A[📱 App Start] --> B(Google OAuth Authentication)
+    A[ App Start] --> B(Google OAuth Authentication)
     B --> C{User Role?}
     
     %% Customer Flow (B2C)
-    C -->|Customer| D[🛍️ Home / Catalog]
+    C -->|Customer| D[ Home / Catalog]
     D --> E[Kits & Promotions]
-    D --> F[🛒 Shopping Cart]
-    F --> G[💳 Checkout & QR Gateway]
-    G --> H[📤 Upload Payment Receipt]
-    H --> I[👤 Profile & History]
-    I --> J[📦 Order Tracking]
+    D --> F[ Shopping Cart]
+    F --> G[ Checkout & QR Gateway]
+    G --> H[ Upload Payment Receipt]
+    H --> I[ Profile & History]
+    I --> J[ Order Tracking]
     
     %% Admin Flow (B2B)
-    C -->|Administrator| K[⚙️ Admin Dashboard]
-    K --> L[📥 Pending Orders]
+    C -->|Administrator| K[ Admin Dashboard]
+    K --> L[ Pending Orders]
     L --> M{Payment Audit}
-    M -->|Approve| N[🚚 Shipping Management]
-    M -->|Reject| O[❌ Cancelled Order]
+    M -->|Approve| N[ Shipping Management]
+    M -->|Reject| O[ Cancelled Order]
     
-    K --> P[📦 Inventory Management]
-    P --> Q[➕ Create/Edit Product]
+    K --> P[ Inventory Management]
+    P --> Q[ Create/Edit Product]
     
-    K --> R[💳 Payment Methods]
-    R --> S[🔄 Update Official QR]
+    K --> R[ Payment Methods]
+    R --> S[ Update Official QR]
 ```
 
 ---
@@ -172,7 +172,7 @@ The codebase follows a rigorous **Clean Architecture** approach structured by fe
 
 ---
 
-## 8. License and Intellectual Property
+## 8. ⚖️ License and Intellectual Property
 
 This repository and all its contents are protected under a **Proprietary Restricted-Use License**.
 
