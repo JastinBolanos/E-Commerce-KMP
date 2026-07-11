@@ -45,7 +45,7 @@ kotlin {
             implementation(libs.coil.compose)
 
             // Seleccionador de archivos multiplataforma (Mantenido para la UI del voucher)
-            implementation("io.github.vinceglb:filekit-compose:0.8.2")
+            implementation("io.github.vinceglb:filekit-compose:0.8.8")
 
             // 📦 SERIALIZACIÓN
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
