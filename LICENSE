@@ -1,0 +1,80 @@
+================================================================================
+PROPRIETARY LICENSE AGREEMENT
+
+Copyright (c) 2026. All rights reserved.
+Software and Intellectual Property Owner: Jastin Bolaños / E-CommerceKMP
+Official Contact: jastinbolanos.dev [at] gmail [dot] com
+================================================================================
+
+This Restricted Use License governs the terms under which the Owner makes this
+Software available. By accessing, cloning, or reviewing the source code, you
+acknowledge and agree to be bound by the terms set forth below.
+
+-------------------------------------------------------------------------------
+1. SCOPE OF PERMITTED USE
+-------------------------------------------------------------------------------
+A limited, personal, and non-transferable right of access is granted to any
+user to use the source code and associated documentation ("the Software")
+solely and exclusively for the purposes of STUDY, LEARNING, PERSONAL RESEARCH,
+or TECHNICAL/ACADEMIC EVALUATION.
+
+-------------------------------------------------------------------------------
+2. PROHIBITIVE RESTRICTIONS (STRICTLY PROHIBITED USE)
+-------------------------------------------------------------------------------
+Any action that infringes upon the intellectual property of the Owner is
+prohibited, including, but not limited to:
+
+A. REPLICATION AND PLAGIARISM OF VISUAL COMPOSITION: Forking, copying, or
+   redistributing this repository is prohibited. Any substantial modification
+   (defined as an alteration of less than 50% of the source code base) or the
+   use of the visual structure (box arrangement, layouts, color combinations,
+   gradients, and UI/UX identity) to be republished under one's own or
+   third-party authorship constitutes a direct violation of this license.
+
+B. UNAUTHORIZED COMMERCIAL EXPLOITATION: It is strictly prohibited to use,
+   copy, modify, merge, publish, distribute, or sublicense this Software or
+   any of its design components for commercial or profit-making purposes, or
+   within production applications, without the prior and explicit written
+   consent of the Owner.
+
+C. LOGO AND TRADEMARK PROTECTION: The use of the official logo or any
+   original graphic resource of visual identity in external or derivative
+   projects is an infringement of trademark rights.
+
+-------------------------------------------------------------------------------
+3. CLARIFICATION ON TRADEMARK/TRADE NAME
+-------------------------------------------------------------------------------
+The trade name used in this project has a demonstrative and placeholder
+character. The Owner does not claim exclusive rights over said name, and it is
+the user's responsibility to verify that its use does not infringe upon
+third-party trademark rights. The protection of this license is exclusively
+focused on the code architecture, business logic, UI design, and the
+project's logo.
+
+-------------------------------------------------------------------------------
+4. COMMERCIAL LICENSING AND COMPENSATION
+-------------------------------------------------------------------------------
+Entities, companies, or developers wishing to commercially exploit the user
+interface (UI), component design, or business logic of this Software must
+contact the Owner via the Official Contact. The granting of a Commercial
+License will be subject to a formal agreement and fair economic compensation.
+
+-------------------------------------------------------------------------------
+5. THIRD-PARTY RESOURCES
+-------------------------------------------------------------------------------
+The Owner declares that certain graphic elements (icons, 3D renders) have been
+integrated from legitimate Figma community libraries under free use licenses.
+The intellectual property protected by this license rests exclusively upon the
+code architecture in Kotlin/Compose Multiplatform and the structural
+industrial design of the screens.
+
+================================================================================
+6. DISCLAIMER OF WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+OWNER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, ARISING FROM, OUT
+OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+================================================================================
