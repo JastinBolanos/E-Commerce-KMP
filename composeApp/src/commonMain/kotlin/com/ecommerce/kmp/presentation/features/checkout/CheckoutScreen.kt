@@ -188,7 +188,7 @@ fun CheckoutScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Default.ReceiptLong, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(48.dp))
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("Toca para subir tu foto", color = Color.Gray)
+                        Text("Toca para subir tu Vaucher", color = Color.Gray)
                     }
                 }
             }
