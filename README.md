@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/logo.remedioznatura.png" alt="Remedioz Natura Logo" width="180" />
+  <img src="docs/logo.remedioznatura.png" alt="Remedioz Natura Logo" width="120" />
 
   <h1>E-Commerce KMP | Enterprise-Grade Retail Architecture</h1>
   <h3>Remedioz Natura Showcase</h3>
