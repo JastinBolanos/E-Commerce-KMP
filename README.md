@@ -46,12 +46,16 @@ The project is governed by the *"Write once, run natively anywhere"* paradigm, o
 The design reflects a hyper-localized e-commerce, merging the warmth of traditional botanical commerce with the non-negotiable fluidity of modern mobile applications.
 
 ### Authentication and Discovery
-The flow starts with a frictionless, simplified Onboarding (*Google OAuth*). The main screen features a dynamic catalog and an advanced `HorizontalPager` for the Promotional Kits section, managing the scroll state without dropping *frames*.
+The flow starts with a frictionless, simplified Onboarding (*Google OAuth*). The main screen features a dynamic catalog, detailed product interactions, and an advanced `HorizontalPager` for the Promotional Kits section, managing the scroll state without dropping *frames*.
 
 <p align="center">
   <img src="docs/00_google_login.png" width="250" alt="Login"/>
   &nbsp;&nbsp;&nbsp;
   <img src="docs/01_home_catalog.png" width="250" alt="General Catalog"/>
+</p>
+
+<p align="center">
+  <img src="docs/03_home_catalog_details.png" width="250" alt="Product Details"/>
   &nbsp;&nbsp;&nbsp;
   <img src="docs/02_home_kits_promotions.png" width="250" alt="Promotional Kits"/>
 </p>
@@ -60,11 +64,11 @@ The flow starts with a frictionless, simplified Onboarding (*Google OAuth*). The
 Cart management with dynamic unit control and exact mathematical calculations in real-time. The *Checkout* simulates the financial idiosyncrasy of the Latin American market, implementing a transfer gateway using QR codes and payment receipt (Voucher) validation.
 
 <p align="center">
-  <img src="docs/03_shopping_cart.png" width="250" alt="Shopping Cart"/>
+  <img src="docs/04_shopping_cart.png" width="250" alt="Shopping Cart"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/04_payment_checkout.png" width="250" alt="QR Payment Gateway"/>
+  <img src="docs/05_payment_checkout.png" width="250" alt="QR Payment Gateway"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/05_user_profile_history.png" width="250" alt="Profile and History"/>
+  <img src="docs/06_user_profile_history.png" width="250" alt="Profile and History"/>
 </p>
 
 ---
@@ -77,33 +81,33 @@ A pocket-sized ERP designed for comprehensive store management, demonstrating co
 The main panel grants access to the pending orders inbox. The system includes strict logic for the administrator to visually validate customer payment receipts and make business decisions (Approve/Reject) before releasing inventory.
 
 <p align="center">
-  <img src="docs/11_admin_dashboard_menu.png" width="250" alt="Admin Dashboard"/>
+  <img src="docs/12_admin_dashboard_menu.png" width="250" alt="Admin Dashboard"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/06_admin_pending_orders.png" width="250" alt="Orders Inbox"/>
+  <img src="docs/07_admin_pending_orders.png" width="250" alt="Orders Inbox"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/15_admin_payment_verification.png" width="250" alt="Payment Auditing"/>
+  <img src="docs/16_admin_payment_verification.png" width="250" alt="Payment Auditing"/>
 </p>
 
 ### Logistics and State Machine (Order Tracking)
 Implementation of a custom *Stepper UI* component for package telemetry. The administrator updates mutable states (*Preparing -> On the Way -> Delivered*), which are instantly propagated to the customer's screen thanks to the reactive *Flows*-based architecture.
 
 <p align="center">
-  <img src="docs/07_admin_shipping_management.png" width="250" alt="Shipping Management"/>
+  <img src="docs/08_admin_shipping_management.png" width="250" alt="Shipping Management"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/08_order_tracking_active.png" width="250" alt="Intermediate Tracking"/>
+  <img src="docs/09_order_tracking_active.png" width="250" alt="Intermediate Tracking"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/09_order_tracking_delivered.png" width="250" alt="Final Tracking"/>
+  <img src="docs/10_order_tracking_delivered.png" width="250" alt="Final Tracking"/>
 </p>
 
 ### Integrated Content Management System (CMS)
 The Administrator does not rely on technical teams to maintain the platform. It features a complete CRUD system to edit the product catalog, modify prices, and dynamically update the credentials and payment QR code seen by customers.
 
 <p align="center">
-  <img src="docs/12_admin_product_management.png" width="250" alt="Inventory Management"/>
+  <img src="docs/13_admin_product_management.png" width="250" alt="Inventory Management"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/13_admin_add_new_product.png" width="250" alt="Product Form"/>
+  <img src="docs/14_admin_add_new_product.png" width="250" alt="Product Form"/>
   &nbsp;&nbsp;&nbsp;
-  <img src="docs/14_admin_payment_methods.png" width="250" alt="QR Update"/>
+  <img src="docs/15_admin_payment_methods.png" width="250" alt="QR Update"/>
 </p>
 
 ---

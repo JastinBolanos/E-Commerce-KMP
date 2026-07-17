@@ -227,7 +227,7 @@ fun EditProductSheetContent(
 ) {
     var name by remember { mutableStateOf(product?.name ?: "") }
     var priceInput by remember { mutableStateOf(if (product != null && product.price > 0.0) product.price.toString() else "") }
-    var category by remember { mutableStateOf(product?.category?.takeIf { it.isNotEmpty() } ?: "Tratamientos") }
+    var category by remember { mutableStateOf(product?.category?.takeIf { it.isNotEmpty() } ?: "Treatments") }
     var description by remember { mutableStateOf(product?.description ?: "") }
     val allowedCategories = listOf("Kits", "Treatments", "Beauty", "Care", "Skin", "Other")
     var expandedDropdown by remember { mutableStateOf(false) }
