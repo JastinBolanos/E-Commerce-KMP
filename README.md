@@ -13,7 +13,7 @@
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-orange.svg?style=for-the-badge)]()
 
 <p align="center">
-  <a href="https://github.com/JastinBolanos/E-Commerce-KMP/releases/download/v1.0.0/E-CommerceKMP.apk">
+  <a href="https://github.com/JastinBolanos/E-Commerce-KMP/releases/download/v1.0.1/E-CommerceKMP.apk">
     <img src="https://img.shields.io/badge/Descargar-APK%20Android-green?style=for-the-badge&logo=android&logoColor=white" alt="Descargar APK">
   </a>
 </p>
