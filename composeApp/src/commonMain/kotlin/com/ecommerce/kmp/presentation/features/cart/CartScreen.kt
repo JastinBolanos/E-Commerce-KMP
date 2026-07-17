@@ -78,7 +78,7 @@ fun CartScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Carrito de Compras",
+                            text = "Shopping Cart",
                             fontFamily = FontFamily(Font(Res.font.imperial_script)),
                             fontWeight = FontWeight.Normal,
                             fontSize = 38.sp,
@@ -87,7 +87,7 @@ fun CartScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -96,7 +96,7 @@ fun CartScreen(
             }
         },
         bottomBar = {
-            // --- FOOTER: TOTAL Y BOTÓN COMPRAR TODO ---
+            // --- FOOTER: TOTAL AND BUY ALL BUTTON ---
             if (cartItems.isNotEmpty()) {
                 Column(
                     modifier = Modifier
@@ -104,7 +104,7 @@ fun CartScreen(
                         .background(Color.White)
                         .padding(24.dp)
                 ) {
-                    Text("Total: S/ ${totalAmount.format(2)}", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text("Total: $ ${totalAmount.format(2)}", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -117,7 +117,7 @@ fun CartScreen(
                             .clickable { onProceedToCheckoutClick() },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Comprar Todo", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                        Text("Buy All", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -129,7 +129,7 @@ fun CartScreen(
                 modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Tu carrito está vacío", fontSize = 18.sp, color = Color.Gray)
+                Text("Your cart is empty", fontSize = 18.sp, color = Color.Gray)
             }
         } else {
             LazyColumn(
@@ -150,7 +150,7 @@ fun CartScreen(
     }
 }
 
-// --- COMPONENTE INTERNO: LA TARJETA DEL PRODUCTO EN EL CARRITO ---
+// --- INTERNAL COMPONENT: THE PRODUCT CARD IN THE CART ---
 @Composable
 fun CartItemRow(
     cartItem: CartItem,
@@ -189,9 +189,9 @@ fun CartItemRow(
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // 2. Columna de detalles a la derecha
+        // 2. Details column on the right
         Column(modifier = Modifier.weight(1f)) {
-            // Título y botón de eliminar
+            // Title and delete button
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -203,10 +203,10 @@ fun CartItemRow(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text("S/ ${product.price.format(2)}", fontSize = 12.sp, color = Color.Gray)
+                    Text("$ ${product.price.format(2)}", fontSize = 12.sp, color = Color.Gray)
                 }
 
-                // Botón de carrito
+                // Cart button
                 Box(
                     modifier = Modifier
                         .size(24.dp)
@@ -217,7 +217,7 @@ fun CartItemRow(
                 ) {
                     Icon(
                         Icons.Default.ShoppingCart,
-                        contentDescription = "Eliminar",
+                        contentDescription = "Delete",
                         tint = Color.White,
                         modifier = Modifier.size(14.dp)
                     )
@@ -226,9 +226,9 @@ fun CartItemRow(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Fila "Detalles" y botón "Ver"
+            // "Details" row and "View" button
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Detalles", fontSize = 13.sp, color = Color(0xFF333333))
+                Text(text = "Details", fontSize = 13.sp, color = Color(0xFF333333))
                 Spacer(modifier = Modifier.width(8.dp))
                 Box(
                     modifier = Modifier
@@ -245,13 +245,13 @@ fun CartItemRow(
                         .padding(horizontal = 12.dp, vertical = 2.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Ver", color = Color.White, fontSize = 10.sp)
+                    Text("View", color = Color.White, fontSize = 10.sp)
                 }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Subtotal: S/ ${subtotal.format(2)}", fontSize = 13.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+            Text(text = "Subtotal: $ ${subtotal.format(2)}", fontSize = 13.sp, color = Color.Black, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -303,7 +303,7 @@ fun CartItemRow(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Botón Comprar
+            // Buy button
             Box(
                 modifier = Modifier
                     .width(120.dp)
@@ -323,7 +323,7 @@ fun CartItemRow(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    "Comprar",
+                    "Buy",
                     color = Color.White,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium

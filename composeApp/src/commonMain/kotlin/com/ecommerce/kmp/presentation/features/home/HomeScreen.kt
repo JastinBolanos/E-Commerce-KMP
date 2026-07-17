@@ -89,7 +89,7 @@ fun HomeScreen(
     val kitsProducts = rawKits.filter { kit ->
         val matchesQuery = kit.name.contains(searchQuery, ignoreCase = true) ||
                 kit.description.contains(searchQuery, ignoreCase = true)
-        val matchesCategory = selectedCategory == "Todos" || selectedCategory.equals("Kits", ignoreCase = true)
+        val matchesCategory = selectedCategory == "All" || selectedCategory.equals("Kits", ignoreCase = true)
 
         matchesQuery && matchesCategory
     }
@@ -162,7 +162,7 @@ fun HomeScreen(
                                 if (!isKitsCategory) {
                                     Spacer(modifier = Modifier.height(20.dp))
                                     Text(
-                                        text = "Kits y Promociones",
+                                        text = "Kits and Promotions",
                                         fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.Black,
@@ -264,7 +264,7 @@ fun HomeScreen(
                 onConfirmOrder = { voucherBytes ->
                     checkoutViewModel.processOrder(
                         userId = "USER-ANONYMOUS",
-                        customerName = "Cliente de App",
+                        customerName = "App Customer",
                         cartItems = itemsToBuy,
                         total = total,
                         voucherBytes = voucherBytes

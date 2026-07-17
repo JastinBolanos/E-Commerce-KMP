@@ -63,7 +63,7 @@ fun ShippingTimelineScreen(
     onUpdateStatusClick: (String) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
-    val statusFlow = listOf("Aprobado", "Preparando Paquete", "En Camino", "Entregado")
+    val statusFlow = listOf("Approved", "Preparing Package", "In Transit", "Delivered")
     val currentIndex = statusFlow.indexOfFirst { it.equals(currentStatus, ignoreCase = true) }.takeIf { it >= 0 } ?: 0
     var showConfirmDialog by remember { mutableStateOf(false) }
     var pendingNextStatus by remember { mutableStateOf("") }
@@ -72,9 +72,9 @@ fun ShippingTimelineScreen(
         topBar = {
             Column {
                 CenterAlignedTopAppBar(
-                    title = { Text("Estado del Envío", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black) },
+                    title = { Text("Shipping Status", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black) },
                     navigationIcon = {
-                        IconButton(onClick = onBackClick) { Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black) }
+                        IconButton(onClick = onBackClick) { Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black) }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
                 )
@@ -85,8 +85,8 @@ fun ShippingTimelineScreen(
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color.White).verticalScroll(rememberScrollState()).padding(24.dp)
         ) {
-            // --- 1. CABECERA DEL PEDIDO ---
-            Text("Detalles de la Orden", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            // --- 1. ORDER HEADER ---
+            Text("Order Details", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(12.dp))
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9F9)),
@@ -94,18 +94,18 @@ fun ShippingTimelineScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    TimelineDetailRow("ID Pedido:", orderId.uppercase())
+                    TimelineDetailRow("Order ID:", orderId.uppercase())
                     Spacer(modifier = Modifier.height(8.dp))
-                    TimelineDetailRow("Cliente:", customerName)
+                    TimelineDetailRow("Customer:", customerName)
                     Spacer(modifier = Modifier.height(8.dp))
-                    TimelineDetailRow("Estado Actual:", currentStatus, valueColor = Color(0xFF1976D2))
+                    TimelineDetailRow("Current Status:", currentStatus, valueColor = Color(0xFF1976D2))
                 }
             }
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- 2. LA LÍNEA DE TIEMPO VERTICAL ---
-            Text("Seguimiento", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            // --- 2. VERTICAL TIMELINE ---
+            Text("Tracking", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(24.dp))
 
             statusFlow.forEachIndexed { index, stepName ->
@@ -121,7 +121,7 @@ fun ShippingTimelineScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- 3. EL BOTÓN ---
+            // --- 3. THE BUTTON ---
             if (currentIndex < statusFlow.lastIndex) {
                 val nextStatus = statusFlow[currentIndex + 1]
 
@@ -138,7 +138,7 @@ fun ShippingTimelineScreen(
                     if (isLoading) {
                         CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                     } else {
-                        Text("Pasar a: $nextStatus", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text("Move to: $nextStatus", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     }
                 }
             } else {
@@ -146,22 +146,22 @@ fun ShippingTimelineScreen(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Check, contentDescription = null, tint = Color(0xFF4CAF50))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("¡Pedido Entregado con Éxito!", color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
+                        Text("Order Delivered Successfully!", color = Color(0xFF2E7D32), fontWeight = FontWeight.Bold)
                     }
                 }
             }
         }
 
-        // CUADRO FLOTANTE DE CONFIRMACIÓN (Alerta)
+        // CONFIRMATION FLOATING DIALOG
         if (showConfirmDialog) {
             AlertDialog(
                 onDismissRequest = { showConfirmDialog = false },
                 containerColor = Color.White,
                 title = {
-                    Text("Confirmar Cambio", fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text("Confirm Change", fontWeight = FontWeight.Bold, color = Color.Black)
                 },
                 text = {
-                    Text("¿Estás seguro que deseas avanzar este pedido al estado:\n\n\"$pendingNextStatus\"?\n\nEsta acción notificará al cliente.", color = Color.DarkGray)
+                    Text("Are you sure you want to advance this order to the status:\n\n\"$pendingNextStatus\"?\n\nThis action will notify the customer.", color = Color.DarkGray)
                 },
                 confirmButton = {
                     Button(
@@ -172,7 +172,7 @@ fun ShippingTimelineScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Sí, avanzar", color = Color.White)
+                        Text("Yes, advance", color = Color.White)
                     }
                 },
                 dismissButton = {
@@ -181,7 +181,7 @@ fun ShippingTimelineScreen(
                         border = BorderStroke(1.dp, Color.Black),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Cancelar", color = Color.Black)
+                        Text("Cancel", color = Color.Black)
                     }
                 }
             )
@@ -189,11 +189,11 @@ fun ShippingTimelineScreen(
     }
 }
 
-// COMPONENTE: DIBUJA CADA PASO DE LA LÍNEA DE TIEMPO
+// COMPONENT: DRAWS EACH TIMELINE STEP
 @Composable
 fun TimelineStep(title: String, isCompleted: Boolean, isLast: Boolean) {
     Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
-        // Columna Izquierda (Dibujo de la bolita y la línea)
+        // Left Column (Dot and line drawing)
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(40.dp)) {
             Box(
                 modifier = Modifier.size(24.dp).clip(CircleShape).background(if (isCompleted) Color.Black else Color(0xFFE0E0E0)),
@@ -209,7 +209,7 @@ fun TimelineStep(title: String, isCompleted: Boolean, isLast: Boolean) {
             }
         }
 
-        // Columna Derecha (Texto)
+        // Right Column (Text)
         Column(modifier = Modifier.weight(1f).padding(bottom = 32.dp)) {
             Text(
                 text = title,

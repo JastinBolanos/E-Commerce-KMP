@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) {
-    // --- MEMORIA DEL COMPONENTE ---
+    // --- COMPONENT MEMORY ---
     var isAdminExpanded by remember { mutableStateOf(false) }
     var emailAdmin by remember { mutableStateOf("") }
     var passwordAdmin by remember { mutableStateOf("") }
@@ -62,13 +62,13 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
             .background(Color(0xFF0A0A0A))
             .padding(32.dp)
     ) {
-        // Título de la marca
+        // Brand title
         Text("Remedioz Natura", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Descripción real en español
+        // Real description
         Text(
-            text = "Plataforma de e-commerce dedicada a la venta de productos naturales para el bienestar y la salud integral.",
+            text = "E-commerce platform dedicated to the sale of natural products for comprehensive health and well-being.",
             color = Color.Gray,
             fontSize = 14.sp,
             lineHeight = 20.sp
@@ -76,11 +76,11 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Menú inferior
+        // Bottom menu
         Text("MENU", color = Color.White, fontWeight = FontWeight.Bold, letterSpacing = 1.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
-        val menuItems = listOf("Ayuda", "Contactanos", "Sobre Nosotros", "Preguntas Frecuentes", "Terminos Y Condiciones")
+        val menuItems = listOf("Help", "Contact Us", "About Us", "FAQ", "Terms and Conditions")
         menuItems.forEach { item ->
             Text(
                 text = item,
@@ -92,15 +92,15 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- PANEL DE ADMINISTRADOR OCULTO ---
+        // --- HIDDEN ADMIN PANEL ---
         if (isAdminExpanded) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Input de Email
+            // Email Input
             OutlinedTextField(
                 value = emailAdmin,
                 onValueChange = { emailAdmin = it },
-                placeholder = { Text("Ingresa Email de Administrador", color = Color.Gray) },
+                placeholder = { Text("Enter Admin Email", color = Color.Gray) },
                 shape = RoundedCornerShape(50),
                 modifier = Modifier.fillMaxWidth(),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -116,11 +116,11 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Input de Contraseña
+            // Password Input
             OutlinedTextField(
                 value = passwordAdmin,
                 onValueChange = { passwordAdmin = it },
-                placeholder = { Text("Contraseña", color = Color.Gray) },
+                placeholder = { Text("Password", color = Color.Gray) },
                 shape = RoundedCornerShape(50),
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(0.7f),
@@ -137,24 +137,24 @@ fun FooterSection(modifier: Modifier = Modifier, onAdminLoginClick: () -> Unit) 
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón Ingresar
+            // Login Button
             Button(
                 onClick = { onAdminLoginClick() },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
-                Text("Ingresar", color = Color.Black, fontWeight = FontWeight.Bold)
+                Text("Login", color = Color.Black, fontWeight = FontWeight.Bold)
             }
         }
 
-        // --- LA FLECHITA TÁCTIL ---
+        // --- TOUCHABLE ARROW ---
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd
         ) {
             Icon(
                 imageVector = if (isAdminExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = "Expandir Admin",
+                contentDescription = "Expand Admin",
                 tint = Color.White,
                 modifier = Modifier
                     .size(36.dp)

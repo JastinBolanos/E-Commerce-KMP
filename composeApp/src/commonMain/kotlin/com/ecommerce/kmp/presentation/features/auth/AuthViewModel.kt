@@ -44,7 +44,7 @@ class AuthViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    // Datos simulados del usuario logueado
+    // Simulated logged-in user data
     private val _userName = MutableStateFlow<String?>(null)
     val userName: StateFlow<String?> = _userName.asStateFlow()
 
@@ -55,11 +55,11 @@ class AuthViewModel : ViewModel() {
     val userPhotoUrl: StateFlow<String?> = _userPhotoUrl.asStateFlow()
 
     /**
-     * Inicia sesión simulada para el Administrador
+     * Simulates Administrator login
      */
     fun loginAdmin(email: String, pass: String, onSuccess: () -> Unit) {
         if (email.isBlank() || pass.isBlank()) {
-            _errorMessage.value = "Por favor, llena ambos campos."
+            _errorMessage.value = "Please fill in both fields."
             return
         }
 
@@ -70,23 +70,23 @@ class AuthViewModel : ViewModel() {
 
             _isLoading.value = false
 
-            // Dejamos pasar cualquier credencial,
-            // pero podríamos poner un if(email == "admin@admin.com") si quisieras restringirlo.
+            // We allow any credentials to pass,
+            // but we could add an if(email == "admin@admin.com") if you wanted to restrict it.
             onSuccess()
         }
     }
 
     /**
-     * Inicia sesión simulada como Cliente (Reemplaza al flujo de Google)
+     * Simulates Client login (Replaces Google flow)
      */
     fun loginAsClient(onSuccess: () -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true
 
-            // Simulamos la latencia de la API de Google
+            // Simulate Google API latency
             delay(1500)
 
-            // Inyectamos datos falsos para que el perfil de usuario se vea bonito
+            // Inject fake data so the user profile looks nice
             _userName.value = "LAURA VERACRUZ"
             _userEmail.value = "laura.official@gmail.com"
             _userPhotoUrl.value = ""
@@ -99,7 +99,7 @@ class AuthViewModel : ViewModel() {
     }
 
     /**
-     * Simula el cierre de sesión
+     * Simulates logout
      */
     fun logout() {
         _userName.value = null

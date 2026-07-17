@@ -77,7 +77,7 @@ fun CustomerProfileScreen(
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
 
-    // MOTOR DE ANIMACIÓN PARA EL BORDE DEL PERFIL
+    // ANIMATION ENGINE FOR PROFILE BORDER
     val infiniteTransition = rememberInfiniteTransition(label = "profile_border_animation")
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -94,11 +94,11 @@ fun CustomerProfileScreen(
             Column {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text("Perfil", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
+                        Text("Profile", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -113,13 +113,13 @@ fun CustomerProfileScreen(
                 .padding(paddingValues)
                 .background(Color.White)
         ) {
-            // --- 1. CABECERA DEL PERFIL ---
+            // --- 1. PROFILE HEADER ---
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // CÍRCULO DE FOTO CON BORDE ANIMADO
+                    // PHOTO CIRCLE WITH ANIMATED BORDER
                     Box(
                         modifier = Modifier
                             .size(106.dp)
@@ -149,7 +149,7 @@ fun CustomerProfileScreen(
                     ) {
                         Image(
                             painter = painterResource(Res.drawable.img_perfil),
-                            contentDescription = "Foto de perfil",
+                            contentDescription = "Profile picture",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
@@ -158,7 +158,7 @@ fun CustomerProfileScreen(
                     Spacer(modifier = Modifier.width(24.dp))
 
                     Column {
-                        Text("Datos Personales", fontSize = 16.sp, color = Color.Black)
+                        Text("Personal Information", fontSize = 16.sp, color = Color.Black)
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(userName ?: "Laura Veracruz", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                         Text(userEmail ?: "laura.official@gmail.com", fontSize = 14.sp, color = Color.Gray)
@@ -167,9 +167,9 @@ fun CustomerProfileScreen(
 
                 HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
 
-                // --- TÍTULO DE SECCIÓN ---
+                // --- SECTION TITLE ---
                 Text(
-                    text = "Tus Pedidos",
+                    text = "Your Orders",
                     fontSize = 30.sp,
                     fontFamily = imperialFont,
                     color = Color.Black,
@@ -178,7 +178,7 @@ fun CustomerProfileScreen(
                 HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
             }
 
-            // --- 2. LISTA DE PEDIDOS REALES ---
+            // --- 2. REAL ORDERS LIST ---
             items(orders) { order ->
                 CustomerOrderCard(order = order, onTrackClick = { onTrackOrderClick(order) })
                 HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
@@ -187,7 +187,7 @@ fun CustomerProfileScreen(
             if (orders.isEmpty()) {
                 item {
                     Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                        Text("Aún no tienes pedidos.", color = Color.Gray)
+                        Text("You have no orders yet.", color = Color.Gray)
                     }
                 }
             }
@@ -195,15 +195,15 @@ fun CustomerProfileScreen(
     }
 }
 
-// --- COMPONENTE: TARJETA DE PEDIDO DEL CLIENTE ---
+// --- COMPONENT: CUSTOMER ORDER CARD ---
 @Composable
 private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     val firstProduct = order.items.firstOrNull()?.product
     val firstProductImage = firstProduct?.imageUrl ?: ""
-    val firstProductName = firstProduct?.name ?: "Producto Natura"
+    val firstProductName = firstProduct?.name ?: "Natura Product"
     val firstProductPrice = firstProduct?.price?.format(2) ?: "0.00"
 
-    // LÓGICA DE TRADUCCIÓN DE IMÁGENES
+    // IMAGE TRANSLATION LOGIC
     val isKit = firstProduct?.category.equals("Kits", ignoreCase = true)
     val imagePainter = if (isKit) {
         getKitImagePainter(firstProductImage)
@@ -212,12 +212,12 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
     }
 
     val totalItems = order.items.sumOf { it.quantity }
-    val isDelivered = order.status.equals("Entregado", ignoreCase = true)
+    val isDelivered = order.status.equals("Delivered", ignoreCase = true)
     val buttonColor = if (isDelivered) Color(0xFF97DAFD) else Color(0xFFD3D3D3)
     val textColor = Color.Black
 
     Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        // Columna Izquierda: Imagen y Textos
+        // Left Column: Image and Texts
         Column(modifier = Modifier.weight(1f)) {
             Box(
                 modifier = Modifier
@@ -228,26 +228,26 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
             ) {
                 Image(
                     painter = imagePainter,
-                    contentDescription = "Producto",
+                    contentDescription = "Product",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = firstProductName, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-            Text(text = "S/ $firstProductPrice", fontSize = 12.sp, color = Color.Gray)
+            Text(text = "$ $firstProductPrice", fontSize = 12.sp, color = Color.Gray)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Columna Derecha: Estadísticas y Botón de Estado
+        // Right Column: Statistics and Status Button
         Column(modifier = Modifier.weight(1.5f)) {
-            CustomerOutlinedStatRow(label = "Cantidad:", value = totalItems.toString())
+            CustomerOutlinedStatRow(label = "Quantity:", value = totalItems.toString())
             Spacer(modifier = Modifier.height(6.dp))
-            CustomerOutlinedStatRow(label = "Costos Totales:", value = "S/ ${order.totalAmount.format(2)}")
+            CustomerOutlinedStatRow(label = "Total Cost:", value = "$ ${order.totalAmount.format(2)}")
 
             Spacer(modifier = Modifier.height(6.dp))
-            CustomerOutlinedStatRow(label = "Estado:", value = order.status)
+            CustomerOutlinedStatRow(label = "Status:", value = order.status)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -257,13 +257,13 @@ private fun CustomerOrderCard(order: Order, onTrackClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Ver Detalles",
+                    text = "View Details",
                     fontSize = 12.sp,
                     color = Color.DarkGray,
                     modifier = Modifier.clickable { onTrackClick() }
                 )
 
-                // Botón de Estado
+                // Status Button
                 Button(
                     onClick = onTrackClick,
                     colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
@@ -286,7 +286,7 @@ private fun Double.format(digits: Int): String {
     return "$whole.${fraction.padEnd(digits, '0')}"
 }
 
-// Cajita de estadísticas
+// Statistics box
 @Composable
 private fun CustomerOutlinedStatRow(label: String, value: String) {
     Row(

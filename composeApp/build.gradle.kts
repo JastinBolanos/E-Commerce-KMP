@@ -44,7 +44,7 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.coil.compose)
 
-            // Seleccionador de archivos multiplataforma (Mantenido para la UI del voucher)
+            // Cross-platform file picker (Maintained for the voucher UI)
             implementation("io.github.vinceglb:filekit-compose:0.8.2")
 
             // 📦 SERIALIZACIÓN

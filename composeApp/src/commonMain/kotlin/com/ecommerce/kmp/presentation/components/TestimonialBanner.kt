@@ -44,7 +44,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TestimonialBanner(modifier: Modifier = Modifier) {
 
-    // --- MOTOR DE ANIMACIÓN INFINITA ---
+    // --- INFINITE ANIMATION ENGINE ---
     val infiniteTransition = rememberInfiniteTransition()
     val angle by infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -55,7 +55,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
         )
     )
 
-    // Contenedor principal
+    // Main container
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -64,7 +64,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
             .clip(RoundedCornerShape(24.dp))
     ) {
 
-        // --- CAPA 1: EL EFECTO DE LUZ GIRATORIA (Fondo) ---
+        // --- LAYER 1: ROTATING LIGHT EFFECT (Background) ---
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +88,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
                 }
         )
 
-        // --- CAPA 2: IMAGEN ---
+        // --- LAYER 2: IMAGE ---
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,7 +97,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
         ) {
             Image(
                 painter = painterResource(Res.drawable.img_banner_full),
-                contentDescription = "Banner Testimonial Especialista",
+                contentDescription = "Specialist Testimonial Banner",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )

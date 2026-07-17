@@ -45,7 +45,7 @@ fun CategoryFilter(
     onCategorySelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val categories = listOf("Todos", "Kits", "Tratamientos", "Belleza", "Cuidados", "Piel", "Otros")
+    val categories = listOf("All", "Kits", "Treatments", "Beauty", "Care", "Skin", "Others")
 
     LazyRow(
         modifier = modifier.fillMaxWidth(),

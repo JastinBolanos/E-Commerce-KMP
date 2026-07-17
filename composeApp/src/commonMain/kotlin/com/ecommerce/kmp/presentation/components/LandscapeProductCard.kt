@@ -69,7 +69,7 @@ fun LandscapeProductCard(
     val name = product.name
     val price = product.price
 
-    // --- ESTADOS ---
+    // --- STATES ---
     val cartItems by CartManager.cartItems.collectAsState()
     val isInCart = cartItems.any { it.product.id == product.id }
     var expanded by remember { mutableStateOf(false) }
@@ -84,7 +84,7 @@ fun LandscapeProductCard(
             .background(Color.White)
             .animateContentSize()
     ) {
-        // --- Caja principal de la imagen ---
+        // --- Main Image Box ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,7 +93,7 @@ fun LandscapeProductCard(
                 .background(Color(0xFFD6D6D6))
         ) {
             if (product.imageUrl.isNotEmpty()) {
-                // Traductor de Kits
+                // Kits Translator
                 Image(
                     painter = getKitImagePainter(product.imageUrl),
                     contentDescription = name,
@@ -102,7 +102,7 @@ fun LandscapeProductCard(
                 )
             }
 
-            // --- BOTÓN DE CARRITO ---
+            // --- CART BUTTON ---
             if (!isAdminView && showCartIcon) {
                 Box(
                     modifier = Modifier
@@ -130,7 +130,7 @@ fun LandscapeProductCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.AddShoppingCart,
-                        contentDescription = "Añadir al carrito",
+                        contentDescription = "Add to cart",
                         tint = if (isInCart) Color.White else Color.Gray,
                         modifier = Modifier.size(18.dp)
                     )
@@ -140,7 +140,7 @@ fun LandscapeProductCard(
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // --- Fila de Título y Flecha ---
+            // --- Title and Arrow Row ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -155,26 +155,26 @@ fun LandscapeProductCard(
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
-                    Text(text = "S/ ${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "\$${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expandir",
+                    contentDescription = "Expand",
                     tint = Color.Black
                 )
             }
 
-            // CONTENIDO EXPANDIBLE
+            // EXPANDABLE CONTENT
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // --- Fila Detalles + Botón Ver ---
+                // --- Details Row + View Button ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Detalles",
+                        text = "Details",
                         fontSize = 14.sp,
                         color = Color(0xFF333333),
                         modifier = Modifier.weight(1f)
@@ -187,7 +187,7 @@ fun LandscapeProductCard(
                             .padding(horizontal = 16.dp, vertical = 4.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Ver", color = Color.White, fontSize = 12.sp)
+                        Text("View", color = Color.White, fontSize = 12.sp)
                     }
                 }
 
@@ -197,7 +197,7 @@ fun LandscapeProductCard(
                     val calculatedTotal = product.price * quantity
 
                     Text(
-                        text = if (quantity > 1) "Subtotal: S/ ${calculatedTotal.format(2)}" else "Precio: S/ ${calculatedTotal.format(2)}",
+                        text = if (quantity > 1) "Subtotal: \$${calculatedTotal.format(2)}" else "Price: \$${calculatedTotal.format(2)}",
                         fontSize = 15.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Medium
@@ -205,7 +205,7 @@ fun LandscapeProductCard(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // --- Selector de Cantidad ---
+                    // --- Quantity Selector ---
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -236,7 +236,7 @@ fun LandscapeProductCard(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // --- Botón Comprar ---
+                    // --- Buy Button ---
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -248,7 +248,7 @@ fun LandscapeProductCard(
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Comprar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text("Buy", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -264,7 +264,7 @@ fun LandscapeProductCard(
     }
 }
 
-// Traductor para los KITS (Categoría 5)
+// Translator for KITS (Category 5)
 @Composable
 fun getKitImagePainter(imageUrl: String): Painter {
     val imageRes = when (imageUrl) {

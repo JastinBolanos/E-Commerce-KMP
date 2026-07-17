@@ -35,57 +35,57 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MockOrderRepositoryImpl : OrderRepository {
 
-    // --- 1. PRODUCTOS DE DEMOSTRACIÓN PARA LOS PEDIDOS ---
+    // --- 1. DEMO PRODUCTS FOR ORDERS ---
 
     private val productArgan = Product(
         id = "13",
-        name = "Aceite Esencial de Argán Puro",
+        name = "Pure Argan Essential Oil",
         price = 58.0,
-        category = "Cuidados",
-        description = "El \"oro líquido\" para tu rutina. Un aceite puro multiusos ideal para hidratar profundamente la piel y revitalizar las puntas secas del cabello.",
+        category = "Care",
+        description = "The \"liquid gold\" for your routine. A multi-purpose pure oil ideal for deeply hydrating the skin and revitalizing dry hair ends.",
         imageUrl = "img_aceite_dorado"
     )
 
     private val productKitBotanico = Product(
         id = "26",
-        name = "Kit Spa Botánico Premium",
+        name = "Premium Botanical Spa Kit",
         price = 270.0,
         category = "Kits",
-        description = "Una experiencia de spa de lujo en casa. Colección completa de aceites, sales de baño y lociones en envases de vidrio ecológico para una relajación absoluta.",
+        description = "A luxury spa experience at home. Complete collection of oils, bath salts, and lotions in eco-friendly glass packaging for absolute relaxation.",
         imageUrl = "img_kit_botanico"
     )
 
     private val productSerumPink = Product(
         id = "1",
-        name = "Sérum Iluminador Pink Peptide",
+        name = "Pink Peptide Illuminating Serum",
         price = 85.0,
-        category = "Piel",
-        description = "El secreto de la cosmética coreana. Péptidos concentrados que aportan un brillo de cristal y firmeza instantánea a tu rostro.",
+        category = "Skin",
+        description = "The secret of Korean cosmetics. Concentrated peptides that provide crystal shine and instant firmness to your face.",
         imageUrl = "img_serum_pink_peptide"
     )
 
     private val productPerfumeOceano = Product(
         id = "10",
-        name = "Eau de Parfum Brisa Oceánica",
+        name = "Ocean Breeze Eau de Parfum",
         price = 130.0,
-        category = "Belleza",
-        description = "Frescura pura envasada. Notas de flor de loto, jazmín de agua y brisa marina que te envuelven en una sensación de limpieza y paz durante todo el día.",
+        category = "Beauty",
+        description = "Pure freshness bottled. Notes of lotus flower, water jasmine, and sea breeze that envelop you in a feeling of cleanliness and peace all day long.",
         imageUrl = "img_perfume_azul"
     )
 
     private val productKitCitrico = Product(
         id = "25",
-        name = "Kit Regalo Energía Cítrica",
+        name = "Citrus Energy Gift Kit",
         price = 155.0,
         category = "Kits",
-        description = "El regalo perfecto para revitalizar los sentidos. Incluye perfume, crema de manos y loción corporal con notas vibrantes de mandarina en una hermosa caja de edición especial.",
+        description = "The perfect gift to revitalize the senses. Includes perfume, hand cream, and body lotion with vibrant tangerine notes in a beautiful special edition box.",
         imageUrl = "img_kit_citrico"
     )
 
-    // --- 2. BASE DE DATOS EN RAM CON 5 ESTADOS DIFERENTES Y CLIENTES FICTICIOS ---
+    // --- 2. RAM DATABASE WITH 5 DIFFERENT STATES AND FICTIONAL CUSTOMERS ---
 
     private val mockOrders = mutableListOf(
-        // ESTADO 1: Entregado
+        // STATE 1: Delivered
         Order(
             id = "ORD-77382",
             userId = "USER-LAURA",
@@ -93,10 +93,10 @@ class MockOrderRepositoryImpl : OrderRepository {
             items = listOf(CartItem(productArgan, 2)),
             totalAmount = 116.0,
             voucherUrl = "url_voucher_1",
-            status = "Entregado",
+            status = "Delivered",
             timestamp = getCurrentTimeMillis() - 864000000L
         ),
-        // ESTADO 2: En Camino
+        // STATE 2: In Transit
         Order(
             id = "ORD-88102",
             userId = "USER-ANDREA",
@@ -104,10 +104,10 @@ class MockOrderRepositoryImpl : OrderRepository {
             items = listOf(CartItem(productKitCitrico, 1)),
             totalAmount = 155.0,
             voucherUrl = "url_voucher_2",
-            status = "En Camino",
+            status = "In Transit",
             timestamp = getCurrentTimeMillis() - 172800000L
         ),
-        // ESTADO 3: Preparando Paquete
+        // STATE 3: Preparing Package
         Order(
             id = "ORD-92034",
             userId = "USER-ISABELLA",
@@ -115,10 +115,10 @@ class MockOrderRepositoryImpl : OrderRepository {
             items = listOf(CartItem(productPerfumeOceano, 2)),
             totalAmount = 260.0,
             voucherUrl = "url_voucher_3",
-            status = "Preparando Paquete",
+            status = "Preparing Package",
             timestamp = getCurrentTimeMillis() - 86400000L
         ),
-        // ESTADO 4: Aprobado
+        // STATE 4: Approved
         Order(
             id = "ORD-98011",
             userId = "USER-CAMILA",
@@ -126,10 +126,10 @@ class MockOrderRepositoryImpl : OrderRepository {
             items = listOf(CartItem(productSerumPink, 1)),
             totalAmount = 85.0,
             voucherUrl = "url_voucher_4",
-            status = "Aprobado",
+            status = "Approved",
             timestamp = getCurrentTimeMillis() - 3600000L
         ),
-        // ESTADO 5: Pendiente (El más reciente)
+        // STATE 5: Pending (The most recent)
         Order(
             id = "ORD-99124",
             userId = "USER-LAURA",
@@ -137,7 +137,7 @@ class MockOrderRepositoryImpl : OrderRepository {
             items = listOf(CartItem(productKitBotanico, 1)),
             totalAmount = 270.0,
             voucherUrl = "url_voucher_5",
-            status = "Pendiente",
+            status = "Pending",
             timestamp = getCurrentTimeMillis()
         )
     )

@@ -47,7 +47,7 @@ class HomeViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _selectedCategory = MutableStateFlow("Todos")
+    private val _selectedCategory = MutableStateFlow("All")
     val selectedCategory: StateFlow<String> = _selectedCategory.asStateFlow()
 
     val filteredProducts: StateFlow<List<Product>> = combine(
@@ -56,7 +56,7 @@ class HomeViewModel(
         products.filter { product ->
             val matchesQuery = product.name.contains(query, ignoreCase = true) ||
                     product.description.contains(query, ignoreCase = true)
-            val matchesCategory = if (category == "Todos") true else product.category.equals(
+            val matchesCategory = if (category == "All") true else product.category.equals(
                 category,
                 ignoreCase = true
             )
@@ -80,7 +80,7 @@ class HomeViewModel(
                     _products.value = liveProducts
                 }
             } catch (e: Exception) {
-                println("Error en Home escuchando productos: ${e.message}")
+                println("Error in Home listening to products: ${e.message}")
             }
         }
 
@@ -90,7 +90,7 @@ class HomeViewModel(
                     _kits.value = liveKits
                 }
             } catch (e: Exception) {
-                println("Error en Home escuchando kits: ${e.message}")
+                println("Error in Home listening to kits: ${e.message}")
             }
         }
     }

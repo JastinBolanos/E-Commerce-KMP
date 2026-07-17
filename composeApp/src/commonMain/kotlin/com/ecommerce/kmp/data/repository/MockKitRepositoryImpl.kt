@@ -33,54 +33,54 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MockKitRepositoryImpl : KitRepository {
 
-    // Simula nuestra base de datos en la nube exclusiva para Kits
+    // Simulates our cloud database exclusively for Kits
     private val mockKits = mutableListOf(
         Product(
             id = "25",
-            name = "Kit Regalo Energía Cítrica",
+            name = "Citrus Energy Gift Kit",
             price = 155.0,
             category = "Kits",
-            description = "El regalo perfecto para revitalizar los sentidos. Incluye perfume, crema de manos y loción corporal con notas vibrantes de mandarina en una hermosa caja de edición especial.",
+            description = "The perfect gift to revitalize the senses. Includes perfume, hand cream, and body lotion with vibrant tangerine notes in a beautiful special edition box.",
             imageUrl = "img_kit_citrico"
         ),
         Product(
             id = "26",
-            name = "Kit Spa Botánico Premium",
+            name = "Premium Botanical Spa Kit",
             price = 270.0,
             category = "Kits",
-            description = "Una experiencia de spa de lujo en casa. Colección completa de aceites, sales de baño y lociones en envases de vidrio ecológico para una relajación absoluta.",
+            description = "A luxury spa experience at home. Complete collection of oils, bath salts, and lotions in eco-friendly glass packaging for absolute relaxation.",
             imageUrl = "img_kit_botanico"
         ),
         Product(
             id = "27",
-            name = "Kit Rutina Diaria Minimalista",
+            name = "Minimalist Daily Routine Kit",
             price = 140.0,
             category = "Kits",
-            description = "Todo lo que necesitas para tu día a día. Gel limpiador, tónico, crema hidratante y mascarilla con fórmulas limpias y envases altamente estéticos.",
+            description = "Everything you need for your day to day. Cleansing gel, toner, moisturizing cream, and mask with clean formulas and highly aesthetic packaging.",
             imageUrl = "img_kit_minimalista"
         ),
         Product(
             id = "28",
-            name = "Kit Reparador de Centella",
+            name = "Centella Repair Kit",
             price = 180.0,
             category = "Kits",
-            description = "La línea definitiva para pieles sensibles. Contiene limpiador, sérum y cremas ricas en Centella Asiática para restaurar y fortalecer la barrera cutánea.",
+            description = "The definitive line for sensitive skin. Contains cleanser, serum, and creams rich in Centella Asiatica to restore and strengthen the skin barrier.",
             imageUrl = "img_kit_centella"
         ),
         Product(
             id = "29",
-            name = "Kit Resplandor de Higo",
+            name = "Fig Radiance Kit",
             price = 165.0,
             category = "Kits",
-            description = "Rutina iluminadora completa enriquecida con extracto de higo natural. Exfolia suavemente y devuelve el brillo natural y la vitalidad a los rostros apagados.",
+            description = "Complete illuminating routine enriched with natural fig extract. Gently exfoliates and restores natural shine and vitality to dull faces.",
             imageUrl = "img_kit_higo"
         ),
         Product(
             id = "30",
-            name = "Colección Rosas y Frutos Rojos",
+            name = "Roses and Red Fruits Collection",
             price = 210.0,
             category = "Kits",
-            description = "El lujo máximo en cuidado facial. Infusiones de rosas reales y frutos rojos antioxidantes que combaten el envejecimiento prematuro dejando una tez de porcelana.",
+            description = "The ultimate luxury in facial care. Infusions of real roses and antioxidant red fruits that combat premature aging, leaving a porcelain complexion.",
             imageUrl = "img_kit_rosas"
         )
     )

@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 
 class OrdersViewModel(private val repository: OrderRepository) : ViewModel() {
 
-    // Escucha todos los pedidos en vivo (ahora desde el Mock local)
+    // Listens to all orders in real-time (now from the local Mock)
     val orders: StateFlow<List<Order>> = repository.observeOrders()
         .stateIn(
             scope = viewModelScope,
@@ -47,7 +47,7 @@ class OrdersViewModel(private val repository: OrderRepository) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    // Función para Aprobar o Rechazar el voucher
+    // Function to Approve or Reject the voucher
     fun updateOrderStatus(orderId: String, newStatus: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _isLoading.value = true

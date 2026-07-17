@@ -66,12 +66,12 @@ fun OrdersScreen(
     onConfirmClick: (Order) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
-    val tabs = listOf("Pendientes De Confirmacion", "Estado de Envios")
+    val tabs = listOf("Pending Confirmation", "Shipping Status")
 
     val displayedOrders = if (selectedTab == 0) {
-        orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
+        orders.filter { it.status.equals("Pending", ignoreCase = true) }
     } else {
-        orders.filter { !it.status.equals("Pendiente", ignoreCase = true) }
+        orders.filter { !it.status.equals("Pending", ignoreCase = true) }
     }
 
     Scaffold(
@@ -80,7 +80,7 @@ fun OrdersScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Pedidos",
+                            text = "Orders",
                             fontFamily = imperialFont,
                             fontSize = 36.sp,
                             color = Color.Black
@@ -88,13 +88,13 @@ fun OrdersScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
                 )
 
-                // --- TABS (Pestañas) ---
+                // --- TABS ---
                 TabRow(
                     selectedTabIndex = selectedTab,
                     containerColor = Color.White,
@@ -126,7 +126,7 @@ fun OrdersScreen(
             }
         }
     ) { paddingValues ->
-        // --- LISTA DE PEDIDOS REALES ---
+        // --- REAL ORDERS LIST ---
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,7 +140,7 @@ fun OrdersScreen(
             if (displayedOrders.isEmpty()) {
                 item {
                     Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                        Text("No hay pedidos en esta sección.", color = Color.Gray)
+                        Text("There are no orders in this section.", color = Color.Gray)
                     }
                 }
             }
@@ -148,29 +148,29 @@ fun OrdersScreen(
     }
 }
 
-// --- COMPONENTE: TARJETA DE PEDIDO REAL ---
+// --- COMPONENT: REAL ORDER CARD ---
 @Composable
 fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
-    // 1. Extraemos el primer producto para la imagen y el diálogo
+    // 1. Extract the first product for the image and dialog
     val firstProduct = order.items.firstOrNull()?.product
     val firstProductImage = firstProduct?.imageUrl ?: ""
     val isKit = firstProduct?.category.equals("Kits", ignoreCase = true)
 
-    // 2. Traductor nativo de imágenes
+    // 2. Native image translator
     val imagePainter = if (isKit) {
         getKitImagePainter(firstProductImage)
     } else {
         getProductImagePainter(firstProductImage)
     }
 
-    // 3. Estado para controlar el diálogo
+    // 3. State to control the dialog
     var showDetailsDialog by remember { mutableStateOf(false) }
 
     val totalItems = order.items.sumOf { it.quantity }
     val productSummary = order.items.joinToString(", ") { "${it.quantity}x ${it.product.name}" }
 
-    val isPending = order.status.equals("Pendiente", ignoreCase = true)
-    val isDelivered = order.status.equals("Entregado", ignoreCase = true)
+    val isPending = order.status.equals("Pending", ignoreCase = true)
+    val isDelivered = order.status.equals("Delivered", ignoreCase = true)
 
     val buttonColor = when {
         isPending -> Color(0xFFD9D9D9)
@@ -179,31 +179,31 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
     }
 
     val buttonText = when {
-        isPending -> "Ir a Confirmar"
-        isDelivered -> "Finalizado"
-        else -> "Gestionar Envío"
+        isPending -> "Go to Confirm"
+        isDelivered -> "Completed"
+        else -> "Manage Shipping"
     }
 
     Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        // Columna Izquierda: Imagen del PRODUCTO
+        // Left Column: PRODUCT Image
         Column(modifier = Modifier.weight(1f)) {
             Box(modifier = Modifier.fillMaxWidth().aspectRatio(1f).clip(RoundedCornerShape(12.dp)).background(Color(0xFFF0F0F0))) {
                 Image(
                     painter = imagePainter,
-                    contentDescription = "Producto",
+                    contentDescription = "Product",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Pedido: ${order.id.takeLast(4)}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(text = "Order: ${order.id.takeLast(4)}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Columna Derecha: Estadísticas y Botón Inteligente
+        // Right Column: Stats and Smart Button
         Column(modifier = Modifier.weight(1.5f)) {
-            // Resumen de productos comprados
+            // Summary of purchased products
             Text(
                 text = productSummary,
                 fontSize = 12.sp,
@@ -214,19 +214,19 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Estadísticas
-            OutlinedStatRow(label = "Cant:", value = "$totalItems prod.")
+            // Statistics
+            OutlinedStatRow(label = "Qty:", value = "$totalItems items")
             Spacer(modifier = Modifier.height(4.dp))
 
-            OutlinedStatRow(label = "Total:", value = "S/ ${order.totalAmount.format(2)}")
+            OutlinedStatRow(label = "Total:", value = "$ ${order.totalAmount.format(2)}")
             Spacer(modifier = Modifier.height(4.dp))
 
-            OutlinedStatRow(label = "Estado:", value = order.status)
+            OutlinedStatRow(label = "Status:", value = order.status)
             Spacer(modifier = Modifier.height(12.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "Ver Detalles",
+                    "View Details",
                     fontSize = 12.sp,
                     color = Color.DarkGray,
                     modifier = Modifier.clickable {
@@ -259,7 +259,7 @@ fun OrderCardReal(order: Order, onConfirmClick: () -> Unit) {
     }
 }
 
-// --- COMPONENTE: CAJITA DE ESTADÍSTICA ---
+// --- COMPONENT: STATISTIC BOX ---
 @Composable
 fun OutlinedStatRow(label: String, value: String) {
     Row(

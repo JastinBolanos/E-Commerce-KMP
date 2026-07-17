@@ -60,7 +60,7 @@ fun AdminScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Modo Administrador",
+                            text = "Administrator Mode",
                             fontFamily = imperialFont,
                             fontSize = 36.sp,
                             color = Color.Black
@@ -68,7 +68,7 @@ fun AdminScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Return", tint = Color.Black)
                         }
                     },
                     actions = {
@@ -81,10 +81,10 @@ fun AdminScreen(
                                         }
                                     }
                                 ) {
-                                    Icon(Icons.Outlined.Notifications, contentDescription = "Notificaciones", tint = Color.Black)
+                                    Icon(Icons.Outlined.Notifications, contentDescription = "Notifications", tint = Color.Black)
                                 }
                             } else {
-                                Icon(Icons.Outlined.Notifications, contentDescription = "Notificaciones", tint = Color.Black)
+                                Icon(Icons.Outlined.Notifications, contentDescription = "Notifications", tint = Color.Black)
                             }
                         }
                     },
@@ -100,7 +100,7 @@ fun AdminScreen(
                 .padding(paddingValues)
                 .background(Color.White)
         ) {
-            // --- ITEM 1: PEDIDOS ---
+            // --- ITEM 1: ORDERS ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +108,7 @@ fun AdminScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
                 Text(
-                    text = "Pedidos",
+                    text = "Orders",
                     fontFamily = imperialFont,
                     fontSize = 32.sp,
                     color = Color.Black
@@ -116,7 +116,7 @@ fun AdminScreen(
             }
             HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
 
-            // --- ITEM 2: EDITAR PRODUCTOS ---
+            // --- ITEM 2: EDIT PRODUCTS ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,7 +124,7 @@ fun AdminScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
                 Text(
-                    text = "Editar Productos",
+                    text = "Edit Products",
                     fontFamily = imperialFont,
                     fontSize = 32.sp,
                     color = Color.Black
@@ -132,7 +132,7 @@ fun AdminScreen(
             }
             HorizontalDivider(color = Color(0xFFE0E0E0), thickness = 1.dp)
 
-            // --- ITEM 3: ACTUALIZAR MÉTODO DE PAGO ---
+            // --- ITEM 3: UPDATE PAYMENT METHOD ---
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,7 +140,7 @@ fun AdminScreen(
                     .padding(horizontal = 24.dp, vertical = 20.dp)
             ) {
                 Text(
-                    text = "Actualizar Metodos de Pago",
+                    text = "Update Payment Methods",
                     fontFamily = imperialFont,
                     fontSize = 32.sp,
                     color = Color.Black

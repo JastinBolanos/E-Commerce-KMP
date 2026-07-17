@@ -79,13 +79,13 @@ fun AuthScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(onClick = onClose) {
-                Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = Color.Black)
+                Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Black)
             }
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // --- 1. CABECERA ---
+        // --- 1. HEADER ---
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -101,7 +101,7 @@ fun AuthScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Tu bienestar natural a un clic de distancia.",
+                text = "Your natural well-being just a click away.",
                 color = Color.DarkGray,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
@@ -109,7 +109,7 @@ fun AuthScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Inicia sesión para guardar tu carrito, ver tus pedidos y recibir recomendaciones personalizadas.",
+                text = "Log in to save your cart, view your orders, and receive personalized recommendations.",
                 color = Color.Gray,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -120,7 +120,7 @@ fun AuthScreen(
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        // --- 2. ACCIÓN PRINCIPAL (CLIENTES) ---
+        // --- 2. MAIN ACTION (CUSTOMERS) ---
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -130,7 +130,7 @@ fun AuthScreen(
                 CircularProgressIndicator(color = Color.Black)
             } else {
                 FloatingAuthButton(
-                    text = "Continuar con Google",
+                    text = "Continue with Google",
                     onClick = { viewModel.loginAsClient(onClientSuccess) }
                 )
             }
@@ -146,7 +146,7 @@ fun AuthScreen(
             }
 
             Text(
-                text = "Al continuar, aceptas nuestros Términos de Servicio y Política de Privacidad.",
+                text = "By continuing, you agree to our Terms of Service and Privacy Policy.",
                 color = Color.LightGray,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center,
@@ -163,7 +163,7 @@ fun AuthScreen(
 fun FloatingAuthButton(
     text: String,
     logoSize: Dp = 24.dp,
-    espacioDesdeIzquierda: Dp = 70.dp,
+    spaceFromLeft: Dp = 70.dp,
     onClick: () -> Unit
 ) {
     Box(
@@ -178,11 +178,11 @@ fun FloatingAuthButton(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = espacioDesdeIzquierda)
+            modifier = Modifier.padding(start = spaceFromLeft)
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_google_logo),
-                contentDescription = "Logo Google",
+                contentDescription = "Google Logo",
                 modifier = Modifier.size(logoSize)
             )
             Spacer(modifier = Modifier.width(16.dp))

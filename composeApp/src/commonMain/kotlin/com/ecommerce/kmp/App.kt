@@ -64,7 +64,7 @@ fun App() {
         var adminOrdersTab by remember { mutableIntStateOf(0) }
         var isUserLoggedIn by remember { mutableStateOf(false) }
 
-        // --- INYECCIÓN DE DEPENDENCIAS (NUESTRAS BASES DE DATOS FALSAS) ---
+        // --- DEPENDENCY INJECTION (OUR FAKE DATABASES) ---
         val productRepository = remember { MockProductRepositoryImpl() }
         val orderRepository = remember { MockOrderRepositoryImpl() }
         val kitRepository = remember { MockKitRepositoryImpl() }
@@ -95,7 +95,7 @@ fun App() {
 
                     val ordersViewModel = viewModel { OrdersViewModel(orderRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
-                    val pendingCount = orders.count { it.status.equals("Pendiente", ignoreCase = true) }
+                    val pendingCount = orders.count { it.status.equals("Pending", ignoreCase = true) }
 
                     AdminScreen(
                         pendingOrdersCount = pendingCount,
@@ -135,7 +135,7 @@ fun App() {
                         onConfirmClick = { order ->
                             selectedOrder = order
 
-                            if (order.status.equals("Pendiente", ignoreCase = true)) {
+                            if (order.status.equals("Pending", ignoreCase = true)) {
                                 currentScreen = "ORDER_DETAILS"
                             } else {
                                 currentScreen = "SHIPPING_TIMELINE"
@@ -177,17 +177,17 @@ fun App() {
                             orderId = order.id,
                             voucherUrl = order.voucherUrl,
                             customerName = order.customerName,
-                            totalAmount = "S/ ${order.totalAmount}",
+                            totalAmount = "$ ${order.totalAmount}",
                             status = order.status,
                             isLoading = isLoading,
                             onBackClick = { currentScreen = "ORDERS" },
                             onApproveClick = { orderId ->
-                                ordersViewModel.updateOrderStatus(orderId, "Aprobado") {
+                                ordersViewModel.updateOrderStatus(orderId, "Approved") {
                                     currentScreen = "ORDERS"
                                 }
                             },
                             onRejectClick = { orderId ->
-                                ordersViewModel.updateOrderStatus(orderId, "Rechazado") {
+                                ordersViewModel.updateOrderStatus(orderId, "Rejected") {
                                     currentScreen = "ORDERS"
                                 }
                             }
@@ -201,7 +201,7 @@ fun App() {
                     val coroutineScope = rememberCoroutineScope()
                     var isUploadingQr by remember { mutableStateOf(false) }
 
-                    // Estados locales simulados para la UI
+                    // Simulated local states for the UI
                     var currentPhone by remember { mutableStateOf("999 888 777") }
 
                     UpdatePaymentScreen(
@@ -226,7 +226,7 @@ fun App() {
 
                     val ordersViewModel = viewModel { OrdersViewModel(orderRepository) }
                     val orders by ordersViewModel.orders.collectAsState()
-                    val pendingOrders = orders.filter { it.status.equals("Pendiente", ignoreCase = true) }
+                    val pendingOrders = orders.filter { it.status.equals("Pending", ignoreCase = true) }
 
                     NotificationsScreen(
                         pendingOrders = pendingOrders,

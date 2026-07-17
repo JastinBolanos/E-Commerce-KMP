@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 
 @Composable
 actual fun BackHandler(isEnabled: Boolean, onBack: () -> Unit) {
-    // En iOS no hay un botón físico de "Atrás" a nivel de sistema que podamos interceptar así.
-    // La navegación hacia atrás en iOS ocurre por gestos táctiles (swipe)
-    // que son manejados internamente por el sistema operativo o tu librería de navegación.
-    // Por lo tanto, esta función se queda vacía (no-op) de forma intencional.
+    // In iOS, there is no physical system-level "Back" button that we can intercept like this.
+    // Back navigation in iOS occurs via touch gestures (swipe)
+    // which are handled internally by the operating system or your navigation library.
+    // Therefore, this function is intentionally left empty (no-op).
 }

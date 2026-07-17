@@ -109,10 +109,10 @@ fun SearchInput(
         OutlinedTextField(
             value = query,
             onValueChange = onQueryChange,
-            placeholder = { Text("Buscar Productos", color = Color.Gray) },
+            placeholder = { Text("Search Products", color = Color.Gray) },
             trailingIcon = {
                 IconButton(onClick = { focusManager.clearFocus() }) {
-                    Icon(Icons.Default.Search, contentDescription = "Buscar", tint = Color.Gray)
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.Gray)
                 }
             },
             shape = RoundedCornerShape(50),

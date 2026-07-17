@@ -77,7 +77,7 @@ fun UpdatePaymentScreen(
     val launcher = rememberFilePickerLauncher(
         type = PickerType.Image,
         mode = PickerMode.Single,
-        title = "Selecciona tu nuevo QR de Yape o Plin"
+        title = "Select your new Yape or Plin QR"
     ) { platformFile ->
         if (platformFile != null) {
             coroutineScope.launch {
@@ -92,7 +92,7 @@ fun UpdatePaymentScreen(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            text = "Metodos de Pago",
+                            text = "Payment Methods",
                             fontFamily = imperialFont,
                             fontSize = 36.sp,
                             color = Color.Black
@@ -100,7 +100,7 @@ fun UpdatePaymentScreen(
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -119,7 +119,7 @@ fun UpdatePaymentScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "Sube la imagen oficial de tu código QR. Esto se actualizará en tiempo real en la pantalla de pagos de tus clientes.",
+                "Upload the official image of your QR code. This will be updated in real-time on your customers' payment screen.",
                 color = Color.Gray,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -128,7 +128,7 @@ fun UpdatePaymentScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- CAJA PARA SUBIR EL QR ---
+            // --- QR UPLOAD BOX ---
             Box(
                 modifier = Modifier
                     .size(220.dp)
@@ -142,18 +142,18 @@ fun UpdatePaymentScreen(
                     .clickable { launcher.launch() },
                 contentAlignment = Alignment.Center
             ) {
-                // LÓGICA DE PRIORIDAD DE IMAGEN
+                // IMAGE PRIORITY LOGIC
                 if (selectedQrBytes != null) {
                     AsyncImage(
                         model = selectedQrBytes,
-                        contentDescription = "Nuevo QR seleccionado",
+                        contentDescription = "New selected QR",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
                 } else if (currentQrUrl.isNotEmpty()) {
                     AsyncImage(
                         model = currentQrUrl,
-                        contentDescription = "QR actual",
+                        contentDescription = "Current QR",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -166,18 +166,18 @@ fun UpdatePaymentScreen(
                             modifier = Modifier.size(56.dp)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Text("Toca para subir de la galería", color = Color.Gray, fontSize = 14.sp)
+                        Text("Tap to upload from gallery", color = Color.Gray, fontSize = 14.sp)
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // CAJA DE TEXTO PARA EL NÚMERO
+            // NUMBER TEXT FIELD
             OutlinedTextField(
                 value = phoneNumberText,
                 onValueChange = { phoneNumberText = it },
-                label = { Text("Número de celular (Yape/Plin)") },
+                label = { Text("Phone number (Yape/Plin)") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
@@ -192,7 +192,7 @@ fun UpdatePaymentScreen(
 
             val hasChanges = selectedQrBytes != null || phoneNumberText != currentPhoneNumber
 
-            // --- BOTÓN GUARDAR ---
+            // --- SAVE BUTTON ---
             Button(
                 onClick = {
                     if (hasChanges && !isLoading) {
@@ -207,7 +207,7 @@ fun UpdatePaymentScreen(
                 if (isLoading) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                 } else {
-                    Text("Guardar Cambios", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("Save Changes", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             }
         }

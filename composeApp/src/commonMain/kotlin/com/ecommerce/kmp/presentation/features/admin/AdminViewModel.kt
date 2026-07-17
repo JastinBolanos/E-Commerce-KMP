@@ -54,7 +54,7 @@ class AdminViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-    private val _selectedCategory = MutableStateFlow("Todos")
+    private val _selectedCategory = MutableStateFlow("All")
     val selectedCategory: StateFlow<String> = _selectedCategory.asStateFlow()
 
     val filteredProducts: StateFlow<List<Product>> = combine(
@@ -64,7 +64,7 @@ class AdminViewModel(
             val matchesQuery = product.name.contains(query, ignoreCase = true) ||
                     product.description.contains(query, ignoreCase = true)
 
-            val matchesCategory = if (category == "Todos") true else product.category.equals(
+            val matchesCategory = if (category == "All") true else product.category.equals(
                 category,
                 ignoreCase = true
             )
@@ -86,7 +86,7 @@ class AdminViewModel(
 
                 _products.value = normalProducts + kitProducts
             } catch (e: Exception) {
-                println("Error cargando productos/kits: ${e.message}")
+                println("Error loading products/kits: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -116,10 +116,10 @@ class AdminViewModel(
                 if (success) {
                     loadProducts()
                 } else {
-                    println("Error: El repositorio devolvió false al guardar.")
+                    println("Error: The repository returned false upon saving.")
                 }
             } catch (e: Exception) {
-                println("Error guardando producto: ${e.message}")
+                println("Error saving product: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -130,9 +130,9 @@ class AdminViewModel(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                println("Simulando eliminación del producto con ID: $productId")
+                println("Simulating deletion of the product with ID: $productId")
             } catch (e: Exception) {
-                println("Error eliminando producto: ${e.message}")
+                println("Error deleting product: ${e.message}")
             } finally {
                 _isLoading.value = false
             }

@@ -51,7 +51,7 @@ fun TopNavBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // --- INICIO DEL LOGO REMEDIOZ NATURA ---
+        // --- REMEDIOZ NATURA LOGO START ---
         Text(
             text = "Remedioz Natura",
             fontFamily = FontFamily(Font(Res.font.imperial_script)),
@@ -63,14 +63,14 @@ fun TopNavBar(
         )
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
 
-            // --- BOTÓN DEL CARRITO ---
+            // --- CART BUTTON ---
             IconButton(onClick = { onCartClick() }) {
-                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Carrito", tint = Color.Black)
+                Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color.Black)
             }
 
-            // --- BOTÓN DE PERFIL ---
+            // --- PROFILE BUTTON ---
             IconButton(onClick = { onProfileClick() }) {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "Perfil", tint = Color.Black)
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Profile", tint = Color.Black)
             }
         }
     }

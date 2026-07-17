@@ -69,7 +69,7 @@ fun ProductCard(
     val name = product.name
     val price = product.price
 
-    // --- PERSISTENCIA ---
+    // --- STATE ---
     val cartItems by CartManager.cartItems.collectAsState()
     val isInCart = cartItems.any { it.product.id == product.id }
 
@@ -77,7 +77,7 @@ fun ProductCard(
     var quantity by remember { mutableStateOf(1) }
     var showDetails by remember { mutableStateOf(false) }
 
-    // --- CONTENEDOR PRINCIPAL ---
+    // --- MAIN CONTAINER ---
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -86,7 +86,7 @@ fun ProductCard(
             .background(Color.White)
             .animateContentSize()
     ) {
-        // --- 1. IMAGEN ---
+        // --- 1. IMAGE ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,7 +102,7 @@ fun ProductCard(
                 )
             }
 
-            // --- BOTÓN DE CARRITO ---
+            // --- CART BUTTON ---
             if (showCartIcon) {
                 Box(
                     modifier = Modifier
@@ -127,7 +127,7 @@ fun ProductCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.AddShoppingCart,
-                        contentDescription = "Añadir al carrito",
+                        contentDescription = "Add to cart",
                         tint = if (isInCart) Color.White else Color.Gray,
                         modifier = Modifier.size(20.dp)
                     )
@@ -135,13 +135,13 @@ fun ProductCard(
             }
         }
 
-        // --- 2. CONTENIDO (Textos y controles) ---
+        // --- 2. CONTENT (Texts and controls) ---
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // --- Fila de Título y Flecha ---
+            // --- Title and Arrow Row ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -151,28 +151,28 @@ fun ProductCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = name, fontSize = 18.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                    Text(text = "S/ ${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
+                    Text(text = "\$${product.price.format(2)}", fontSize = 14.sp, color = Color.Gray)
                 }
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expandir",
+                    contentDescription = "Expand",
                     tint = Color.Black,
                     modifier = Modifier.size(28.dp)
                 )
             }
 
-            // --- 3. ACORDEÓN OCULTO ---
+            // --- 3. HIDDEN ACCORDION ---
             if (expanded) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // --- Detalles + Botón Ver ---
+                // --- Details + View Button ---
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Detalles", fontSize = 16.sp, color = Color(0xFF333333), modifier = Modifier.weight(1f))
+                    Text(text = "Details", fontSize = 16.sp, color = Color(0xFF333333), modifier = Modifier.weight(1f))
 
-                    // --- botón "Ver" ---
+                    // --- "View" button ---
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(16.dp))
@@ -181,7 +181,7 @@ fun ProductCard(
                             .padding(horizontal = 20.dp, vertical = 6.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Ver", color = Color.White, fontSize = 14.sp)
+                        Text("View", color = Color.White, fontSize = 14.sp)
                     }
 
                     if (showDetails) {
@@ -199,7 +199,7 @@ fun ProductCard(
                     val calculatedTotal = product.price * quantity
 
                     Text(
-                        text = if (quantity > 1) "Subtotal: S/ ${calculatedTotal.format(2)}" else "Precio: S/ ${calculatedTotal.format(2)}",
+                        text = if (quantity > 1) "Subtotal: \$${calculatedTotal.format(2)}" else "Price: \$${calculatedTotal.format(2)}",
                         fontSize = 15.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Medium
@@ -207,7 +207,7 @@ fun ProductCard(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // --- Selector de Cantidad [ - | 1 | + ] ---
+                    // --- Quantity Selector [ - | 1 | + ] ---
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -216,24 +216,24 @@ fun ProductCard(
                             .clip(RoundedCornerShape(8.dp)),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // --- Botón Menos ---
+                        // --- Minus Button ---
                         Box(
                             modifier = Modifier.weight(1f).fillMaxHeight().clickable { if (quantity > 1) quantity-- },
                             contentAlignment = Alignment.Center
                         ) { Icon(Icons.Default.Remove, contentDescription = "-", tint = Color.Black) }
 
-                        // --- Línea ---
+                        // --- Line ---
                         Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
 
-                        // --- Número ---
+                        // --- Number ---
                         Box(modifier = Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
                             Text(text = quantity.toString(), fontSize = 18.sp, color = Color.Black)
                         }
 
-                        // --- Línea ---
+                        // --- Line ---
                         Box(modifier = Modifier.width(1.dp).fillMaxHeight().background(Color(0xFFCCCCCC)))
 
-                        // --- Botón Más ---
+                        // --- Plus Button ---
                         Box(
                             modifier = Modifier.weight(1f).fillMaxHeight().clickable { quantity++ },
                             contentAlignment = Alignment.Center
@@ -242,7 +242,7 @@ fun ProductCard(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    // --- Botón Comprar ---
+                    // --- Buy Button ---
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -254,7 +254,7 @@ fun ProductCard(
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("Comprar", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                        Text("Buy", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Medium)
                     }
                 }
             }
@@ -273,7 +273,7 @@ fun Double.format(digits: Int): String {
 @Composable
 fun getProductImagePainter(imageUrl: String): Painter {
     val imageRes = when (imageUrl) {
-        // --- CATEGORÍA 1: PIEL ---
+        // --- CATEGORY 1: SKIN ---
         "img_serum_pink_peptide" -> Res.drawable.img_serum_pink_peptide
         "img_crema_dolkong" -> Res.drawable.img_crema_dolkong
         "img_tonico_purificante" -> Res.drawable.img_tonico_purificante
@@ -281,7 +281,7 @@ fun getProductImagePainter(imageUrl: String): Painter {
         "img_jabon_manzanilla" -> Res.drawable.img_jabon_manzanilla
         "img_jabon_arcilla" -> Res.drawable.img_jabon_arcilla
 
-        // --- CATEGORÍA 2: BELLEZA ---
+        // --- CATEGORY 2: BEAUTY ---
         "img_balsamo_citrico" -> Res.drawable.img_balsamo_citrico
         "img_perfume_rojo" -> Res.drawable.img_perfume_rojo
         "img_tinte_seda" -> Res.drawable.img_tinte_seda
@@ -289,7 +289,7 @@ fun getProductImagePainter(imageUrl: String): Painter {
         "img_rubor_liquido" -> Res.drawable.img_rubor_liquido
         "img_balsamo_herbal" -> Res.drawable.img_balsamo_herbal
 
-        // --- CATEGORÍA 3: CUIDADOS ---
+        // --- CATEGORY 3: CARE ---
         "img_aceite_dorado" -> Res.drawable.img_aceite_dorado
         "img_mantequilla_caramelo" -> Res.drawable.img_mantequilla_caramelo
         "img_aceite_macadamia" -> Res.drawable.img_aceite_macadamia
@@ -297,7 +297,7 @@ fun getProductImagePainter(imageUrl: String): Painter {
         "img_exfoliante_corporal" -> Res.drawable.img_exfoliante_corporal
         "img_jabon_avena" -> Res.drawable.img_jabon_avena
 
-        // --- CATEGORÍA 4: TRATAMIENTOS ---
+        // --- CATEGORY 4: TREATMENTS ---
         "img_esencia_lechosa" -> Res.drawable.img_esencia_lechosa
         "img_mascarilla_citrica" -> Res.drawable.img_mascarilla_citrica
         "img_tratamiento_capilar" -> Res.drawable.img_tratamiento_capilar
@@ -305,7 +305,7 @@ fun getProductImagePainter(imageUrl: String): Painter {
         "img_tratamiento_cuero_cabelludo" -> Res.drawable.img_tratamiento_cuero_cabelludo
         "img_mascarilla_miel" -> Res.drawable.img_mascarilla_miel
 
-        // --- FALLBACK (Por si alguna imagen no se encuentra) ---
+        // --- FALLBACK (In case an image is not found) ---
         else -> Res.drawable.img_tinte_seda
     }
     return painterResource(imageRes)

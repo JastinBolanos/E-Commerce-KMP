@@ -59,11 +59,11 @@ fun NotificationsScreen(
             Column {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text("Notificaciones", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
+                        Text("Notifications", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -73,7 +73,7 @@ fun NotificationsScreen(
         }
     ) { paddingValues ->
 
-        // --- LISTA DE NOTIFICACIONES ---
+        // --- NOTIFICATIONS LIST ---
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(paddingValues).background(Color.White)
         ) {
@@ -88,7 +88,7 @@ fun NotificationsScreen(
             if (pendingOrders.isEmpty()) {
                 item {
                     Box(modifier = Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                        Text("No tienes notificaciones nuevas.", color = Color.Gray)
+                        Text("You have no new notifications.", color = Color.Gray)
                     }
                 }
             }
@@ -96,7 +96,7 @@ fun NotificationsScreen(
     }
 }
 
-// --- COMPONENTE: ITEM DE NOTIFICACIÓN ---
+// --- COMPONENT: NOTIFICATION ITEM ---
 @Composable
 fun NotificationItemReal(order: Order, onClick: () -> Unit) {
     Row(
@@ -107,7 +107,7 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.Top
     ) {
-        // Punto de Alerta
+        // Alert Dot
         Box(
             modifier = Modifier
                 .padding(top = 6.dp)
@@ -125,7 +125,7 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Nuevo Pago: ${order.id.takeLast(4)}",
+                    text = "New Payment: ${order.id.takeLast(4)}",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -138,7 +138,7 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "${order.customerName} ha enviado un comprobante por S/ ${order.totalAmount.format(2)} y espera tu confirmación.",
+                text = "${order.customerName} has sent a receipt for $ ${order.totalAmount.format(2)} and awaits your confirmation.",
                 fontSize = 13.sp,
                 color = Color.DarkGray,
                 lineHeight = 18.sp
@@ -147,14 +147,14 @@ fun NotificationItemReal(order: Order, onClick: () -> Unit) {
     }
 }
 
-// --- HERRAMIENTA: TRADUCTOR DE HORA PARA PERÚ (UTC-5) ---
+// --- UTILITY: TIME TRANSLATOR FOR PERU (UTC-5) ---
 fun formatOrderTime(millis: Long): String {
-    if (millis == 0L) return "Reciente"
+    if (millis == 0L) return "Just now"
 
     val totalSeconds = millis / 1000
     val currentSeconds = totalSeconds % (24 * 3600)
 
-    // Calculamos la hora en UTC-5 (Hora de Lima, Perú)
+    // Calculate the time in UTC-5 (Lima, Peru Time)
     val hours = ((currentSeconds / 3600) - 5 + 24) % 24
     val minutes = (currentSeconds % 3600) / 60
 

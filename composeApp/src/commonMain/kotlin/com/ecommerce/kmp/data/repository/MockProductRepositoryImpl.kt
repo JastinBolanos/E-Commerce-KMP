@@ -33,206 +33,206 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MockProductRepositoryImpl : ProductRepository {
 
-    // Simula nuestra base de datos en la nube, pero vive en la memoria RAM
+    // Simulates our cloud database, but lives in RAM memory
     private val mockProducts = mutableListOf(
 
-        // --- CATEGORÍA 1: PIEL (Skin) ---
+        // --- CATEGORY 1: SKIN ---
         Product(
             id = "1",
-            name = "Sérum Iluminador Pink Peptide",
+            name = "Pink Peptide Illuminating Serum",
             price = 85.0,
-            category = "Piel",
-            description = "El secreto de la cosmética coreana. Péptidos concentrados que aportan un brillo de cristal y firmeza instantánea a tu rostro.",
+            category = "Skin",
+            description = "The secret of Korean cosmetics. Concentrated peptides that provide crystal shine and instant firmness to your face.",
             imageUrl = "img_serum_pink_peptide"
         ),
         Product(
             id = "2",
-            name = "Crema Facial Nutritiva Dolkong",
+            name = "Dolkong Nourishing Facial Cream",
             price = 68.0,
-            category = "Piel",
-            description = "Textura rica enriquecida con extractos de soya pura. Nutrición esencial para restaurar la barrera cutánea de las pieles secas.",
+            category = "Skin",
+            description = "Rich texture enriched with pure soy extracts. Essential nutrition to restore the skin barrier of dry skin.",
             imageUrl = "img_crema_dolkong"
         ),
         Product(
             id = "3",
-            name = "Sérum Revitalizante de Rosas",
+            name = "Rose Revitalizing Serum",
             price = 75.0,
-            category = "Piel",
-            description = "Fórmula concentrada con aceites botánicos de rosas. Hidrata profundamente y deja un acabado luminoso sin sensación grasa.",
+            category = "Skin",
+            description = "Concentrated formula with botanical rose oils. Deeply hydrates and leaves a luminous finish without a greasy feel.",
             imageUrl = "img_tonico_purificante"
         ),
         Product(
             id = "4",
-            name = "Crema de Noche Anti-Edad",
+            name = "Anti-Aging Night Cream",
             price = 95.0,
-            category = "Piel",
-            description = "Tratamiento nocturno intensivo sin fragancia. Repara el tejido celular y reduce visiblemente las líneas de expresión mientras duermes.",
+            category = "Skin",
+            description = "Intensive fragrance-free night treatment. Repairs cellular tissue and visibly reduces fine lines while you sleep.",
             imageUrl = "img_crema_noche"
         ),
         Product(
             id = "5",
-            name = "Jabón Limpiador de Manzanilla",
+            name = "Chamomile Cleansing Soap",
             price = 25.0,
-            category = "Piel",
-            description = "Limpiador facial sólido ultra suave. Calma rojeces e irritaciones gracias a las propiedades desinflamantes de la manzanilla natural.",
+            category = "Skin",
+            description = "Ultra-gentle solid facial cleanser. Calms redness and irritation thanks to the anti-inflammatory properties of natural chamomile.",
             imageUrl = "img_jabon_manzanilla"
         ),
         Product(
             id = "6",
-            name = "Jabón Purificante de Arcilla",
+            name = "Clay Purifying Soap",
             price = 22.0,
-            category = "Piel",
-            description = "Ideal para pieles mixtas o con tendencia grasa. La arcilla verde desobstruye los poros y controla el exceso de sebo del rostro.",
+            category = "Skin",
+            description = "Ideal for combination or oily-prone skin. Green clay unclogs pores and controls excess facial sebum.",
             imageUrl = "img_jabon_arcilla"
         ),
 
-        // --- CATEGORÍA 2: BELLEZA (Beauty) ---
+        // --- CATEGORY 2: BEAUTY ---
         Product(
             id = "7",
-            name = "Bálsamo Labial de Limón y Coco",
+            name = "Lemon and Coconut Lip Balm",
             price = 18.0,
-            category = "Belleza",
-            description = "Hidratación intensa con manteca de coco y extracto cítrico. Protege tus labios del sol mientras disfrutas de un aroma tropical y refrescante.",
+            category = "Beauty",
+            description = "Intense hydration with coconut butter and citrus extract. Protects your lips from the sun while you enjoy a refreshing tropical scent.",
             imageUrl = "img_balsamo_citrico"
         ),
         Product(
             id = "8",
-            name = "Perfume Botánico Pasión Rubí",
+            name = "Ruby Passion Botanical Perfume",
             price = 145.0,
-            category = "Belleza",
-            description = "Una fragancia intensa y sofisticada. Combina notas de frutos rojos salvajes, ámbar y un toque de vainilla orgánica para ocasiones muy especiales.",
+            category = "Beauty",
+            description = "An intense and sophisticated fragrance. Combines notes of wild red fruits, amber, and a touch of organic vanilla for very special occasions.",
             imageUrl = "img_perfume_rojo"
         ),
         Product(
             id = "9",
-            name = "Tinte Multi-usos Pétalo de Seda",
+            name = "Silk Petal Multi-use Tint",
             price = 42.0,
-            category = "Belleza",
-            description = "Tinte natural para labios y mejillas. Su textura en crema ultraligera se difumina a la perfección aportando un color romántico y acabado aterciopelado.",
+            category = "Beauty",
+            description = "Natural lip and cheek tint. Its ultra-light cream texture blends perfectly, providing a romantic color and velvety finish.",
             imageUrl = "img_tinte_seda"
         ),
         Product(
             id = "10",
-            name = "Eau de Parfum Brisa Oceánica",
+            name = "Ocean Breeze Eau de Parfum",
             price = 130.0,
-            category = "Belleza",
-            description = "Frescura pura envasada. Notas de flor de loto, jazmín de agua y brisa marina que te envuelven en una sensación de limpieza y paz durante todo el día.",
+            category = "Beauty",
+            description = "Pure freshness bottled. Notes of lotus flower, water jasmine, and sea breeze that envelop you in a feeling of cleanliness and peace all day long.",
             imageUrl = "img_perfume_azul"
         ),
         Product(
             id = "11",
-            name = "Rubor Líquido Natural Glow",
+            name = "Natural Glow Liquid Blush",
             price = 55.0,
-            category = "Belleza",
-            description = "Un toque de color saludable que se funde con tu piel. Acabado jugoso, 100% vegano, altamente pigmentado y de larga duración sin obstruir los poros.",
+            category = "Beauty",
+            description = "A touch of healthy color that melts into your skin. Dewy finish, 100% vegan, highly pigmented, and long-lasting without clogging pores.",
             imageUrl = "img_rubor_liquido"
         ),
         Product(
             id = "12",
-            name = "Bálsamo Reparador de Manzanilla",
+            name = "Chamomile Repair Balm",
             price = 20.0,
-            category = "Belleza",
-            description = "Cuidado experto para labios agrietados. Enriquecido con aceites esenciales de manzanilla y almendras dulces para reparar, calmar y proteger del frío extremo.",
+            category = "Beauty",
+            description = "Expert care for chapped lips. Enriched with chamomile and sweet almond essential oils to repair, soothe, and protect from extreme cold.",
             imageUrl = "img_balsamo_herbal"
         ),
 
-        // --- CATEGORÍA 3: CUIDADOS (Care) ---
+        // --- CATEGORY 3: CARE ---
         Product(
             id = "13",
-            name = "Aceite Esencial de Argán Puro",
+            name = "Pure Argan Essential Oil",
             price = 58.0,
-            category = "Cuidados",
-            description = "El \"oro líquido\" para tu rutina. Un aceite puro multiusos ideal para hidratar profundamente la piel y revitalizar las puntas secas del cabello.",
+            category = "Care",
+            description = "The \"liquid gold\" for your routine. A multi-purpose pure oil ideal for deeply hydrating the skin and revitalizing dry hair ends.",
             imageUrl = "img_aceite_dorado"
         ),
         Product(
             id = "14",
-            name = "Mantequilla Corporal Sweet Vanilla",
+            name = "Sweet Vanilla Body Butter",
             price = 45.0,
-            category = "Cuidados",
-            description = "Un postre para tu piel. Bálsamo corporal ultra nutritivo que se derrite al contacto, dejando una hidratación profunda y un aroma irresistible.",
+            category = "Care",
+            description = "A dessert for your skin. Ultra-nourishing body balm that melts on contact, leaving deep hydration and an irresistible scent.",
             imageUrl = "img_mantequilla_caramelo"
         ),
         Product(
             id = "15",
-            name = "Aceite Curativo Botánico",
+            name = "Botanical Healing Oil",
             price = 62.0,
-            category = "Cuidados",
-            description = "Mezcla orgánica enriquecida con macadamia. Ayuda a reparar cicatrices, suavizar estrías y mejorar notablemente la elasticidad natural de tu piel.",
+            category = "Care",
+            description = "Organic blend enriched with macadamia. Helps repair scars, smooth stretch marks, and significantly improve your skin's natural elasticity.",
             imageUrl = "img_aceite_macadamia"
         ),
         Product(
             id = "16",
-            name = "Shampoo Sólido Revitalizante",
+            name = "Revitalizing Solid Shampoo",
             price = 35.0,
-            category = "Cuidados",
-            description = "Alternativa ecológica y sin envases. Limpia el cuero cabelludo suavemente con ingredientes botánicos, generando una espuma rica y purificante.",
+            category = "Care",
+            description = "Eco-friendly, package-free alternative. Gently cleanses the scalp with botanical ingredients, generating a rich, purifying lather.",
             imageUrl = "img_shampoo_solido"
         ),
         Product(
             id = "17",
-            name = "Exfoliante Corporal Luminoso",
+            name = "Luminous Body Scrub",
             price = 52.0,
-            category = "Cuidados",
-            description = "Renueva la textura de tu cuerpo en la ducha. Cristales finos y aceites esenciales que eliminan células muertas y dejan tu piel sedosa y perfumada.",
+            category = "Care",
+            description = "Renew your body's texture in the shower. Fine crystals and essential oils that remove dead cells and leave your skin silky and perfumed.",
             imageUrl = "img_exfoliante_corporal"
         ),
         Product(
             id = "18",
-            name = "Jabón Artesanal de Avena",
+            name = "Artisanal Oatmeal Soap",
             price = 18.0,
-            category = "Cuidados",
-            description = "Elaborado a mano con avena entera y extracto de manzanilla. Exfolia suavemente y calma las pieles más sensibles, ideal para uso diario.",
+            category = "Care",
+            description = "Handmade with whole oats and chamomile extract. Gently exfoliates and soothes the most sensitive skin, ideal for daily use.",
             imageUrl = "img_jabon_avena"
         ),
 
-        // --- CATEGORÍA 4: TRATAMIENTOS (Treatments) ---
+        // --- CATEGORY 4: TREATMENTS ---
         Product(
             id = "19",
-            name = "Esencia Facial Equilibrante",
+            name = "Balancing Facial Essence",
             price = 65.0,
-            category = "Tratamientos",
-            description = "Tratamiento en esencia de textura lechosa. Prepara la piel tras la limpieza, equilibrando el pH y maximizando la absorción de tus sérums posteriores.",
+            category = "Treatments",
+            description = "Essence treatment with a milky texture. Prepares the skin after cleansing, balancing pH and maximizing the absorption of your subsequent serums.",
             imageUrl = "img_esencia_lechosa"
         ),
         Product(
             id = "20",
-            name = "Mascarilla Facial Iluminadora",
+            name = "Illuminating Facial Mask",
             price = 24.0,
-            category = "Tratamientos",
-            description = "Mascarilla de velo enriquecida con vitamina C y extractos de pomelo. Un tratamiento flash de 15 minutos para revivir y energizar pieles apagadas.",
+            category = "Treatments",
+            description = "Sheet mask enriched with Vitamin C and grapefruit extracts. A 15-minute flash treatment to revive and energize dull skin.",
             imageUrl = "img_mascarilla_citrica"
         ),
         Product(
             id = "21",
-            name = "Tratamiento Reparador Capilar",
+            name = "Hair Repair Treatment",
             price = 110.0,
-            category = "Tratamientos",
-            description = "Sistema intensivo de reconstrucción para cabello dañado. Repara los enlaces capilares desde el interior, devolviendo fuerza, suavidad y brillo.",
+            category = "Treatments",
+            description = "Intensive reconstruction system for damaged hair. Repairs hair bonds from the inside out, restoring strength, softness, and shine.",
             imageUrl = "img_tratamiento_capilar"
         ),
         Product(
             id = "22",
-            name = "Gel Tratamiento Vitamina C",
+            name = "Vitamin C Treatment Gel",
             price = 78.0,
-            category = "Tratamientos",
-            description = "Concentrado antioxidante en textura gel-sérum. Combate los radicales libres, atenúa manchas y unifica el tono natural de tu rostro con uso continuo.",
+            category = "Treatments",
+            description = "Antioxidant concentrate in a gel-serum texture. Combats free radicals, reduces dark spots, and evens out your natural skin tone with continuous use.",
             imageUrl = "img_gel_vitamina_c"
         ),
         Product(
             id = "23",
-            name = "Sérum Purificante de Raíz",
+            name = "Root Purifying Serum",
             price = 85.0,
-            category = "Tratamientos",
-            description = "Tratamiento especializado estilo spa para el cuero cabelludo. Alivia la descamación, purifica los folículos y promueve un crecimiento capilar sano.",
+            category = "Treatments",
+            description = "Specialized spa-style treatment for the scalp. Soothes flaking, purifies follicles, and promotes healthy hair growth.",
             imageUrl = "img_tratamiento_cuero_cabelludo"
         ),
         Product(
             id = "24",
-            name = "Mascarilla Nutritiva de Miel",
+            name = "Nourishing Honey Mask",
             price = 55.0,
-            category = "Tratamientos",
-            description = "Formulada con miel cruda y extracto de propóleo. Un tratamiento SOS intensivo que repara, hidrata a profundidad y calma la piel estresada.",
+            category = "Treatments",
+            description = "Formulated with raw honey and propolis extract. An intensive SOS treatment that deeply repairs, hydrates, and soothes stressed skin.",
             imageUrl = "img_mascarilla_miel"
         )
     )

@@ -65,18 +65,18 @@ class CheckoutViewModel(
         viewModelScope.launch {
             _isLoading.value = true
 
-            // Simulamos el tiempo de subida a la nube
+            // Simulate the cloud upload time
             delay(2000)
 
-            // EL PEDIDO EN LA MEMORIA
+            // THE IN-MEMORY ORDER
             val newOrder = Order(
                 id = "ORD-${(10000..99999).random()}",
                 userId = userId.ifEmpty { "USER-NEW" },
-                customerName = customerName.ifEmpty { "Cliente Nuevo" },
+                customerName = customerName.ifEmpty { "New Customer" },
                 items = cartItems,
                 totalAmount = total,
                 voucherUrl = "local_demo_voucher",
-                status = "Pendiente",
+                status = "Pending",
                 timestamp = getCurrentTimeMillis()
             )
 

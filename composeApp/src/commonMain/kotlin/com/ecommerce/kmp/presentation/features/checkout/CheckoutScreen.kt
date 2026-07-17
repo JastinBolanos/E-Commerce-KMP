@@ -54,8 +54,8 @@ import org.jetbrains.compose.resources.painterResource
  */
 
 /**
- * Pantalla de finalización de compra y recaudo de pagos (Checkout).
- * Permite al usuario visualizar el monto final y adjuntar su comprobante de pago (Voucher).
+ * Checkout and payment collection screen.
+ * Allows the user to view the final amount and attach their payment receipt (Voucher).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +73,7 @@ fun CheckoutScreen(
     val launcher = rememberFilePickerLauncher(
         type = PickerType.Image,
         mode = PickerMode.Single,
-        title = "Selecciona tu comprobante de pago"
+        title = "Select your payment voucher"
     ) { platformFile ->
         if (platformFile != null) {
             coroutineScope.launch {
@@ -85,10 +85,10 @@ fun CheckoutScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("PAGO", fontSize = 16.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp) },
+                title = { Text("PAYMENT", fontSize = 16.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.sp) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -106,10 +106,10 @@ fun CheckoutScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            // --- 1. RESUMEN DE MONTO ---
-            Text("Total a Pagar", fontSize = 16.sp, color = Color.Gray)
+            // --- 1. AMOUNT SUMMARY ---
+            Text("Total to Pay", fontSize = 16.sp, color = Color.Gray)
             Text(
-                text = "S/ ${totalAmount.format(2)}",
+                text = "$ ${totalAmount.format(2)}",
                 fontSize = 40.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -117,7 +117,7 @@ fun CheckoutScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- 2. INSTRUCCIONES Y DATOS BANCARIOS ---
+            // --- 2. INSTRUCTIONS AND BANK DETAILS ---
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9F9)),
                 shape = RoundedCornerShape(16.dp),
@@ -129,11 +129,11 @@ fun CheckoutScreen(
                         .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("Escanea o transfiere vía Yape/Plin al:", color = Color.DarkGray, fontSize = 14.sp)
+                    Text("Scan or transfer via Yape/Plin to:", color = Color.DarkGray, fontSize = 14.sp)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // EL CUADRADO DEL QR
+                    // THE QR SQUARE
                     Box(
                         modifier = Modifier
                             .size(160.dp)
@@ -143,7 +143,7 @@ fun CheckoutScreen(
                     ) {
                         Image(
                             painter = painterResource(Res.drawable.img_pago_qr),
-                            contentDescription = "QR Oficial de Pago",
+                            contentDescription = "Official Payment QR",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
@@ -157,9 +157,9 @@ fun CheckoutScreen(
             }
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- 3. SUBIDA DE VOUCHER (FileKit) ---
+            // --- 3. VOUCHER UPLOAD (FileKit) ---
             Text(
-                "Adjunta tu comprobante",
+                "Attach your voucher",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.fillMaxWidth(),
@@ -180,7 +180,7 @@ fun CheckoutScreen(
                 if (selectedVoucherBytes != null) {
                     AsyncImage(
                         model = selectedVoucherBytes,
-                        contentDescription = "Voucher seleccionado",
+                        contentDescription = "Selected voucher",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                     )
@@ -188,14 +188,14 @@ fun CheckoutScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Default.ReceiptLong, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(48.dp))
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text("Toca para subir tu Vaucher", color = Color.Gray)
+                        Text("Tap to upload your voucher", color = Color.Gray)
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- 4. ACCIÓN FINAL ---
+            // --- 4. FINAL ACTION ---
             Button(
                 onClick = {
                     if (selectedVoucherBytes != null) {
@@ -215,7 +215,7 @@ fun CheckoutScreen(
                 if (isLoading) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
                 } else {
-                    Text("Confirmar Pago y Enviar Pedido", color = Color.White, fontWeight = FontWeight.Bold)
+                    Text("Confirm Payment and Submit Order", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             }
 

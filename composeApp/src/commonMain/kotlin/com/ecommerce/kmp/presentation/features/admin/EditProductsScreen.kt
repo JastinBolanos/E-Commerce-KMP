@@ -96,7 +96,7 @@ fun EditProductsScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Editar Productos",
+                        text = "Edit Products",
                         fontFamily = FontFamily(Font(Res.font.imperial_script)),
                         fontSize = 36.sp,
                         color = Color.Black
@@ -104,7 +104,7 @@ fun EditProductsScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.Close, contentDescription = "Cerrar")
+                        Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -119,7 +119,7 @@ fun EditProductsScreen(
                 containerColor = Color.Black,
                 contentColor = Color.White
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar Producto")
+                Icon(Icons.Default.Add, contentDescription = "Add Product")
             }
         }
     ) { paddingValues ->
@@ -168,9 +168,9 @@ fun EditProductsScreen(
             }
 
             if (kitsProducts.isNotEmpty()) {
-                if (selectedCategory.equals("Todos", ignoreCase = true)) {
+                if (selectedCategory.equals("All", ignoreCase = true)) {
                     Text(
-                        "Kits y Promociones",
+                        "Kits and Promotions",
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -229,7 +229,7 @@ fun EditProductSheetContent(
     var priceInput by remember { mutableStateOf(if (product != null && product.price > 0.0) product.price.toString() else "") }
     var category by remember { mutableStateOf(product?.category?.takeIf { it.isNotEmpty() } ?: "Tratamientos") }
     var description by remember { mutableStateOf(product?.description ?: "") }
-    val allowedCategories = listOf("Kits", "Tratamientos", "Belleza", "Cuidados", "Piel", "Otros")
+    val allowedCategories = listOf("Kits", "Treatments", "Beauty", "Care", "Skin", "Other")
     var expandedDropdown by remember { mutableStateOf(false) }
     var selectedImageBytes by remember { mutableStateOf<ByteArray?>(null) }
     val coroutineScope = rememberCoroutineScope()
@@ -237,7 +237,7 @@ fun EditProductSheetContent(
     val launcher = rememberFilePickerLauncher(
         type = PickerType.Image,
         mode = PickerMode.Single,
-        title = "Selecciona una foto para el producto"
+        title = "Select a photo for the product"
     ) { platformFile ->
         if (platformFile != null) {
             coroutineScope.launch {
@@ -253,7 +253,7 @@ fun EditProductSheetContent(
             .padding(bottom = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(if (product?.id.isNullOrEmpty()) "Nuevo Producto" else "Editar Contenido", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(if (product?.id.isNullOrEmpty()) "New Product" else "Edit Content", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
 
         Box(
@@ -267,7 +267,7 @@ fun EditProductSheetContent(
             if (selectedImageBytes != null) {
                 AsyncImage(
                     model = selectedImageBytes,
-                    contentDescription = "Foto nueva",
+                    contentDescription = "New photo",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -276,7 +276,7 @@ fun EditProductSheetContent(
                 val isKit = category.equals("Kits", ignoreCase = true)
                 Image(
                     painter = if (isKit) getKitImagePainter(product!!.imageUrl) else getProductImagePainter(product!!.imageUrl),
-                    contentDescription = "Foto actual",
+                    contentDescription = "current photo",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -284,22 +284,22 @@ fun EditProductSheetContent(
             else {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Default.PhotoCamera, contentDescription = null, tint = Color.Gray)
-                    Text("Cambiar Foto", fontSize = 10.sp, color = Color.Gray)
+                    Text("Change Photo", fontSize = 10.sp, color = Color.Gray)
                 }
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Nombre") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
+        OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") }, modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(12.dp))
         Spacer(modifier = Modifier.height(12.dp))
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedTextField(
                 value = priceInput,
                 onValueChange = { priceInput = it },
-                label = { Text("Precio") },
-                prefix = { Text("S/ ") },
+                label = { Text("Price") },
+                prefix = { Text("$") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp)
@@ -314,7 +314,7 @@ fun EditProductSheetContent(
                     value = category,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Categoría") },
+                    label = { Text("Category") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDropdown) },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.menuAnchor()
@@ -337,7 +337,7 @@ fun EditProductSheetContent(
         }
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Descripción") }, modifier = Modifier.fillMaxWidth().height(100.dp), shape = RoundedCornerShape(12.dp))
+        OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") }, modifier = Modifier.fillMaxWidth().height(100.dp), shape = RoundedCornerShape(12.dp))
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
@@ -357,7 +357,7 @@ fun EditProductSheetContent(
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
         ) {
-            Text("Guardar Cambios", color = Color.White, fontWeight = FontWeight.Bold)
+            Text("Save Changes", color = Color.White, fontWeight = FontWeight.Bold)
         }
 
         if (!product?.id.isNullOrEmpty()) {
@@ -368,7 +368,7 @@ fun EditProductSheetContent(
                 },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text("Eliminar Producto", color = Color.Red)
+                Text("Remove Product", color = Color.Red)
             }
         }
     }

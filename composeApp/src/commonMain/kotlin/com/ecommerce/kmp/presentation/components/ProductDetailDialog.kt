@@ -65,7 +65,7 @@ fun ProductDetailDialog(
             color = Color.White
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                // --- Botón Cerrar (X) Flotante ---
+                // --- Floating Close Button (X) ---
                 IconButton(
                     onClick = onDismiss,
                     modifier = Modifier
@@ -74,7 +74,7 @@ fun ProductDetailDialog(
                         .background(Color.White.copy(alpha = 0.7f), RoundedCornerShape(50))
                         .zIndex(1f)
                 ) {
-                    Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = Color.Black)
+                    Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Black)
                 }
 
                 Column(
@@ -82,7 +82,7 @@ fun ProductDetailDialog(
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    // --- 1. IMAGEN GRANDE ---
+                    // --- 1. LARGE IMAGE ---
                     Image(
                         painter = imagePainter,
                         contentDescription = product.name,
@@ -93,7 +93,7 @@ fun ProductDetailDialog(
                             .background(Color(0xFFEBEBEB))
                     )
 
-                    // --- 2. DETALLES Y DESCRIPCIÓN ---
+                    // --- 2. DETAILS AND DESCRIPTION ---
                     Column(modifier = Modifier.padding(24.dp)) {
                         Text(
                             text = product.category.uppercase(),
@@ -114,7 +114,7 @@ fun ProductDetailDialog(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
-                            text = "S/ ${product.price.format(2)}",
+                            text = "\$${product.price.format(2)}",
                             fontSize = 20.sp,
                             color = Color(0xFF67B2C5),
                             fontWeight = FontWeight.Medium
@@ -122,7 +122,7 @@ fun ProductDetailDialog(
                         Spacer(modifier = Modifier.height(24.dp))
 
                         Text(
-                            text = "Acerca de este producto",
+                            text = "About this product",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
@@ -130,7 +130,7 @@ fun ProductDetailDialog(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Text(
-                            text = product.description.ifEmpty { "Descripción no disponible para este producto." },
+                            text = product.description.ifEmpty { "Description not available for this product." },
                             fontSize = 15.sp,
                             color = Color.DarkGray,
                             lineHeight = 24.sp

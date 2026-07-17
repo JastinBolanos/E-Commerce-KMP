@@ -1,7 +1,7 @@
 package com.ecommerce.kmp.presentation.features.admin
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image // 👇 Importado para imagen local
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.painterResource // 👇 Importado para cargar recursos locales
+import org.jetbrains.compose.resources.painterResource
 import e_commercekmp.composeapp.generated.resources.Res
-import e_commercekmp.composeapp.generated.resources.img_voucher // 👇 La imagen del comprobante
+import e_commercekmp.composeapp.generated.resources.img_voucher
 import e_commercekmp.composeapp.generated.resources.imperial_script
 import org.jetbrains.compose.resources.Font
 
@@ -67,18 +67,18 @@ fun OrderDetailsScreen(
     onRejectClick: (String) -> Unit
 ) {
     val imperialFont = FontFamily(Font(Res.font.imperial_script))
-    val formattedTotal = totalAmount.replace("S/ ", "").toDoubleOrNull()?.format(2) ?: "0.00"
+    val formattedTotal = totalAmount.replace("$ ", "").toDoubleOrNull()?.format(2) ?: "0.00"
 
     Scaffold(
         topBar = {
             Column {
                 CenterAlignedTopAppBar(
                     title = {
-                        Text("Veredicto de Pago", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
+                        Text("Payment Verdict", fontFamily = imperialFont, fontSize = 36.sp, color = Color.Black)
                     },
                     navigationIcon = {
                         IconButton(onClick = onBackClick) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Volver", tint = Color.Black)
+                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = "Back", tint = Color.Black)
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.White)
@@ -95,8 +95,8 @@ fun OrderDetailsScreen(
                 .background(Color.White)
                 .padding(24.dp)
         ) {
-            // --- 1. SECCIÓN DEL VOUCHER ---
-            Text("Comprobante del Cliente", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            // --- 1. VOUCHER SECTION ---
+            Text("Customer Voucher", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(12.dp))
 
             Box(
@@ -110,7 +110,7 @@ fun OrderDetailsScreen(
             ) {
                 Image(
                     painter = painterResource(Res.drawable.img_voucher),
-                    contentDescription = "Voucher del cliente",
+                    contentDescription = "Customer voucher",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -118,27 +118,27 @@ fun OrderDetailsScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // --- 2. RESUMEN DEL PEDIDO ---
+            // --- 2. ORDER SUMMARY ---
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color(0xFFF9F9F9)),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    DetailRow("ID Pedido:", orderId)
+                    DetailRow("Order ID:", orderId)
                     Spacer(modifier = Modifier.height(8.dp))
-                    DetailRow("Cliente:", customerName)
+                    DetailRow("Customer:", customerName)
                     Spacer(modifier = Modifier.height(8.dp))
-                    DetailRow("Monto Total:", "S/ $formattedTotal")
+                    DetailRow("Total Amount:", "$ $formattedTotal")
                     Spacer(modifier = Modifier.height(8.dp))
-                    DetailRow("Estado Actual:", status, valueColor = Color(0xFFD32F2F))
+                    DetailRow("Current Status:", status, valueColor = Color(0xFFD32F2F))
                 }
             }
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            // --- 3. CONTROLES DE VEREDICTO ---
-            if (status.equals("Pendiente", ignoreCase = true)) {
+            // --- 3. VERDICT CONTROLS ---
+            if (status.equals("Pending", ignoreCase = true)) {
                 Button(
                     onClick = { onApproveClick(orderId) },
                     modifier = Modifier.fillMaxWidth().height(56.dp),
@@ -147,7 +147,7 @@ fun OrderDetailsScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Black)
                 ) {
                     if (isLoading) CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                    else Text("Aprobar Pago (Iniciar Envío)", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    else Text("Approve Payment (Start Shipping)", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -161,11 +161,11 @@ fun OrderDetailsScreen(
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black)
                 ) {
                     if (isLoading) CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(24.dp))
-                    else Text("Rechazar (Voucher Inválido)", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    else Text("Reject (Invalid Voucher)", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 }
             } else {
                 Box(modifier = Modifier.fillMaxWidth().background(Color(0xFFEBEBEB), RoundedCornerShape(12.dp)).padding(16.dp), contentAlignment = Alignment.Center) {
-                    Text("Este pedido ya fue procesado.", color = Color.DarkGray, fontWeight = FontWeight.Medium)
+                    Text("This order has already been processed.", color = Color.DarkGray, fontWeight = FontWeight.Medium)
                 }
             }
 
