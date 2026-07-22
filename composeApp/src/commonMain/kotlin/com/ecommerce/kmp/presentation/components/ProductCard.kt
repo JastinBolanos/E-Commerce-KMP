@@ -139,13 +139,13 @@ fun ProductCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+                .clickable { expanded = !expanded }
                 .padding(16.dp)
         ) {
             // --- Title and Arrow Row ---
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expanded = !expanded },
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
