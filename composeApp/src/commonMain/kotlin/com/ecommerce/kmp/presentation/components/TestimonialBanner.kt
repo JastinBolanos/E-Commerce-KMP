@@ -75,9 +75,9 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
                                 colors = listOf(
                                     Color.Transparent,
                                     Color.Transparent,
-                                    Color(0xFF70B6C7),
+                                    Color.DarkGray,
                                     Color.White,
-                                    Color(0xFF76B8C9),
+                                    Color(0xFF212121),
                                     Color.Transparent,
                                     Color.Transparent
                                 )
@@ -92,7 +92,7 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(3.dp)
+                .padding(2.5.dp)
                 .clip(RoundedCornerShape(20.dp))
         ) {
             Image(
