@@ -92,8 +92,8 @@ fun TestimonialBanner(modifier: Modifier = Modifier) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(2.5.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .padding(1.5.dp)
+                .clip(RoundedCornerShape(23.dp))
         ) {
             Image(
                 painter = painterResource(Res.drawable.img_banner_full),

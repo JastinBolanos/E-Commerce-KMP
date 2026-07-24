@@ -79,8 +79,8 @@ fun LandscapeProductCard(
     Column(
         modifier = modifier
             .width(280.dp)
-            .clip(RoundedCornerShape(24.dp))
             .border(1.dp, Color(0xFFE5E5E5), RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(24.dp))
             .background(Color.White)
             .animateContentSize()
     ) {
@@ -138,13 +138,17 @@ fun LandscapeProductCard(
             }
         }
 
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+                .clickable { expanded = !expanded }
+                .padding(16.dp)
+        ) {
 
             // --- Title and Arrow Row ---
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expanded = !expanded },
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
