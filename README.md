@@ -188,7 +188,7 @@ The codebase follows a rigorous **Clean Architecture** approach structured by fe
 
 ---
 
-## 8. ⚖️ License and Intellectual Property
+## 8. License and Intellectual Property
 
 This repository and all its contents are protected under a **Proprietary Restricted-Use License**.
 
