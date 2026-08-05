@@ -4,11 +4,12 @@
   <h1>E-Commerce KMP | Enterprise-Grade Retail Architecture</h1>
   <h3>Remedioz Natura Showcase</h3>
 
-  <p><strong>High-Performance Multiplatform E-Commerce Architecture, Declarative UI, and Offline Availability.</strong></p>
+  <p><strong>High-Performance Multiplatform E-Commerce Architecture, Declarative UI, WebAssembly Support, and Offline Availability.</strong></p>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.x-blue.svg?style=for-the-badge&logo=kotlin)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg?style=for-the-badge&logo=android)](https://www.jetbrains.com/lp/compose-multiplatform/)
 [![iOS Compatible](https://img.shields.io/badge/iOS-120Hz_ProMotion-black.svg?style=for-the-badge&logo=apple)]()
+[![WebAssembly](https://img.shields.io/badge/Web-Wasm_Ready-654FF0.svg?style=for-the-badge&logo=webassembly)]()
 [![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen.svg?style=for-the-badge&logo=githubactions)]()
 [![Clean Architecture](https://img.shields.io/badge/Architecture-Clean-orange.svg?style=for-the-badge)]()
 
@@ -33,8 +34,9 @@ After a successful architectural design cycle with production-level foundations,
 
 The project is governed by the *"Write once, run natively anywhere"* paradigm, optimized for scenarios with high visual load and strict transactional logic.
 
-* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Shares 100% of the visual and business logic between Android and iOS.
+* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Shares 100% of the visual and business logic between Android, iOS, and **Web**.
 * **Extreme Performance (iOS):** Rendering unlocked at **120Hz (ProMotion)** by injecting the `CADisableMinimumFrameDurationOnPhone` parameter in the Apple ecosystem, ensuring silky smooth animations.
+* **Enterprise Web Port (Wasm):** Fully operational browser deployment powered by WebAssembly (Kotlin 2.x). Features native HTML5 canvas rendering, responsive window handling (`object-fit: contain`), and high-quality anti-aliasing algorithms for a pixel-perfect desktop experience without external plugins.
 * **State Management (UDF):** Rigorous implementation of *Unidirectional Data Flow* using `StateFlow` and Coroutines, eradicating race conditions in the shopping cart.
 * **Build Infrastructure:** Centralized `.toml` configuration files, Gradle memory optimization (`-Xmx3072M`), and strict exclusion of compromised artifacts (`.jks`, `Pods/`) via a bulletproof `.gitignore`.
 * **Automated CI/CD:** Continuous Integration pipeline implemented in GitHub Actions. Every *commit* triggers a `macos-latest` virtual machine that verifies the Kotlin code and compiles the native iOS schema using `xcodebuild`, ensuring zero regressions in production.
@@ -172,16 +174,18 @@ The codebase follows a rigorous **Clean Architecture** approach structured by fe
 ### Prerequisites
 * **Android:** Android Studio Ladybug (or higher) with the KMP plugin enabled.
 * **iOS:** macOS machine with Xcode 16+ installed.
+* **Web:** Any modern browser with WebAssembly support (Chrome, Firefox, Safari, Edge).
 
 ### Local Deployment
 1. Clone the repository:
    ```bash
-   git clone https://github.com/JastinBolanos/E-Commerce-KMP.git
+   git clone [https://github.com/JastinBolanos/E-Commerce-KMP.git](https://github.com/JastinBolanos/E-Commerce-KMP.git)
    cd e-commerce-kmp
    ```
 
 2. **For Android:** Open the project in Android Studio, select the `composeApp` configuration, and press *Run*.
-3. **For iOS:**
+3. **For WebAssembly** (Browser): In Android Studio, open the Gradle panel -> composeApp -> Tasks -> kotlin browser -> double click on wasmJsBrowserDevelopmentRun. The application will compile and automatically launch in your default web browser.
+4. **For iOS:**
    * Open the `iosApp` folder in Xcode.
    * Wait for *Swift* and *Assets* indexing to complete.
    * Select a simulator (e.g., iPhone 15/16) and press `Cmd + R`. Xcode will automatically delegate the compilation of the Kotlin framework to Gradle.
