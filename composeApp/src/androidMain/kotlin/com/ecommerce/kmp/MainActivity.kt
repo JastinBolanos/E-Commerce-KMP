@@ -1,36 +1,27 @@
 package com.ecommerce.kmp
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.view.WindowCompat
 
 /**
- * ============================================================================
- * 🤖 ANDROID NATIVE ENTRY POINT (MAIN ACTIVITY)
- * ============================================================================
- * * @description
- * This is the primary native container and entry point for the Android target.
- * It hosts the Kotlin Multiplatform shared UI (`App()`) within a native
- * `ComponentActivity`. It implements modern Android UI guidelines, such as
- * `enableEdgeToEdge()` to draw the UI behind system bars for a premium look.
- * * 🔌 NOTE FOR BACKEND / NATIVE DEVOPS TEAM:
- * If the application requires native Android SDK initializations that cannot
- * be handled in the shared KMP module—such as Firebase App Check, Android-specific
- * Push Notification channels (FCM), Stripe/Payment SDK bootstrapping, or Crashlytics
- * initialization—those configurations MUST be placed inside the `onCreate` lifecycle
- * method, strictly *before* the `setContent` block.
- * * @layer Platform / Android Native Shell
- * ============================================================================
+ * Android Native Entry Point. Hosts the shared KMP UI (`App()`).
+ *
+ * NOTE: Native SDK initializations (Firebase, Stripe, Crashlytics, etc.)
+ * must be placed in `onCreate` strictly before `setContent`.
  */
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         enableEdgeToEdge()
+        window.statusBarColor = Color.WHITE
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+
         setContent {
             App()
         }
