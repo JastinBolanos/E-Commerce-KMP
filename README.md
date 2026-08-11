@@ -45,7 +45,7 @@ The project is governed by the *"Write once, run natively anywhere"* paradigm, o
 ### <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHp0bDAxNXk1bG56OHp6MHU5NWp3aG95Zm9ndzNjNmh2amxpNTZmNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/F0VCptrJteVWDeLBHD/giphy.gif" width="70" align="absmiddle" /> Live Demo: E-Commerce KMP in Action
 > Explore the showcased experience: observe the interface's fluidity, visual consistency, and the integrated operation of the key user-facing modules. This brief demonstration presents Remedioz Natura, an enterprise-grade, multiplatform retail architecture built entirely using Kotlin Multiplatform and Compose Multiplatform. To access the full experience—including all B2C flows and B2B administrative modules—download the APK available at the top of this README file.
 
-https://github.com/user-attachments/assets/9a7dbbef-3cd1-4633-8a03-1bdcc1e99edc
+https://github.com/user-attachments/assets/89751b45-21f7-4c6f-997e-7cb8b099ee5f
 
 ---
 
