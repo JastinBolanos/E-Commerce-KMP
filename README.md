@@ -4,7 +4,7 @@
   <h1>E-Commerce KMP | Enterprise-Grade Retail Architecture</h1>
   <h3>Remedioz Natura Showcase</h3>
 
-  <p><strong>High-Performance Multiplatform E-Commerce Architecture, Declarative UI, WebAssembly Support, and Offline Availability.</strong></p>
+  <p><strong>High-Performance E-Commerce Architecture (Native Android + Multiplatform Core), Declarative UI, and Offline Availability.</strong></p>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.x-blue.svg?style=for-the-badge&logo=kotlin)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg?style=for-the-badge&logo=android)](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -26,7 +26,7 @@
 
 After a successful architectural design cycle with production-level foundations, this codebase has been surgically structured to act as an elite **Frontend & Architecture Showcase**.
 
-**E-Commerce KMP** is not a generic virtual store. It establishes a "competitive moat" in multiplatform development by demonstrating that transactional complexity (B2C) and backoffice management (B2B) can coexist in a single codebase without sacrificing performance. By isolating the data layer into a purely reactive in-memory database, the project allows for immediate **Plug-and-Play** compilation. Any developer, auditor, or Tech Lead can instantly clone and evaluate the system without dealing with API keys or server configurations.
+**E-Commerce KMP** is not a generic virtual store. It establishes a "competitive moat" in multiplatform development by demonstrating that transactional complexity (B2C) and backoffice management (B2B) can coexist in a single shared codebase without sacrificing performance. By isolating the data layer into a purely reactive in-memory database, the project allows for immediate **Plug-and-Play** compilation. Any developer, auditor, or Tech Lead can instantly clone and evaluate the system without dealing with API keys or server configurations.
 
 ---
 
@@ -34,16 +34,16 @@ After a successful architectural design cycle with production-level foundations,
 
 The project is governed by the *"Write once, run natively anywhere"* paradigm, optimized for scenarios with high visual load and strict transactional logic.
 
-* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Shares 100% of the visual and business logic between Android, iOS, and **Web**.
-* **Extreme Performance (iOS):** Rendering unlocked at **120Hz (ProMotion)** by injecting the `CADisableMinimumFrameDurationOnPhone` parameter in the Apple ecosystem, ensuring silky smooth animations.
-* **Enterprise Web Port (Wasm):** Fully operational browser deployment powered by WebAssembly (Kotlin 2.x). Features native HTML5 canvas rendering, responsive window handling (`object-fit: contain`), and high-quality anti-aliasing algorithms for a pixel-perfect desktop experience without external plugins.
+* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Delivers a flawless native Android experience today, powered by a shared visual and business logic engine structurally prepared to scale seamlessly to iOS and **Web**.
+* **Future-Proof Performance (iOS):** The codebase includes architectural readiness for rendering unlocked at **120Hz (ProMotion)** (by injecting the `CADisableMinimumFrameDurationOnPhone` parameter) for when the project is scaled to the Apple ecosystem.
+* **Enterprise Web Readiness (Wasm):** The underlying architecture is designed to support future browser deployments powered by WebAssembly (Kotlin 2.x), enabling native HTML5 canvas rendering, responsive window handling (`object-fit: contain`), and high-quality anti-aliasing algorithms without external plugins.
 * **State Management (UDF):** Rigorous implementation of *Unidirectional Data Flow* using `StateFlow` and Coroutines, eradicating race conditions in the shopping cart.
 * **Build Infrastructure:** Centralized `.toml` configuration files, Gradle memory optimization (`-Xmx3072M`), and strict exclusion of compromised artifacts (`.jks`, `Pods/`) via a bulletproof `.gitignore`.
-* **Automated CI/CD:** Continuous Integration pipeline implemented in GitHub Actions. Every *commit* triggers a `macos-latest` virtual machine that verifies the Kotlin code and compiles the native iOS schema using `xcodebuild`, ensuring zero regressions in production.
+* **Automated CI/CD:** Continuous Integration pipeline implemented in GitHub Actions. Every *commit* triggers a `macos-latest` virtual machine that verifies the Kotlin code and compiles the native iOS schema using `xcodebuild`, ensuring zero regressions in the shared core.
 
 ---
 ### <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHp0bDAxNXk1bG56OHp6MHU5NWp3aG95Zm9ndzNjNmh2amxpNTZmNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/F0VCptrJteVWDeLBHD/giphy.gif" width="70" align="absmiddle" /> Live Demo: E-Commerce KMP in Action
-> Explore the showcased experience: observe the interface's fluidity, visual consistency, and the integrated operation of the key user-facing modules. This brief demonstration presents Remedioz Natura, an enterprise-grade, multiplatform retail architecture built entirely using Kotlin Multiplatform and Compose Multiplatform. To access the full experience—including all B2C flows and B2B administrative modules—download the APK available at the top of this README file.
+> Explore the showcased experience: observe the interface's fluidity, visual consistency, and the integrated operation of the key user-facing modules. This brief demonstration presents Remedioz Natura, an enterprise-grade retail architecture delivering a native Android experience driven by a powerful shared Kotlin Multiplatform engine. To access the full experience—including all B2C flows and B2B administrative modules—download the APK available at the top of this README file.
 
 https://github.com/user-attachments/assets/89751b45-21f7-4c6f-997e-7cb8b099ee5f
 
