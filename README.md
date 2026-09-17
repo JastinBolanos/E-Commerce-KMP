@@ -1,10 +1,10 @@
 <div align="center">
   <img src="docs/logo.remedioznatura.png" alt="Remedioz Natura Logo" width="120" />
 
-  <h1>E-Commerce KMP | Enterprise-Grade Retail Architecture</h1>
+  <h1>E-Commerce KMP | Retail Client Architecture</h1>
   <h3>Remedioz Natura Showcase</h3>
 
-  <p><strong>High-Performance E-Commerce Architecture (Native Android + Multiplatform Core), Declarative UI, and Offline Availability.</strong></p>
+  <p><strong>A multiplatform retail frontend application exploring declarative UI patterns, client-side state management, and offline-first workflows across native Android, iOS, and Web.</strong></p>
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.x-blue.svg?style=for-the-badge&logo=kotlin)](https://kotlinlang.org)
 [![Compose Multiplatform](https://img.shields.io/badge/Compose-Multiplatform-purple.svg?style=for-the-badge&logo=android)](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -22,24 +22,23 @@
 
 ---
 
-## 1. Project Vision and Repository Nature
+## 1. Project Vision and Scope
 
-After a successful architectural design cycle with production-level foundations, this codebase has been surgically structured to act as an elite **Frontend & Architecture Showcase**.
+This repository serves as an open **Frontend & Client Architecture Showcase**, designed to explore modern multiplatform UI paradigms and clean component structuring for retail applications.
 
-**E-Commerce KMP** is not a generic virtual store. It establishes a "competitive moat" in multiplatform development by demonstrating that transactional complexity (B2C) and backoffice management (B2B) can coexist in a single shared codebase without sacrificing performance. By isolating the data layer into a purely reactive in-memory database, the project allows for immediate **Plug-and-Play** compilation. Any developer, auditor, or Tech Lead can instantly clone and evaluate the system without dealing with API keys or server configurations.
+**E-Commerce KMP** demonstrates how consumer shopping experiences (B2C) and administrative interfaces (B2B) can be organized within a single, unified client-side codebase using Kotlin Multiplatform. The application utilizes a reactive local data store with simulated latency, enabling an immediate **plug-and-play** evaluation experience. Developers, designers, and engineering teams can clone, build, and explore the complete UI and interaction flows locally without configuring external backend services or managing API credentials.
 
 ---
 
-## 2. Tech Stack and Technical Excellence (Infrastructure)
+## 2. Tech Stack and Technical Foundations
 
-The project is governed by the *"Write once, run natively anywhere"* paradigm, optimized for scenarios with high visual load and strict transactional logic.
+The project leverages modern multiplatform tooling to share UI components and presentation logic across supported form factors while preserving platform-native feel.
 
-* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Delivers a flawless native Android experience today, powered by a shared visual and business logic engine structurally prepared to scale seamlessly to iOS and **Web**.
-* **Future-Proof Performance (iOS):** The codebase includes architectural readiness for rendering unlocked at **120Hz (ProMotion)** (by injecting the `CADisableMinimumFrameDurationOnPhone` parameter) for when the project is scaled to the Apple ecosystem.
-* **Enterprise Web Readiness (Wasm):** The underlying architecture is designed to support future browser deployments powered by WebAssembly (Kotlin 2.x), enabling native HTML5 canvas rendering, responsive window handling (`object-fit: contain`), and high-quality anti-aliasing algorithms without external plugins.
-* **State Management (UDF):** Rigorous implementation of *Unidirectional Data Flow* using `StateFlow` and Coroutines, eradicating race conditions in the shopping cart.
-* **Build Infrastructure:** Centralized `.toml` configuration files, Gradle memory optimization (`-Xmx3072M`), and strict exclusion of compromised artifacts (`.jks`, `Pods/`) via a bulletproof `.gitignore`.
-* **Automated CI/CD:** Continuous Integration pipeline implemented in GitHub Actions. Every *commit* triggers a `macos-latest` virtual machine that verifies the Kotlin code and compiles the native iOS schema using `xcodebuild`, ensuring zero regressions in the shared core.
+* **Core & UI Framework:** Kotlin Multiplatform (KMP) and Compose Multiplatform. Delivers a native Android experience today, driven by a shared declarative UI and business logic engine structured to extend to iOS and **Web**.
+* **WebAssembly Integration (Wasm):** The client architecture is organized to support browser targets using WebAssembly (Kotlin 2.x), rendering via HTML5 Canvas with responsive window scaling (`object-fit: contain`) and anti-aliased visual output.
+* **State Management (UDF):** Built around *Unidirectional Data Flow* using Kotlin `StateFlow` and Coroutines, providing predictable state transitions across cart interactions, order updates, and navigation.
+* **Build Infrastructure:** Managed through modern Gradle version catalogs (`libs.versions.toml`), dedicated heap memory configurations (`-Xmx3072M`), and standard project hygiene rules (`.gitignore`).
+* **Continuous Integration:** Automated build workflows configured via GitHub Actions. Each commit runs on a macOS virtual environment, validating the Kotlin code and testing iOS compilation with `xcodebuild` to maintain cross-platform build consistency.
 
 ---
 ### <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHp0bDAxNXk1bG56OHp6MHU5NWp3aG95Zm9ndzNjNmh2amxpNTZmNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/F0VCptrJteVWDeLBHD/giphy.gif" width="70" align="absmiddle" /> Live Demo: E-Commerce KMP in Action
@@ -51,10 +50,10 @@ https://github.com/user-attachments/assets/89751b45-21f7-4c6f-997e-7cb8b099ee5f
 
 ## 3. Case Study: User Ecosystem (B2C Consumer App)
 
-The design reflects a hyper-localized e-commerce, merging the warmth of traditional botanical commerce with the non-negotiable fluidity of modern mobile applications.
+The client interface is tailored around a localized retail concept, combining warm botanical visual themes with responsive mobile UI patterns.
 
 ### Authentication and Discovery
-The flow starts with a frictionless, simplified Onboarding (*Google OAuth*). The main screen features a dynamic catalog, detailed product interactions, and an advanced `HorizontalPager` for the Promotional Kits section, managing the scroll state without dropping *frames*.
+The consumer journey begins with an onboarding flow supporting Google OAuth authentication. The main catalog features structured product listings, detailed product views, and an animated `HorizontalPager` carousel for promotional kits designed to preserve smooth scrolling states.
 
 <p align="center">
   <img src="docs/00_google_login.png" width="250" alt="Login"/>
@@ -69,7 +68,7 @@ The flow starts with a frictionless, simplified Onboarding (*Google OAuth*). The
 </p>
 
 ### Transaction and Localized Checkout
-Cart management with dynamic unit control and exact mathematical calculations in real-time. The *Checkout* simulates the financial idiosyncrasy of the Latin American market, implementing a transfer gateway using QR codes and payment receipt (Voucher) validation.
+Cart management includes dynamic unit counters and immediate total recalculations. The checkout screen simulates familiar regional payment workflows, featuring bank transfer instructions via QR code and a receipt (voucher) upload confirmation step.
 
 <p align="center">
   <img src="docs/04_shopping_cart.png" width="250" alt="Shopping Cart"/>
@@ -83,10 +82,10 @@ Cart management with dynamic unit control and exact mathematical calculations in
 
 ## 4. Case Study: Backoffice and CMS (B2B Admin Mode)
 
-A pocket-sized ERP designed for comprehensive store management, demonstrating complex role handling, conditional routing, and reactive database mutation in Compose.
+A compact client-side management interface designed to showcase role-based UI states, conditional navigation, and reactive data handling within Compose.
 
-### Control Tower and Financial Auditing
-The main panel grants access to the pending orders inbox. The system includes strict logic for the administrator to visually validate customer payment receipts and make business decisions (Approve/Reject) before releasing inventory.
+### Order Overview and Receipt Verification
+The administrative dashboard provides direct access to the pending orders queue. Reviewers can examine customer-uploaded payment receipts directly inside the UI to approve or decline orders before simulated fulfillment begins.
 
 <p align="center">
   <img src="docs/12_admin_dashboard_menu.png" width="250" alt="Admin Dashboard"/>
@@ -96,8 +95,8 @@ The main panel grants access to the pending orders inbox. The system includes st
   <img src="docs/16_admin_payment_verification.png" width="250" alt="Payment Auditing"/>
 </p>
 
-### Logistics and State Machine (Order Tracking)
-Implementation of a custom *Stepper UI* component for package telemetry. The administrator updates mutable states (*Preparing -> On the Way -> Delivered*), which are instantly propagated to the customer's screen thanks to the reactive *Flows*-based architecture.
+### Logistics and Status Updates (Order Tracking)
+Features a custom stepper component tracking the order delivery lifecycle (*Preparing -> On the Way -> Delivered*). Status updates made in the admin view propagate reactively across screens via shared Kotlin Flows.
 
 <p align="center">
   <img src="docs/08_admin_shipping_management.png" width="250" alt="Shipping Management"/>
@@ -107,8 +106,8 @@ Implementation of a custom *Stepper UI* component for package telemetry. The adm
   <img src="docs/10_order_tracking_delivered.png" width="250" alt="Final Tracking"/>
 </p>
 
-### Integrated Content Management System (CMS)
-The Administrator does not rely on technical teams to maintain the platform. It features a complete CRUD system to edit the product catalog, modify prices, and dynamically update the credentials and payment QR code seen by customers.
+### Content Management (Catalog & Payment Setup)
+The administrative tools allow store operators to maintain catalog data locally. This section includes forms to create or edit products, adjust prices, and update the QR payment code displayed during customer checkout.
 
 <p align="center">
   <img src="docs/13_admin_product_management.png" width="250" alt="Inventory Management"/>
@@ -156,35 +155,35 @@ graph TD
 
 ## 6. Clean Architecture & Engineering Principles
 
-The codebase follows a rigorous **Clean Architecture** approach structured by features (*Feature-Based*), ensuring a strict separation of concerns:
+The codebase applies **Clean Architecture** conventions organized by feature, maintaining clear boundaries across layers:
 
-* `domain`: The pure, immutable core. Contains data models (`Product`, `Order`) and repository interfaces. Completely agnostic: it is entirely unaware of Android, iOS, or Compose.
-* `data`: The infrastructure layer. Controlled implementations (e.g., `MockProductRepositoryImpl`) that inject static data with simulated latency (`delay()`) to verify UI loading states. Native resource resolution using the `expect/actual` pattern.
-* `presentation`: The visual layer, surgically divided into business modules (`home`, `admin`, `checkout`), global themes, and injectable state managers like `CartManager`.
+* `domain`: The core business layer. Contains pure data models (`Product`, `Order`) and repository contracts, completely decoupled from platform SDKs and UI frameworks.
+* `data`: The client data infrastructure. Houses repository implementations (e.g., `MockProductRepositoryImpl`) with local mock data and artificial delays (`delay()`) to test loading indicators and error states. Platform-specific resources are handled through the `expect/actual` pattern.
+* `presentation`: The user interface layer, modularized by feature (`home`, `admin`, `checkout`), encompassing shared design tokens, themes, and scoped state containers such as `CartManager`.
 
-### Repository Golden Rules
-* **Domain Isolation:** Importing UI states (`MutableState`) into underlying layers is strictly prohibited.
-* **DRY Principle in UI:** Components such as `ProductCard`, status buttons, and `TopNavBar` are generic entities reused systematically throughout the application.
-* **Passive UI:** `@Composable` functions are limited to rendering states and emitting *Intents*. Logic resides strictly within the *ViewModels*.
+### Architecture Guidelines
+* **Domain Independence:** Domain models and interfaces remain agnostic of Compose UI state objects (`MutableState`).
+* **Reusable UI Components:** Common components such as `ProductCard`, status buttons, and `TopNavBar` are organized as modular units reused throughout the app.
+* **Passive UI Pattern:** `@Composable` functions focus on state rendering and user intent emission, keeping state transformation logic inside corresponding *ViewModels*.
 
 ---
 
 ## 7. Build Instructions
 
 ### Prerequisites
-* **Android:** Android Studio Ladybug (or higher) with the KMP plugin enabled.
+* **Android:** Android Studio Ladybug (or higher) with the Kotlin Multiplatform plugin enabled.
 * **iOS:** macOS machine with Xcode 16+ installed.
 * **Web:** Any modern browser with WebAssembly support (Chrome, Firefox, Safari, Edge).
 
 ### Local Deployment
 1. Clone the repository:
    ```bash
-   git clone [https://github.com/JastinBolanos/E-Commerce-KMP.git](https://github.com/JastinBolanos/E-Commerce-KMP.git)
+   git clone https://github.com/JastinBolanos/E-Commerce-KMP.git
    cd e-commerce-kmp
    ```
 
 2. **For Android:** Open the project in Android Studio, select the `composeApp` configuration, and press *Run*.
-3. **For WebAssembly** (Browser): In Android Studio, open the Gradle panel -> composeApp -> Tasks -> kotlin browser -> double click on wasmJsBrowserDevelopmentRun. The application will compile and automatically launch in your default web browser.
+3. **For WebAssembly (Browser):** In Android Studio, open the Gradle panel -> `composeApp` -> `Tasks` -> `kotlin browser` -> double click on `wasmJsBrowserDevelopmentRun`. The application will compile and automatically launch in your default web browser.
 4. **For iOS:**
    * Open the `iosApp` folder in Xcode.
    * Wait for *Swift* and *Assets* indexing to complete.
