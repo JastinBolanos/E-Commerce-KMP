@@ -54,25 +54,11 @@
 
 ## Routing & Logic Map
 
-```mermaid
-graph TD
-    A[ App Start ] --> B(Google OAuth)
-    B --> C{User Role?}
-    
-    %% Customer Flow (B2C)
-    C -->|Customer| D[ Home / Catalog ]
-    D --> E[ Shopping Cart ]
-    E --> F[ Checkout & QR Gateway ]
-    F --> G[ Order Tracking ]
-    
-    %% Admin Flow (B2B)
-    C -->|Administrator| H[ Admin Dashboard ]
-    H --> I[ Pending Orders ]
-    I --> J{Payment Audit}
-    J -->|Approve| K[ Shipping Management ]
-    
-    H --> L[ Inventory Management ]
-```
+| User Role | Main Navigation Flow |
+| :--- | :--- |
+| **🛍️ Customer (B2C)** | Catalog ➔ Shopping Cart ➔ QR Checkout ➔ Order Tracking |
+| **🛡️ Admin (B2B)** | Dashboard ➔ Pending Orders ➔ Payment Audit ➔ Shipping |
+| **📦 Admin (CMS)** | Dashboard ➔ Inventory & Product Management |
 
 ---
 
