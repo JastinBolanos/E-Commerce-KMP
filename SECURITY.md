@@ -2,15 +2,18 @@
 
 ## Supported Versions
 
-We currently provide security updates and maintenance for the latest version of the E-Commerce KMP architecture showcase.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.0.x   | YES                |
-| < 1.0   | NO                 |
+| Version | Supported |
+| ------- | --------- |
+| >= 1.0.x| ✅ Yes     |
+| < 1.0   | ❌ No      |
 
 ## Reporting a Vulnerability
 
-Security is a top priority for enterprise-grade applications. If you discover a security vulnerability or architectural flaw within this project, please **DO NOT** open a public issue.
+E-Commerce KMP is an open-source architectural showcase. It does not handle real money or sensitive user data in production.
 
-Instead, please report it privately by sending an email to the Official Contact listed in the `LICENSE` file. All security reports will be taken seriously and addressed promptly.
+However, code quality and security are important to this project. If you discover a vulnerability or a significant architectural flaw, we encourage you to report it. You can:
+
+1. Use GitHub's **Private Vulnerability Reporting** feature in this repository.
+2. Open a standard [Issue](https://github.com/JastinBolanos/E-Commerce-KMP/issues) if it's a general architectural flaw.
+
+Pull Requests with security and stability enhancements are always welcome!
